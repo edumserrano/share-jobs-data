@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ShareJobsDataCli": {
+      "commandName": "Project",
+      "commandLineArgs": "122 a"
+    }
+  }
+}
