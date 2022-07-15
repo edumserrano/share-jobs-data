@@ -3,5 +3,7 @@ Console.WriteLine("Hello, World!");
 
 foreach(var arg in args)
 {
+    Console.WriteLine("arg start");
     Console.WriteLine(arg);
+    Console.WriteLine("arg end");
 }
