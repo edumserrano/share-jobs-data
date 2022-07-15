@@ -44,8 +44,6 @@ jobs:
           name: Eduardo
           age: 20
           nationality: Portuguese
-  
-
 
   # only-errors-true:
   #   name: only-errors set to true
