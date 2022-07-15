@@ -17,12 +17,14 @@ function Main()
   Write-Output "Executing: dotnet '/app/ShareJobsDataCli.dll' $argsAsList"
   $output = dotnet '/app/ShareJobsDataCli.dll' $argsAsList
   
+  Write-Output $output
+
   if($LASTEXITCODE -ne 0 ) {
       Write-Output "::error::Share data jobs didn't complete successfully. See the step's log for more details."
       exit $LASTEXITCODE
   }
   
-  Write-Output "::set-output name=mlc-result::$output"  
+  # Write-Output "::set-output name=mlc-result::$output"  
 }
 
 # invoke entrypoint function
