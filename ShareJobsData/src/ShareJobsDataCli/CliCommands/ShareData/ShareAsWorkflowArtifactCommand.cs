@@ -32,9 +32,8 @@ public class ShareAsWorkflowArtifactCommand : ICommand
             var dataAsYml = deserializer.Deserialize<object>(DataAsYmlStr);
             var dataAsJson = JsonConvert.SerializeObject(dataAsYml, Formatting.Indented);
 
-            await console.Output.WriteAsync(dataAsJson);
-            await console.Output.WriteAsync(Environment.NewLine);
-            await console.Output.WriteAsync($"ACTIONS_RUNTIME_URL={Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL")}");
+            await console.Output.WriteLineAsync(dataAsJson);
+            await console.Output.WriteLineAsync($"ACTIONS_RUNTIME_URL={Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL")}");
 
             var githubHttpClient = new GitHubHttpClient();
             await githubHttpClient.UploadArtifactAsync(dataAsJson);
