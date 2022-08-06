@@ -58,6 +58,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Debug 2
+      env:
+        SOME_URL: ${{ env.ACTIONS_RUNTIME_URL }}
+        SOME_URL_2: test
+      run: |
+        Write-Output $Env:SOME_URL
+        Write-Output $Env:SOME_URL_2
     - name: Debug
       run: |
         Write-Output $Env:ACTIONS_RUNTIME_URL
