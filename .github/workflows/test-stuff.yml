@@ -59,7 +59,8 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: pwsh list env
-      run: dir env
+      run: |
+        dir env:
     - name: unbunt list env
       shell: bash
       run: env
