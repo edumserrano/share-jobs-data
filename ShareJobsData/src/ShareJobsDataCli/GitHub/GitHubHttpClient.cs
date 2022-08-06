@@ -39,7 +39,7 @@ internal class GitHubHttpClient
         var runtimeUrl = Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL");
         var workflowRunId = Environment.GetEnvironmentVariable("GITHUB_RUN_ID");
         var apiVersion = "6.0-preview";
-        var createContainerUrl = $"${runtimeUrl}_apis/pipelines/workflows/${workflowRunId}/artifacts?api-version=${apiVersion}";
+        var createContainerUrl = $"{runtimeUrl}_apis/pipelines/workflows/{workflowRunId}/artifacts?api-version={apiVersion}";
         var body = new
         {
             Type = "actions_storage",
@@ -50,7 +50,7 @@ internal class GitHubHttpClient
 
 
         using var createContainerHttpRequest = new HttpRequestMessage(HttpMethod.Post, createContainerUrl);
-        createContainerHttpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue($"application/json;api-version=${apiVersion}"));
+        createContainerHttpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue($"application/json;api-version={apiVersion}"));
         createContainerHttpRequest.Content = new StringContent(jsonBody, Encoding.UTF8, MediaTypeNames.Application.Json);
         var response = await httpClient.SendAsync(createContainerHttpRequest);
         var responseBody = await response.Content.ReadAsStringAsync();
