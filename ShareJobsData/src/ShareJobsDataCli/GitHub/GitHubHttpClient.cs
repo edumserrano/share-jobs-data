@@ -1,3 +1,4 @@
+using System.Net.Http.Json;
 using System.Net.Mime;
 using System.Text;
 
@@ -46,19 +47,26 @@ internal class GitHubHttpClient
             Type = "actions_storage",
             Name = "my-artifact-name",
         };
-        var jsonBody = System.Text.Json.JsonSerializer.Serialize(body);
+        //var jsonBody = System.Text.Json.JsonSerializer.Serialize(body);
 
         Console.WriteLine();
         Console.WriteLine($"create-container-request-url: {createContainerUrl}");
         Console.WriteLine($"create-container-request-auth: {actionRuntimeToken}");
-        using var createContainerHttpRequest = new HttpRequestMessage(HttpMethod.Post, createContainerUrl);
-        createContainerHttpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={apiVersion}");
-        createContainerHttpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", actionRuntimeToken);
-        createContainerHttpRequest.Content = new StringContent(jsonBody, Encoding.UTF8, MediaTypeNames.Application.Json);
-        var response = await httpClient.SendAsync(createContainerHttpRequest);
-        var responseBody = await response.Content.ReadAsStringAsync();
-        Console.WriteLine($"create-container-response: {response.StatusCode}");
-        Console.WriteLine($"create-container-response-body: {responseBody}");
+        using var createArtifactFileContainerHttpRequest = new HttpRequestMessage(HttpMethod.Post, createContainerUrl);
+        createArtifactFileContainerHttpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={apiVersion}");
+        createArtifactFileContainerHttpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", actionRuntimeToken);
+        createArtifactFileContainerHttpRequest.Content = JsonContent.Create(body);
+        //createContainerHttpRequest.Content = new StringContent(jsonBody, Encoding.UTF8, MediaTypeNames.Application.Json);
+        var createArtifactFileContainerHttpResponse = await httpClient.SendAsync(createArtifactFileContainerHttpRequest);
+        //var responseBody = await response.Content.ReadAsStringAsync();
+        var createArtifactFileContainerResponse = await createArtifactFileContainerHttpResponse.Content.ReadFromJsonAsync<CreateArtifactFileContainerResponse>();
+
+
+        Console.WriteLine($"create-container-response: {createArtifactFileContainerHttpResponse.StatusCode}");
+        Console.WriteLine($"Name: {createArtifactFileContainerResponse!.Name}");
+        Console.WriteLine($"Url: {createArtifactFileContainerResponse.Url}");
+        Console.WriteLine($"FileContainerResourceUrl: {createArtifactFileContainerResponse.FileContainerResourceUrl}");
+
 
         //using var uploadFileHttpRequest = new HttpRequestMessage(HttpMethod.Put, createContainerUrl);
         //createContainerHttpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue($"application/json;api-version=${apiVersion}"));
