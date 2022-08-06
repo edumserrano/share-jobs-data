@@ -29,6 +29,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Debug
+      run: |
+        Write-Output $Env:ACTIONS_RUNTIME_URL
+        Write-Output $Env:GITHUB_RUN_ID
     - name: Run share jobs data
       uses: ./
       with:
