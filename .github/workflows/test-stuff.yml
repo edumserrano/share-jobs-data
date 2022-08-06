@@ -56,5 +56,5 @@ jobs:
     - uses: actions/checkout@v3
     - name: Debug
       run: |
-        Write-Output '${{ env.ACTIONS_RUNTIME_URL }}'
-        Write-Output '${{ env.GITHUB_RUN_ID }}'
+        Write-Output $Env:ACTIONS_RUNTIME_URL
+        Write-Output $Env:GITHUB_RUN_ID
