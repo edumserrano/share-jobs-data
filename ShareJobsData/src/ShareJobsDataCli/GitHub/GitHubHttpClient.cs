@@ -30,7 +30,7 @@ internal class GitHubHttpClient
     //    return httpClient;
     //}
 
-    public async Task UploadArtifactAsync(string json)
+    public async Task UploadArtifactAsync(string json, GitHubAuthToken authToken)
     {
         var httpClient = new HttpClient();
 
@@ -51,6 +51,7 @@ internal class GitHubHttpClient
         Console.WriteLine($"create-container-request-url: {createContainerUrl}");
         using var createContainerHttpRequest = new HttpRequestMessage(HttpMethod.Post, createContainerUrl);
         createContainerHttpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={apiVersion}");
+        createContainerHttpRequest.Headers.Authorization = new AuthenticationHeaderValue("token", authToken);
         createContainerHttpRequest.Content = new StringContent(jsonBody, Encoding.UTF8, MediaTypeNames.Application.Json);
         var response = await httpClient.SendAsync(createContainerHttpRequest);
         var responseBody = await response.Content.ReadAsStringAsync();

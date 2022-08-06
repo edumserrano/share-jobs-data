@@ -24,6 +24,7 @@ public class ShareAsWorkflowArtifactCommand : ICommand
         try
         {
             console.NotNull();
+            var authToken = new GitHubAuthToken(AuthToken);
 
             var deserializer = new DeserializerBuilder()
                 .IgnoreUnmatchedProperties()
@@ -36,9 +37,8 @@ public class ShareAsWorkflowArtifactCommand : ICommand
             await console.Output.WriteAsync($"ACTIONS_RUNTIME_URL={Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL")}");
 
             var githubHttpClient = new GitHubHttpClient();
-            await githubHttpClient.UploadArtifactAsync(dataAsJson);
+            await githubHttpClient.UploadArtifactAsync(dataAsJson, authToken);
 
-            //var authToken = new GitHubAuthToken(AuthToken);
             //var repo = new GitHubRepository(Repo);
             //var runId = new GitHubRunId(RunId);
             //var jobName = new GitHubJobName(JobName);
