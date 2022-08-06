@@ -2,7 +2,7 @@
   "profiles": {
     "ShareJobsDataCli": {
       "commandName": "Project",
-      "commandLineArgs": "share-data --data \"name: George Washington\\r\\nage: 89\""
+      "commandLineArgs": "share-data --auth-token test123 --data \"name: George Washington\\r\\nage: 89\""
     }
   }
 }

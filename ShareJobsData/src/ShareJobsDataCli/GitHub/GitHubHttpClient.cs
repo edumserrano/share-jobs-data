@@ -53,7 +53,7 @@ internal class GitHubHttpClient
         Console.WriteLine($"create-container-request-auth: {actionRuntimeToken}");
         using var createContainerHttpRequest = new HttpRequestMessage(HttpMethod.Post, createContainerUrl);
         createContainerHttpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={apiVersion}");
-        createContainerHttpRequest.Headers.Authorization = new AuthenticationHeaderValue("token", actionRuntimeToken);
+        createContainerHttpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", actionRuntimeToken);
         createContainerHttpRequest.Content = new StringContent(jsonBody, Encoding.UTF8, MediaTypeNames.Application.Json);
         var response = await httpClient.SendAsync(createContainerHttpRequest);
         var responseBody = await response.Content.ReadAsStringAsync();
