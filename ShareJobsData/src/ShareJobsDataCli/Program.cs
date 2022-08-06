@@ -1,9 +1,10 @@
-// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+namespace ShareJobsDataCli;
 
-foreach(var arg in args)
+internal static class Program
 {
-    Console.WriteLine("arg start");
-    Console.WriteLine(arg);
-    Console.WriteLine("arg end");
+    public static async Task<int> Main(string[] args)
+    {
+        var app = new ShareJobsDataCli();
+        return await app.RunAsync(args);
+    }
 }

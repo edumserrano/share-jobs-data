@@ -1,0 +1,11 @@
+global using System.Diagnostics.CodeAnalysis;
+global using System.Net.Http.Headers;
+global using System.Runtime.CompilerServices;
+global using CliFx;
+global using CliFx.Attributes;
+global using CliFx.Exceptions;
+global using CliFx.Extensibility;
+global using CliFx.Infrastructure;
+global using Newtonsoft.Json;
+global using ShareJobsDataCli.ArgumentValidations;
+global using YamlDotNet.Serialization;

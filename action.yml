@@ -8,10 +8,6 @@ inputs:
     description: 'GitHub token used to access workflow run logs.'
     required: true
     default: ${{ github.token }}
-  repo:
-    description: 'The repository for the workflow run in the format of {owner}/{repo}.'
-    required: true
-    default: ${{ github.repository }}
   data:
     description: 'YAML representation of the data to share.'
     required: true
@@ -25,8 +21,6 @@ runs:
     - share-data
     - --auth-token
     - ${{ inputs.auth-token }}
-    - --repo 
-    - ${{ inputs.repo }}
     - --data
     - ${{ inputs.data }}
     # # The syntax for the optional parameters uses a kind of way of doing a ternary operator. See https://github.com/actions/runner/issues/409

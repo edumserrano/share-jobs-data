@@ -1,0 +1,60 @@
+name: Test stuff
+
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  trigger-info:
+    name: Trigger info
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+    - name: Dump github context for debug purposes
+      env:
+        GITHUB_CONTEXT: ${{ toJSON(github) }}
+      run: $env:GITHUB_CONTEXT
+    - name: Trigger info
+      run: |
+        Write-Output "::notice::This worklfow was triggered by a 'workflow_run' from '${{ github.event.workflow_run.name }}'."
+
+  test:
+    name: test
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run share jobs data
+      uses: ./
+      with:
+        data: |
+          name: George Washington
+          age: 89
+          height_in_inches: 5.75
+          addresses:
+            home:
+              street: 400 Mockingbird Lane
+              city: Louaryland
+              state: Hawidaho
+              zip: 99970
+              list:
+              - first
+              - second
+              - third
+
+  test2:
+    name: test 2
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Debug
+      run: |
+        Write-Output '${{ env.ACTIONS_RUNTIME_URL }}'
+        Write-Output '${{ env.GITHUB_RUN_ID }}'
