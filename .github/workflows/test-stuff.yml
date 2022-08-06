@@ -63,6 +63,12 @@ jobs:
     - name: unbunt list env
       shell: bash
       run: env
+    - name: bash echo
+      shell: bash
+      run: |
+          echo "ACTIONS_RUNTIME_URL: $ACTIONS_RUNTIME_URL"
+          echo "GITHUB_RUN_ID: $GITHUB_RUN_ID"
+          echo "ACTIONS_RUNTIME_TOKEN: $ACTIONS_RUNTIME_TOKEN"
     - name: Debug 2
       env:
         SOME_URL: ${{ env.ACTIONS_RUNTIME_URL }}
