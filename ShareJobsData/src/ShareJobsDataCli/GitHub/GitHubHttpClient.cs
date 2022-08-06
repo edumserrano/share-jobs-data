@@ -62,8 +62,7 @@ internal class GitHubHttpClient
         Console.WriteLine($"FileContainerResourceUrl: {createArtifactFileContainerResponse.FileContainerResourceUrl}");
 
 
-        //using var uploadFileHttpRequest = new HttpRequestMessage(HttpMethod.Put, createArtifactFileContainerResponse.FileContainerResourceUrl);
-        using var uploadFileHttpRequest = new HttpRequestMessage(HttpMethod.Put,"https://google.com");
+        using var uploadFileHttpRequest = new HttpRequestMessage(HttpMethod.Put, createArtifactFileContainerResponse.FileContainerResourceUrl);
         uploadFileHttpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", actionRuntimeToken);
         uploadFileHttpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={apiVersion}");
         var content = "Hello!";

@@ -1,4 +1,4 @@
-﻿namespace ShareJobsDataCli;
+namespace ShareJobsDataCli;
 
 public class ShareJobsDataCli
 {
@@ -9,7 +9,7 @@ public class ShareJobsDataCli
 
     public CliApplicationBuilder CliApplicationBuilder { get; }
 
-    public ValueTask<int> RunAsync(IReadOnlyList<string> args)
+    public ValueTask<int> RunAsync(IReadOnlyList<string> args = default!)
     {
         args ??= Array.Empty<string>();
         return CliApplicationBuilder
