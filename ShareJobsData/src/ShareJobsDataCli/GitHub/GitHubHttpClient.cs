@@ -48,7 +48,7 @@ internal class GitHubHttpClient
         var jsonBody = System.Text.Json.JsonSerializer.Serialize(body);
 
 
-
+        Console.WriteLine($"create-container-request-url: {createContainerUrl}");
         using var createContainerHttpRequest = new HttpRequestMessage(HttpMethod.Post, createContainerUrl);
         createContainerHttpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue($"application/json;api-version={apiVersion}"));
         createContainerHttpRequest.Content = new StringContent(jsonBody, Encoding.UTF8, MediaTypeNames.Application.Json);
