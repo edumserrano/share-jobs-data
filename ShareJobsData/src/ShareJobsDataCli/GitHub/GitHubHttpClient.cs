@@ -63,15 +63,17 @@ internal class GitHubHttpClient
         Console.WriteLine($"Url: {createArtifactFileContainerResponse.Url}");
         Console.WriteLine($"FileContainerResourceUrl: {createArtifactFileContainerResponse.FileContainerResourceUrl}");
 
+        var content = "Hello!";
+        var contentBytes = Encoding.UTF8.GetBytes(content);
+        /*using*/
+        var stream = new MemoryStream(contentBytes);
         var itemPath = $"{artifactName}/name-of-file.txt";
         var uploadFileUrl = createArtifactFileContainerResponse.FileContainerResourceUrl.SetQueryParam("itemPath", itemPath);
         Console.WriteLine($"uploadFileUrl: {uploadFileUrl}");
         using var uploadFileHttpRequest = new HttpRequestMessage(HttpMethod.Put, uploadFileUrl);
         uploadFileHttpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", actionRuntimeToken);
         uploadFileHttpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={apiVersion}");
-        var content = "Hello!";
-        var contentBytes = Encoding.UTF8.GetBytes(content);
-        /*using*/ var stream = new MemoryStream(contentBytes);
+        uploadFileHttpRequest.Headers.TryAddWithoutValidation("Content-Range", $"bytes 0-{contentBytes.Length - 1}/{contentBytes.Length}");
         uploadFileHttpRequest.Content = new StreamContent(stream);
         uploadFileHttpRequest.Content.Headers.Add("Content-Type", "application/octet-stream");
         var uploadFileHttpResponse = await httpClient.SendAsync(uploadFileHttpRequest);
