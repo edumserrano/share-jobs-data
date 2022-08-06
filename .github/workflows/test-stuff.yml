@@ -62,3 +62,9 @@ jobs:
       run: |
         Write-Output $Env:ACTIONS_RUNTIME_URL
         Write-Output $Env:GITHUB_RUN_ID
+        "hi" > test.txt
+    - name: Upload test
+      uses: actions/upload-artifact@v3
+      with:
+        name: my-test
+        path: ./test.txt
