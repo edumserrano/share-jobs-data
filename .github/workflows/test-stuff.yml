@@ -58,6 +58,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: pwsh list env
+      run: dir env
+    - name: unbunt list env
+      shell: bash
+      run: env
     - name: Debug 2
       env:
         SOME_URL: ${{ env.ACTIONS_RUNTIME_URL }}
