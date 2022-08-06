@@ -1,3 +1,5 @@
+using ShareJobsDataCli.GitHub;
+
 namespace ShareJobsDataCli.CliCommands.ShareData;
 
 [Command("share-data")]
@@ -30,7 +32,11 @@ public class ShareAsWorkflowArtifactCommand : ICommand
             var dataAsJson = JsonConvert.SerializeObject(dataAsYml, Formatting.Indented);
 
             await console.Output.WriteAsync(dataAsJson);
+            await console.Output.WriteAsync(Environment.NewLine);
             await console.Output.WriteAsync($"ACTIONS_RUNTIME_URL={Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL")}");
+
+            var githubHttpClient = new GitHubHttpClient();
+            await githubHttpClient.UploadArtifactAsync(dataAsJson);
 
             //var authToken = new GitHubAuthToken(AuthToken);
             //var repo = new GitHubRepository(Repo);
