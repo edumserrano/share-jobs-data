@@ -73,9 +73,10 @@ internal class GitHubHttpClient
         using var uploadFileHttpRequest = new HttpRequestMessage(HttpMethod.Put, uploadFileUrl);
         uploadFileHttpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", actionRuntimeToken);
         uploadFileHttpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={apiVersion}");
-        uploadFileHttpRequest.Headers.TryAddWithoutValidation("Content-Range", $"bytes 0-{contentBytes.Length - 1}/{contentBytes.Length}");
         uploadFileHttpRequest.Content = new StreamContent(stream);
-        uploadFileHttpRequest.Content.Headers.Add("Content-Type", "application/octet-stream");
+        uploadFileHttpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Octet);
+        uploadFileHttpRequest.Content.Headers.ContentRange = new ContentRangeHeaderValue(from: 0, to: contentBytes.Length - 1, length: contentBytes.Length);
+
         var uploadFileHttpResponse = await httpClient.SendAsync(uploadFileHttpRequest);
         var uploadFileResponse = await uploadFileHttpResponse.Content.ReadAsStringAsync();
         Console.WriteLine($"uploadFileResponse-status-code: {uploadFileHttpResponse.StatusCode}");
