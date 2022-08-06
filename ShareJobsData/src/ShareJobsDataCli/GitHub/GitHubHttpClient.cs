@@ -30,7 +30,7 @@ internal class GitHubHttpClient
     //    return httpClient;
     //}
 
-    public async Task UploadArtifactAsync(string json, GitHubAuthToken authToken)
+    public async Task UploadArtifactAsync(string json)
     {
         var httpClient = new HttpClient();
 
@@ -38,6 +38,7 @@ internal class GitHubHttpClient
         // `${getRuntimeUrl()}_apis/pipelines/workflows/${getWorkFlowRunId()}/artifacts?api-version=${getApiVersion()}`
         var runtimeUrl = Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL");
         var workflowRunId = Environment.GetEnvironmentVariable("GITHUB_RUN_ID");
+        var actionRuntimeToken = Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_TOKEN");
         var apiVersion = "6.0-preview";
         var createContainerUrl = $"{runtimeUrl}_apis/pipelines/workflows/{workflowRunId}/artifacts?api-version={apiVersion}";
         var body = new
@@ -47,11 +48,12 @@ internal class GitHubHttpClient
         };
         var jsonBody = System.Text.Json.JsonSerializer.Serialize(body);
 
-
+        Console.WriteLine();
         Console.WriteLine($"create-container-request-url: {createContainerUrl}");
+        Console.WriteLine($"create-container-request-auth: {authToken}");
         using var createContainerHttpRequest = new HttpRequestMessage(HttpMethod.Post, createContainerUrl);
         createContainerHttpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={apiVersion}");
-        createContainerHttpRequest.Headers.Authorization = new AuthenticationHeaderValue("token", authToken);
+        createContainerHttpRequest.Headers.Authorization = new AuthenticationHeaderValue("token", actionRuntimeToken);
         createContainerHttpRequest.Content = new StringContent(jsonBody, Encoding.UTF8, MediaTypeNames.Application.Json);
         var response = await httpClient.SendAsync(createContainerHttpRequest);
         var responseBody = await response.Content.ReadAsStringAsync();

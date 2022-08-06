@@ -37,7 +37,7 @@ public class ShareAsWorkflowArtifactCommand : ICommand
             await console.Output.WriteAsync($"ACTIONS_RUNTIME_URL={Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL")}");
 
             var githubHttpClient = new GitHubHttpClient();
-            await githubHttpClient.UploadArtifactAsync(dataAsJson, authToken);
+            await githubHttpClient.UploadArtifactAsync(dataAsJson);
 
             //var repo = new GitHubRepository(Repo);
             //var runId = new GitHubRunId(RunId);
