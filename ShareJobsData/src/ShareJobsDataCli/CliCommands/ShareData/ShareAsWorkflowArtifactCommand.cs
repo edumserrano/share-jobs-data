@@ -1,8 +1,15 @@
-﻿namespace ShareJobsDataCli.CliCommands.ShareData;
+namespace ShareJobsDataCli.CliCommands.ShareData;
 
 [Command("share-data")]
 public class ShareAsWorkflowArtifactCommand : ICommand
 {
+    [CommandOption(
+        "auth-token",
+        IsRequired = true,
+        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Description = "GitHub token used to upload the artifact.")]
+    public string AuthToken { get; init; } = default!;
+
     [CommandOption(
         "data",
         IsRequired = true,
@@ -16,13 +23,14 @@ public class ShareAsWorkflowArtifactCommand : ICommand
         {
             console.NotNull();
 
-
-
             var deserializer = new DeserializerBuilder()
                 .IgnoreUnmatchedProperties()
                 .Build();
             var dataAsYml = deserializer.Deserialize<object>(DataAsYmlStr);
             var dataAsJson = JsonConvert.SerializeObject(dataAsYml, Formatting.Indented);
+
+            await console.Output.WriteAsync(dataAsJson);
+            await console.Output.WriteAsync($"ACTIONS_RUNTIME_URL={Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL")}");
 
             //var authToken = new GitHubAuthToken(AuthToken);
             //var repo = new GitHubRepository(Repo);
