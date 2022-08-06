@@ -72,6 +72,7 @@ internal class GitHubHttpClient
         uploadFileHttpRequest.Content.Headers.Add("Content-Type", "application/octet-stream");
         var uploadFileHttpResponse = await httpClient.SendAsync(uploadFileHttpRequest);
         var uploadFileResponse = await uploadFileHttpResponse.Content.ReadAsStringAsync();
+        Console.WriteLine($"uploadFileResponse-status-code: {uploadFileHttpResponse.StatusCode}");
         Console.WriteLine($"uploadFileResponse: {uploadFileResponse}");
 
         var setArtifactSizeRequest = new
@@ -84,6 +85,7 @@ internal class GitHubHttpClient
         setArtifactSizeHttpRequest.Content = JsonContent.Create(setArtifactSizeRequest);
         var setArtifactSizeHttpResponse = await httpClient.SendAsync(setArtifactSizeHttpRequest);
         var setArtifactSizeResponse = await setArtifactSizeHttpResponse.Content.ReadAsStringAsync();
+        Console.WriteLine($"setArtifactSizeHttpResponse-status-code: {setArtifactSizeHttpResponse.StatusCode}");
         Console.WriteLine($"setArtifactSizeResponse: {uploadFileResponse}");
 
 
