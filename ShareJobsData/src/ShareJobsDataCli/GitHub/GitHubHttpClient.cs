@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using System.Net.Mime;
 using System.Text;
+using Flurl;
 
 namespace ShareJobsDataCli.GitHub;
 
@@ -41,14 +42,15 @@ internal class GitHubHttpClient
         var workflowRunId = Environment.GetEnvironmentVariable("GITHUB_RUN_ID");
         var actionRuntimeToken = Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_TOKEN");
         var apiVersion = "6.0-preview";
+        var artifactName = "my-dotnet-artifact-name";
         var createContainerUrl = $"{runtimeUrl}_apis/pipelines/workflows/{workflowRunId}/artifacts?api-version={apiVersion}";
         var createArtifactFileContainerRequest = new
         {
             Type = "actions_storage",
-            Name = "my-dotnet-artifact-name",
+            Name = artifactName
         };
 
-
+        Console.WriteLine($"createArtifactFileContainerUrl: {createContainerUrl}");
         using var createArtifactFileContainerHttpRequest = new HttpRequestMessage(HttpMethod.Post, createContainerUrl);
         createArtifactFileContainerHttpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", actionRuntimeToken);
         createArtifactFileContainerHttpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={apiVersion}");
@@ -61,8 +63,10 @@ internal class GitHubHttpClient
         Console.WriteLine($"Url: {createArtifactFileContainerResponse.Url}");
         Console.WriteLine($"FileContainerResourceUrl: {createArtifactFileContainerResponse.FileContainerResourceUrl}");
 
-
-        using var uploadFileHttpRequest = new HttpRequestMessage(HttpMethod.Put, createArtifactFileContainerResponse.FileContainerResourceUrl);
+        var itemPath = $"{artifactName}/name-of-file.txt";
+        var uploadFileUrl = createArtifactFileContainerResponse.FileContainerResourceUrl.SetQueryParam("itemPath", itemPath);
+        Console.WriteLine($"uploadFileUrl: {uploadFileUrl}");
+        using var uploadFileHttpRequest = new HttpRequestMessage(HttpMethod.Put, uploadFileUrl);
         uploadFileHttpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", actionRuntimeToken);
         uploadFileHttpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={apiVersion}");
         var content = "Hello!";
@@ -79,7 +83,9 @@ internal class GitHubHttpClient
         {
             Size = contentBytes.Length,
         };
-        using var setArtifactSizeHttpRequest = new HttpRequestMessage(HttpMethod.Patch, createContainerUrl);
+        var setArtifactSizeUrl = createContainerUrl.SetQueryParam("artifactName", artifactName);
+        Console.WriteLine($"setArtifactSizeUrl: {setArtifactSizeUrl}");
+        using var setArtifactSizeHttpRequest = new HttpRequestMessage(HttpMethod.Patch, setArtifactSizeUrl);
         setArtifactSizeHttpRequest.Headers.Authorization = new AuthenticationHeaderValue("Bearer", actionRuntimeToken);
         setArtifactSizeHttpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={apiVersion}");
         setArtifactSizeHttpRequest.Content = JsonContent.Create(setArtifactSizeRequest);
