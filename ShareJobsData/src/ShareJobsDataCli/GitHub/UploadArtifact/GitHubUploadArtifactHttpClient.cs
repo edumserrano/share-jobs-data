@@ -47,26 +47,8 @@ internal class GitHubUploadArtifactHttpClient
         var containerRequest = new GitHubCreateArtifactFileContainerRequest(containerName);
         httpRequest.Content = JsonContent.Create(containerRequest);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        if (!httpResponse.IsSuccessStatusCode)
-        {
-            var errorResponseBody = await httpResponse.Content.ReadAsStringAsync();
-            throw new HttpClientResponseException(httpRequest.Method, $"{httpRequest.RequestUri}", httpResponse.StatusCode, errorResponseBody);
-        }
-
-        var createArtifactFileContainerResponse = await httpResponse.Content.ReadFromJsonAsync<GitHubArtifactFileContainerResponse>();
-        if (createArtifactFileContainerResponse is null)
-        {
-            throw HttpResponseValidationException.JsonDeserializedToNull<GitHubArtifactFileContainerResponse>();
-        }
-
-        var validator = new GitHubArtifactFileContainerResponseValidator();
-        var validationResult = validator.Validate(createArtifactFileContainerResponse);
-        if (!validationResult.IsValid)
-        {
-            throw HttpResponseValidationException.ValidationFailed<GitHubArtifactFileContainerResponse>(validationResult);
-        }
-
-        return createArtifactFileContainerResponse;
+        var responseModel = await httpResponse.ReadFromJsonAndValidateAsync<GitHubArtifactFileContainerResponse, GitHubArtifactFileContainerResponseValidator>();
+        return responseModel;
     }
 
     private async Task<GitHubUpdateArtifactResponse> UploadArtifactFileAsync(
@@ -81,26 +63,8 @@ internal class GitHubUploadArtifactHttpClient
         httpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Octet);
         httpRequest.Content.Headers.ContentRange = new ContentRangeHeaderValue(from: 0, to: contentBytes.Length - 1, length: contentBytes.Length);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        if (!httpResponse.IsSuccessStatusCode)
-        {
-            var errorResponseBody = await httpResponse.Content.ReadAsStringAsync();
-            throw new HttpClientResponseException(httpRequest.Method, $"{httpRequest.RequestUri}", httpResponse.StatusCode, errorResponseBody);
-        }
-
-        var updateArtifactResponse = await httpResponse.Content.ReadFromJsonAsync<GitHubUpdateArtifactResponse>();
-        if (updateArtifactResponse is null)
-        {
-            throw HttpResponseValidationException.JsonDeserializedToNull<GitHubUpdateArtifactResponse>();
-        }
-
-        var validator = new GitHubUpdateArtifactResponseValidator();
-        var validationResult = validator.Validate(updateArtifactResponse);
-        if (!validationResult.IsValid)
-        {
-            throw HttpResponseValidationException.ValidationFailed<GitHubUpdateArtifactResponse>(validationResult);
-        }
-
-        return updateArtifactResponse;
+        var responseModel = await httpResponse.ReadFromJsonAndValidateAsync<GitHubUpdateArtifactResponse, GitHubUpdateArtifactResponseValidator>();
+        return responseModel;
     }
 
     private async Task<GitHubArtifactFileContainerResponse> FinalizeArtifactContainerAsync(
@@ -113,25 +77,7 @@ internal class GitHubUploadArtifactHttpClient
         using var httpRequest = new HttpRequestMessage(HttpMethod.Patch, setArtifactSizeUrl);
         httpRequest.Content = JsonContent.Create(finalizeArtifactContainerRequest);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        if (!httpResponse.IsSuccessStatusCode)
-        {
-            var errorResponseBody = await httpResponse.Content.ReadAsStringAsync();
-            throw new HttpClientResponseException(httpRequest.Method, $"{httpRequest.RequestUri}", httpResponse.StatusCode, errorResponseBody);
-        }
-
-        var finalizeArtifactContainerResponse = await httpResponse.Content.ReadFromJsonAsync<GitHubArtifactFileContainerResponse>();
-        if (finalizeArtifactContainerResponse is null)
-        {
-            throw HttpResponseValidationException.JsonDeserializedToNull<GitHubArtifactFileContainerResponse>();
-        }
-
-        var validator = new GitHubArtifactFileContainerResponseValidator();
-        var validationResult = validator.Validate(finalizeArtifactContainerResponse);
-        if (!validationResult.IsValid)
-        {
-            throw HttpResponseValidationException.ValidationFailed<GitHubArtifactFileContainerResponse>(validationResult);
-        }
-
-        return finalizeArtifactContainerResponse;
+        var responseModel = await httpResponse.ReadFromJsonAndValidateAsync<GitHubArtifactFileContainerResponse, GitHubArtifactFileContainerResponseValidator>();
+        return responseModel;
     }
 }

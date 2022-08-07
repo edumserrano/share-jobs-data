@@ -1,5 +1,3 @@
-using ShareJobsDataCli.GitHub.UploadArtifact.HttpModels.Responses;
-
 namespace ShareJobsDataCli.GitHub;
 
 internal class GitHubHttpClient
@@ -47,26 +45,8 @@ internal class GitHubHttpClient
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{containerUrl}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        if (!httpResponse.IsSuccessStatusCode)
-        {
-            var errorResponseBody = await httpResponse.Content.ReadAsStringAsync();
-            throw new HttpClientResponseException(httpRequest.Method, $"{httpRequest.RequestUri}", httpResponse.StatusCode, errorResponseBody);
-        }
-
-        var listArtifactsResponse = await httpResponse.Content.ReadFromJsonAsync<GitHubListArtifactsResponse>();
-        if (listArtifactsResponse is null)
-        {
-            throw HttpResponseValidationException.JsonDeserializedToNull<GitHubListArtifactsResponse>();
-        }
-
-        var validator = new GitHubListArtifactsResponseValidator();
-        var validationResult = validator.Validate(listArtifactsResponse);
-        if (!validationResult.IsValid)
-        {
-            throw HttpResponseValidationException.ValidationFailed<GitHubListArtifactsResponse>(validationResult);
-        }
-
-        return listArtifactsResponse;
+        var responseModel = await httpResponse.ReadFromJsonAndValidateAsync<GitHubListArtifactsResponse, GitHubListArtifactsResponseValidator>();
+        return responseModel;
     }
 
     private async Task GetContainerItemsAsync(string fileContainerResourceUrl, string artifactName)
@@ -74,12 +54,7 @@ internal class GitHubHttpClient
         var getContainerItemsUrl = fileContainerResourceUrl.SetQueryParam("itemPath", artifactName);
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, getContainerItemsUrl);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        if (!httpResponse.IsSuccessStatusCode)
-        {
-            var errorResponseBody = await httpResponse.Content.ReadAsStringAsync();
-            throw new HttpClientResponseException(httpRequest.Method, $"{httpRequest.RequestUri}", httpResponse.StatusCode, errorResponseBody);
-        }
-
+        await httpResponse.EnsureSuccessStatusCodeAsync();
         var raw = await httpResponse.Content.ReadAsStringAsync();
         Console.WriteLine($"GetContainerItemsAsync-raw: {raw}");
 
@@ -100,20 +75,20 @@ internal class GitHubHttpClient
     }
 
     // see https://docs.github.com/en/rest/actions/artifacts#download-an-artifact
-    public async Task<ZipArchive> DownloadArtifactAsync(GitHubRepository repo, GitHubArtifactId artifactId)
-    {
-        repo.NotNull();
-        artifactId.NotNull();
+    //public async Task<ZipArchive> DownloadArtifactAsync(GitHubRepository repo, GitHubArtifactId artifactId)
+    //{
+    //    repo.NotNull();
+    //    artifactId.NotNull();
 
-        using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"repos/{repo}/actions/artifacts/{artifactId}/zip");
-        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        if (!httpResponse.IsSuccessStatusCode)
-        {
-            var errorResponseBody = await httpResponse.Content.ReadAsStringAsync();
-            throw new HttpClientResponseException(httpRequest.Method, $"{httpRequest.RequestUri}", httpResponse.StatusCode, errorResponseBody);
-        }
+    //    using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"repos/{repo}/actions/artifacts/{artifactId}/zip");
+    //    var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
+    //    if (!httpResponse.IsSuccessStatusCode)
+    //    {
+    //        var errorResponseBody = await httpResponse.Content.ReadAsStringAsync();
+    //        throw new HttpClientResponseException(httpRequest.Method, $"{httpRequest.RequestUri}", httpResponse.StatusCode, errorResponseBody);
+    //    }
 
-        var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-        return new ZipArchive(responseStream, ZipArchiveMode.Read);
-    }
+    //    var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+    //    return new ZipArchive(responseStream, ZipArchiveMode.Read);
+    //}
 }

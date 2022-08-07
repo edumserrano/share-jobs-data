@@ -73,6 +73,7 @@ public class ReadDataCommand : ICommand
             var message = @$"An error occurred trying to execute the command to parse the log from a Markdown link check step.
 Error:
 - {e.Message}";
+            message += Environment.NewLine + e.StackTrace;
             throw new CommandException(message, innerException: e);
         }
     }
