@@ -1,3 +1,5 @@
+using System.IO.Compression;
+
 namespace ShareJobsDataCli.GitHub;
 
 internal class GitHubHttpClient
@@ -16,7 +18,6 @@ internal class GitHubHttpClient
 
         var httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", actionRuntimeToken);
-        httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
         httpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", $"edumserrano/share-jobs-data:{repository}");
         return httpClient;
     }
@@ -54,6 +55,7 @@ internal class GitHubHttpClient
             throw new InvalidOperationException();
         }
 
+        Console.WriteLine($"download from {file.ContentLocation}");
         await DownloadContainerItemAsync(file.ContentLocation);
 
         return null!;
@@ -62,6 +64,7 @@ internal class GitHubHttpClient
     private async Task<GitHubListArtifactsResponse> ListArtifactsAsync(GitHubArtifactContainerUrl containerUrl)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{containerUrl}");
+        httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue($"application/json;api-version={GitHubApiVersion.Latest}"));
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         var responseModel = await httpResponse.ReadFromJsonAsync<GitHubListArtifactsResponse>();
         return responseModel;
@@ -71,6 +74,7 @@ internal class GitHubHttpClient
     {
         var getContainerItemsUrl = fileContainerResourceUrl.SetQueryParam("itemPath", artifactName);
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, getContainerItemsUrl);
+        httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue($"application/json;api-version={GitHubApiVersion.Latest}"));
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         var responseModel = await httpResponse.ReadFromJsonAsync<GitHubGetContainerItemsResponse>();
         return responseModel;
@@ -79,11 +83,21 @@ internal class GitHubHttpClient
     private async Task DownloadContainerItemAsync(string contentLocation)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, contentLocation);
+        httpRequest.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+        httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue($"application/octet-stream;api-version={GitHubApiVersion.Latest}"));
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         await httpResponse.EnsureSuccessStatusCodeAsync();
 
-        var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-        using var reader = new StreamReader(responseStream);
+        using var memStream = new MemoryStream();
+        using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+        using (var decompressionStream = new GZipStream(responseStream, CompressionMode.Decompress))
+        {
+            await decompressionStream.CopyToAsync(memStream);
+            Console.WriteLine($"memStream position after gzip copy: {memStream.Position}");
+            memStream.Position = 0;
+        }
+
+        using var reader = new StreamReader(memStream);
         var text = await reader.ReadToEndAsync();
         Console.WriteLine(text);
     }
