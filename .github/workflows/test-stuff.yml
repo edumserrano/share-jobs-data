@@ -47,10 +47,14 @@ jobs:
               - first
               - second
               - third
-    - name: Run read jobs data
-      uses: ./
+    - name: Dump github context for debug purposes
+      run: |
+        "hi" > test.txt
+    - name: Upload test
+      uses: actions/upload-artifact@v2
       with:
-        command: read-data
+        name: my-test
+        path: ./test.txt
 
   read-job:
     name: read
@@ -64,45 +68,54 @@ jobs:
       uses: ./
       with:
         command: read-data
-
-  test2:
-    name: test 2
-    # permissions:
-    #   contents: read
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - name: pwsh list env
-      run: |
-        dir env:
-    - name: unbunt list env
-      shell: bash
-      run: env
-    - name: bash echo
-      shell: bash
-      run: |
-          echo "ACTIONS_RUNTIME_URL: $ACTIONS_RUNTIME_URL"
-          echo "GITHUB_RUN_ID: $GITHUB_RUN_ID"
-          echo "ACTIONS_RUNTIME_TOKEN: $ACTIONS_RUNTIME_TOKEN"
-    - uses: actions/github-script@v6.1.0
-      with:
-        script: |
-          const runtimeUrl = process.env['ACTIONS_RUNTIME_URL']
-          console.log(runtimeUrl)
-    - name: Debug 2
-      env:
-        SOME_URL: ${{ env.ACTIONS_RUNTIME_URL }}
-        SOME_URL_2: test
-      run: |
-        Write-Output $Env:SOME_URL
-        Write-Output $Env:SOME_URL_2
-    - name: Debug
-      run: |
-        Write-Output $Env:ACTIONS_RUNTIME_URL
-        Write-Output $Env:GITHUB_RUN_ID
-        "hi" > test.txt
-    - name: Upload test
-      uses: actions/upload-artifact@v3
+        path: ./test.txt
+    - uses: actions/download-artifact@v3
       with:
         name: my-test
-        path: ./test.txt
+    - name: ls download
+      run: |
+        ls -R
+    - name: cat download
+      run: |
+        cat test.txt
+  # test2:
+  #   name: test 2
+  #   # permissions:
+  #   #   contents: read
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v3
+  #   - name: pwsh list env
+  #     run: |
+  #       dir env:
+  #   - name: unbunt list env
+  #     shell: bash
+  #     run: env
+  #   - name: bash echo
+  #     shell: bash
+  #     run: |
+  #         echo "ACTIONS_RUNTIME_URL: $ACTIONS_RUNTIME_URL"
+  #         echo "GITHUB_RUN_ID: $GITHUB_RUN_ID"
+  #         echo "ACTIONS_RUNTIME_TOKEN: $ACTIONS_RUNTIME_TOKEN"
+  #   - uses: actions/github-script@v6.1.0
+  #     with:
+  #       script: |
+  #         const runtimeUrl = process.env['ACTIONS_RUNTIME_URL']
+  #         console.log(runtimeUrl)
+  #   - name: Debug 2
+  #     env:
+  #       SOME_URL: ${{ env.ACTIONS_RUNTIME_URL }}
+  #       SOME_URL_2: test
+  #     run: |
+  #       Write-Output $Env:SOME_URL
+  #       Write-Output $Env:SOME_URL_2
+  #   - name: Debug
+  #     run: |
+  #       Write-Output $Env:ACTIONS_RUNTIME_URL
+  #       Write-Output $Env:GITHUB_RUN_ID
+  #       "hi" > test.txt
+  #   - name: Upload test
+  #     uses: actions/upload-artifact@v3
+  #     with:
+  #       name: my-test
+  #       path: ./test.txt
