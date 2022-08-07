@@ -11,13 +11,13 @@ internal class GitHubUploadArtifactHttpClient
         _httpClient = httpClient.NotNull();
     }
 
-    public static HttpClient CreateHttpClient(string actionRuntimeToken)
+    public static HttpClient CreateHttpClient(string actionRuntimeToken, string repository)
     {
         actionRuntimeToken.NotNullOrWhiteSpace();
         var httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", actionRuntimeToken);
         httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
-        httpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", "share-job-data-cli");
+        httpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", $"share-job-data-cli:{repository}");
         return httpClient;
     }
 
@@ -44,9 +44,16 @@ internal class GitHubUploadArtifactHttpClient
         var containerRequest = new CreateArtifactFileContainerRequest(containerName);
         createArtifactFileContainerHttpRequest.Content = JsonContent.Create(containerRequest);
         var createArtifactFileContainerHttpResponse = await _httpClient.SendAsync(createArtifactFileContainerHttpRequest);
+        //createArtifactFileContainerHttpResponse.EnsureSuccessStatusCode(); // TODO improve, check status code and throw error message with body if fails, add extension method for this EnsureSucessStatusCodeWithError()
+        //var createArtifactFileContainerResponse = await createArtifactFileContainerHttpResponse.Content.ReadFromJsonAsync<UpdateArtifactFileContainerResponse>();
+        //return createArtifactFileContainerResponse.NotNull(); // TODO throw same type of exception that EnsureSucessStatusCodeWithError instead of using NotNull workaround
+
         createArtifactFileContainerHttpResponse.EnsureSuccessStatusCode(); // TODO improve, check status code and throw error message with body if fails, add extension method for this EnsureSucessStatusCodeWithError()
-        var createArtifactFileContainerResponse = await createArtifactFileContainerHttpResponse.Content.ReadFromJsonAsync<UpdateArtifactFileContainerResponse>();
-        return createArtifactFileContainerResponse.NotNull(); // TODO throw same type of exception that EnsureSucessStatusCodeWithError instead of using NotNull workaround
+        var raw = await createArtifactFileContainerHttpResponse.Content.ReadAsStringAsync();
+        Console.WriteLine($"createArtifactFileContainerResponse-status: {createArtifactFileContainerHttpResponse.StatusCode}");
+        Console.WriteLine($"createArtifactFileContainerResponse-raw: {raw}");
+
+        return System.Text.Json.JsonSerializer.Deserialize<UpdateArtifactFileContainerResponse>(raw)!;
     }
 
     private async Task<UploadArtifactFileResponse> UploadArtifactFileAsync(

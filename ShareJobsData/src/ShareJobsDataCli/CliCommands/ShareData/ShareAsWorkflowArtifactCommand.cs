@@ -46,8 +46,8 @@ public class ShareAsWorkflowArtifactCommand : ICommand
 
 
             var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
-            using var httpClient = _httpClient ?? GitHubUploadArtifactHttpClient.CreateHttpClient(githubEnvironment.ActionRuntimeToken);
-            var containerUrl = new GitHubUploadArtifactContainerUrl(githubEnvironment.ActionRuntimeUrl, githubEnvironment.ActionRunId);
+            using var httpClient = _httpClient ?? GitHubUploadArtifactHttpClient.CreateHttpClient(githubEnvironment.GitHubActionRuntimeToken, githubEnvironment.GitHubRepository);
+            var containerUrl = new GitHubUploadArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
             var artifact = new GitHubUploadArtifact("my-dotnet-artifact", "shared-job-data.txt", dataAsJson);
             var githubHttpClient = new GitHubUploadArtifactHttpClient(httpClient);
             await githubHttpClient.UploadArtifactAsync(containerUrl, artifact);

@@ -2,25 +2,30 @@ namespace ShareJobsDataCli.GitHub;
 
 public interface IGitHubEnvironment
 {
-    string ActionRuntimeToken { get; }
+    string GitHubActionRuntimeToken { get; }
 
-    string ActionRuntimeUrl { get; }
+    string GitHubActionRuntimeUrl { get; }
 
-    string ActionRunId { get; }
+    string GitHubActionRunId { get; }
+
+    string GitHubRepository { get; }
 }
 
 internal class GitHubEnvironment : IGitHubEnvironment
 {
     public GitHubEnvironment()
     {
-        ActionRuntimeToken = Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_TOKEN") ?? string.Empty;
-        ActionRuntimeUrl = Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL") ?? string.Empty;
-        ActionRunId = Environment.GetEnvironmentVariable("GITHUB_RUN_ID") ?? string.Empty;
+        GitHubActionRuntimeToken = Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_TOKEN") ?? string.Empty;
+        GitHubActionRuntimeUrl = Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL") ?? string.Empty;
+        GitHubActionRunId = Environment.GetEnvironmentVariable("GITHUB_RUN_ID") ?? string.Empty;
+        GitHubRepository = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY") ?? string.Empty;
     }
 
-    public string ActionRuntimeToken { get; }
+    public string GitHubActionRuntimeToken { get; }
 
-    public string ActionRuntimeUrl { get; }
+    public string GitHubActionRuntimeUrl { get; }
 
-    public string ActionRunId { get; }
+    public string GitHubActionRunId { get; }
+
+    public string GitHubRepository { get; }
 }
