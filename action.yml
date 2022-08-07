@@ -8,9 +8,12 @@ inputs:
     description: 'GitHub token used to access workflow run logs.'
     required: true
     default: ${{ github.token }}
+  command:
+    description: "Command to use: 'share-data' or 'read-data'."
+    required: true
   data:
     description: 'YAML representation of the data to share.'
-    required: true
+    required: false
 # outputs:
 #   mlc-result:
 #     description: 'The result from the Markdown Link Check action in JSON format.'
@@ -18,16 +21,12 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - share-data
+    - ${{ inputs.command }}
     - --auth-token
     - ${{ inputs.auth-token }}
-    - --data
-    - ${{ inputs.data }}
     # # The syntax for the optional parameters uses a kind of way of doing a ternary operator. See https://github.com/actions/runner/issues/409
     # # I don't want to include them in the call to the CLI if the values are the default empty value. Or else the CLI will say the value for that option is missing
     # # So if the optional action inputs below are equal to '' I set them to the default of a space ' ' and then on the entrypoint.ps1 I remove any arg that is empty or whitespace before doing the CLI call
     # # Note: can't set to an empty string '' instead of a space ' ' because then the ternary operator doesn't work, it will always evaluate to the right hand side of the ||. See https://github.com/actions/runner/issues/409#issuecomment-1013325196
-    # - ${{ inputs.json-filepath == ''  && ' ' || '--json-filepath' }}
-    # - ${{ inputs.json-filepath == ''  && ' ' || inputs.json-filepath }}
-    # - ${{ inputs.markdown-filepath == ''  && ' ' || '--markdown-filepath' }}
-    # - ${{ inputs.markdown-filepath == ''  && ' ' || inputs.markdown-filepath }}
+    - ${{ inputs.data == ''  && ' ' || '--data' }}
+    - ${{ inputs.data == ''  && ' ' || inputs.data }}
