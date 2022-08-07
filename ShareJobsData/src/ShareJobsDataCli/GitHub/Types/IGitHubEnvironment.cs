@@ -11,7 +11,7 @@ public interface IGitHubEnvironment
     string GitHubRepository { get; }
 }
 
-internal class GitHubEnvironment : IGitHubEnvironment
+internal record GitHubEnvironment : IGitHubEnvironment
 {
     public GitHubEnvironment()
     {
