@@ -83,7 +83,7 @@ internal class GitHubHttpClient
     private async Task DownloadContainerItemAsync(string contentLocation)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, contentLocation);
-        httpRequest.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+        httpRequest.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip");
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/octet-stream;api-version={GitHubApiVersion.Latest}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         await httpResponse.EnsureSuccessStatusCodeAsync();
