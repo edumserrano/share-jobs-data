@@ -29,14 +29,15 @@ internal class GitHubHttpClient
         var listArtifactsResponse = await ListArtifactsAsync(containerUrl);
         Console.WriteLine($"listArtifactsResponse: {listArtifactsResponse}");
 
-        var artifact = listArtifactsResponse.Value.FirstOrDefault(x => x.Name == artifactName);
+        var artifact = listArtifactsResponse.ArtifactFileContainers.FirstOrDefault(x => x.Name == artifactName);
         if (artifact is null)
         {
             //abort
             throw new InvalidOperationException();
         }
 
-        await GetContainerItemsAsync(artifact.FileContainerResourceUrl, artifact.Name);
+        var containerItemsResponse = await GetContainerItemsAsync(artifact.FileContainerResourceUrl, artifact.Name);
+        Console.WriteLine($"containerItemsResponse: {containerItemsResponse}");
 
         return null!;
     }
@@ -45,33 +46,17 @@ internal class GitHubHttpClient
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{containerUrl}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var responseModel = await httpResponse.ReadFromJsonAndValidateAsync<GitHubListArtifactsResponse, GitHubListArtifactsResponseValidator>();
+        var responseModel = await httpResponse.ReadFromJsonAsync<GitHubListArtifactsResponse>();
         return responseModel;
     }
 
-    private async Task GetContainerItemsAsync(string fileContainerResourceUrl, string artifactName)
+    private async Task<GitHubListArtifactsResponse> GetContainerItemsAsync(string fileContainerResourceUrl, string artifactName)
     {
         var getContainerItemsUrl = fileContainerResourceUrl.SetQueryParam("itemPath", artifactName);
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, getContainerItemsUrl);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        await httpResponse.EnsureSuccessStatusCodeAsync();
-        var raw = await httpResponse.Content.ReadAsStringAsync();
-        Console.WriteLine($"GetContainerItemsAsync-raw: {raw}");
-
-        //var listArtifactsResponse = await httpResponse.Content.ReadFromJsonAsync<GitHubListArtifactsResponse>();
-        //if (listArtifactsResponse is null)
-        //{
-        //    throw HttpResponseValidationException.JsonDeserializedToNull<GitHubListArtifactsResponse>();
-        //}
-
-        //var validator = new GitHubListArtifactsResponseValidator();
-        //var validationResult = validator.Validate(listArtifactsResponse);
-        //if (!validationResult.IsValid)
-        //{
-        //    throw HttpResponseValidationException.ValidationFailed<GitHubListArtifactsResponse>(validationResult);
-        //}
-
-        //return listArtifactsResponse;
+        var responseModel = await httpResponse.ReadFromJsonAsync<GitHubListArtifactsResponse>();
+        return responseModel;
     }
 
     // see https://docs.github.com/en/rest/actions/artifacts#download-an-artifact

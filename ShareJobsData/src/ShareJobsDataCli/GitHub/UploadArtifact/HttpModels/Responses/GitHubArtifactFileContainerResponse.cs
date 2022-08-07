@@ -1,31 +1,29 @@
 namespace ShareJobsDataCli.GitHub.UploadArtifact.HttpModels.Responses;
 
 internal sealed record GitHubArtifactFileContainerResponse
-(
-    int ContainerId,
-    int Size,
-    string FileContainerResourceUrl,
-    string Type,
-    string Name,
-    string Url,
-    DateTime ExpiresOn
-);
-
-internal sealed class GitHubArtifactFileContainerResponseValidator : AbstractValidator<GitHubArtifactFileContainerResponse>
 {
-    public GitHubArtifactFileContainerResponseValidator()
+    private string _fileContainerResourceUrl = default!;
+    private string _name = default!;
+
+    public int ContainerId { get; init; }
+
+    public int Size { get; init; }
+
+    public string FileContainerResourceUrl
     {
-        RuleFor(x => x.FileContainerResourceUrl)
-            .Must(BeAValidUrl)
-            .WithMessage(x => $"{nameof(x.FileContainerResourceUrl)} is not a valid URL. Actual value: '{x.FileContainerResourceUrl}'.");
-        RuleFor(x => x.Name)
-            .NotEmpty()
-            .WithMessage(x => $"{nameof(x.Name)} must have a value.");
+        get => _fileContainerResourceUrl;
+        init => _fileContainerResourceUrl = value.ValidUri<GitHubArtifactFileContainerResponse>(nameof(FileContainerResourceUrl));
     }
 
-    private bool BeAValidUrl(string fileContainerResourceUrl)
+    public string Type { get; init; } = default!;
+
+    public string Name
     {
-        var options = new UriCreationOptions();
-        return Uri.TryCreate(fileContainerResourceUrl, options, out var _);
+        get => _name;
+        init => _name = value.NotNullOrWhiteSpace<GitHubArtifactFileContainerResponse>(nameof(Name));
     }
+
+    public string Url { get; init; } = default!;
+
+    public DateTime ExpiresOn { get; init; }
 }

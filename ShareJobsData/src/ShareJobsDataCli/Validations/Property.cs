@@ -2,7 +2,7 @@ namespace ShareJobsDataCli.Validations;
 
 internal static class Property
 {
-    internal static string PropertyNotNullOrWhiteSpace<TModel>([NotNull] this string? value, string propertyName)
+    internal static string NotNullOrWhiteSpace<TModel>([NotNull] this string? value, string propertyName)
     {
         if (!string.IsNullOrWhiteSpace(value))
         {
@@ -13,22 +13,26 @@ internal static class Property
         throw new PropertValidationException(typeof(TModel).Name, message);
     }
 
-    //public static int PropertyPositive(this int value, [CallerArgumentExpression("value")] string expression = "")
-    //{
-    //    if (value >= 0)
-    //    {
-    //        return value;
-    //    }
-
-    //    var message = $"{expression} must be a positive value. Received '{value}'.";
-    //    throw new PropertValidationException(message);
-    //}
-}
-
-public class PropertValidationException : Exception
-{
-    internal PropertValidationException(string modelName, string validationErrorMessage)
-        : base($"Error validating {modelName}: {validationErrorMessage}")
+    internal static string ValidUri<TModel>([NotNull] this string? value, string propertyName)
     {
+        var options = new UriCreationOptions();
+        if(Uri.TryCreate(value, options, out var _))
+        {
+            return value;
+        }
+
+        var message = $"{propertyName} must be a valid URI. Received: '{value}'.";
+        throw new PropertValidationException(typeof(TModel).Name, message);
+    }
+
+    public static int Positive<TModel>(this int value,  string propertyName)
+    {
+        if (value >= 0)
+        {
+            return value;
+        }
+
+        var message = $"{propertyName} must be a positive value. Received: '{value}'.";
+        throw new PropertValidationException(typeof(TModel).Name, message); 
     }
 }

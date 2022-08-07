@@ -2,7 +2,6 @@ namespace ShareJobsDataCli.GitHub.UploadArtifact.HttpModels.Responses;
 
 public record GitHubGetContainerItemsResponse
 {
-    [JsonPropertyName("count")]
     public int Count { get; init; }
 
     [JsonPropertyName("value")]
@@ -11,15 +10,25 @@ public record GitHubGetContainerItemsResponse
 
 public record GitHubContainerItem
 {
-    private string _contentId = default!;
+    private string _contentLocation = default!;
+    private string _path = default!;
+    private string _itemType = default!;
 
     public int ContainerId { get; init; }
 
     public string ScopeIdentifier { get; init; } = default!;
 
-    public string Path { get; init; } = default!;
+    public string Path
+    {
+        get => _path;
+        init => _path = value.NotNullOrWhiteSpace<GitHubContainerItem>(nameof(Path));
+    }
 
-    public string ItemType { get; init; } = default!;
+    public string ItemType
+    {
+        get => _itemType;
+        init => _itemType = value.NotNullOrWhiteSpace<GitHubContainerItem>(nameof(Path));
+    }
 
     public string Status { get; init; } = default!;
 
@@ -33,13 +42,13 @@ public record GitHubContainerItem
 
     public string ItemLocation { get; init; } = default!;
 
-    public string ContentLocation { get; init; } = default!;
-
-    public string ContentId
+    public string ContentLocation
     {
-        get => _contentId;
-        init => _contentId = value.PropertyNotNullOrWhiteSpace<GitHubContainerItem>(nameof(ContentId));
+        get => _contentLocation;
+        init => _contentLocation = value.ValidUri<GitHubContainerItem>(nameof(ContentLocation));
     }
+
+    public string ContentId { get; init; } = default!;
 
     public int FileLength { get; init; }
 
@@ -48,35 +57,4 @@ public record GitHubContainerItem
     public int FileType { get; init; }
 
     public int FileI { get; init; }
-}
-
-internal sealed class GitHubGetContainerItemsResponseValidator : AbstractValidator<GitHubGetContainerItemsResponse>
-{
-    public GitHubGetContainerItemsResponseValidator()
-    {
-        RuleForEach(x => x.Items)
-            .SetValidator(new GitHubContainerItemValidator());
-    }
-}
-
-internal sealed class GitHubContainerItemValidator : AbstractValidator<GitHubContainerItem>
-{
-    public GitHubContainerItemValidator()
-    {
-        RuleFor(x => x.ContentLocation)
-            .Must(BeAValidUrl)
-            .WithMessage(x => $"item {{CollectionIndex}}: {nameof(x.ContentLocation)} is not a valid URL. Actual value: '{x.ContentLocation}'.");
-        RuleFor(x => x.ItemType)
-            .NotEmpty()
-            .WithMessage(x => $"item {{CollectionIndex}}: {nameof(x.ItemType)} must have a value.");
-        RuleFor(x => x.Path)
-            .NotEmpty()
-            .WithMessage(x => $"item {{CollectionIndex}}: {nameof(x.Path)} must have a value.");
-    }
-
-    private bool BeAValidUrl(string fileContainerResourceUrl)
-    {
-        var options = new UriCreationOptions();
-        return Uri.TryCreate(fileContainerResourceUrl, options, out var _);
-    }
 }
