@@ -10,16 +10,20 @@ internal sealed class GitHubListArtifactsResponseValidator : AbstractValidator<G
     public GitHubListArtifactsResponseValidator()
     {
         RuleFor(x => x.Artifacts)
-            .Must(x => x is not null)
-            .WithMessage(x => $"{nameof(x.Artifacts)} cannot be null.");
-        RuleFor(x => x.Artifacts)
             .Must(AllArtifactsMustBeValid)
             .WithMessage(x => $"{nameof(x.Artifacts)} contains invalid elements.");
     }
 
     private bool AllArtifactsMustBeValid(GitHubListArtifactsResponse instance, List<GitHubArtifactFileContainerResponse> artifacts, ValidationContext<GitHubListArtifactsResponse> context)
     {
-        var hasErrors = false;
+        if (artifacts is null)
+        {
+            var validationFailure = new ValidationFailure(nameof(instance.Artifacts), "Cannot be null");
+            context.AddFailure(validationFailure);
+            return false;
+        }
+
+        var isValid = true;
         var validator = new GitHubArtifactFileContainerResponseValidator();
         for (var i = 0; i < artifacts.Count; i++)
         {
@@ -27,7 +31,7 @@ internal sealed class GitHubListArtifactsResponseValidator : AbstractValidator<G
             var validationResult = validator.Validate(artifact);
             if (!validationResult.IsValid)
             {
-                hasErrors = true;
+                isValid = false;
                 foreach (var error in validationResult.Errors)
                 {
                     error.ErrorMessage = $"Element {i} is invalid. {error.ErrorMessage}"; // update error message to "group" errors by failed artifact model instance
@@ -36,6 +40,6 @@ internal sealed class GitHubListArtifactsResponseValidator : AbstractValidator<G
             }
         }
 
-        return hasErrors;
+        return isValid;
     }
 }
