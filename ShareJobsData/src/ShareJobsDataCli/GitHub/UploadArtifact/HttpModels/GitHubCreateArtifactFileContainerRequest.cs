@@ -1,8 +1,8 @@
 namespace ShareJobsDataCli.GitHub.UploadArtifact.HttpModels;
 
-internal record CreateArtifactFileContainerRequest
+internal sealed record GitHubCreateArtifactFileContainerRequest
 {
-    public CreateArtifactFileContainerRequest(string name)
+    public GitHubCreateArtifactFileContainerRequest(string name)
     {
         Name = name.NotNullOrWhiteSpace();
     }

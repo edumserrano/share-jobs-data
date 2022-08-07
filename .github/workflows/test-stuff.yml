@@ -29,13 +29,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Debug
-      run: |
-        Write-Output $Env:ACTIONS_RUNTIME_URL
-        Write-Output $Env:GITHUB_RUN_ID
     - name: Run share jobs data
       uses: ./
       with:
+        command: share-data
         data: |
           name: George Washington
           age: 89
@@ -50,6 +47,10 @@ jobs:
               - first
               - second
               - third
+    - name: Run read jobs data
+      uses: ./
+      with:
+        command: read-data
 
   test2:
     name: test 2

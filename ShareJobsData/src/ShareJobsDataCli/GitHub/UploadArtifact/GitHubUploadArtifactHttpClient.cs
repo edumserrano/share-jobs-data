@@ -1,5 +1,3 @@
-using ShareJobsDataCli.GitHub.UploadArtifact.HttpModels;
-
 namespace ShareJobsDataCli.GitHub.UploadArtifact;
 
 internal class GitHubUploadArtifactHttpClient
@@ -11,20 +9,27 @@ internal class GitHubUploadArtifactHttpClient
         _httpClient = httpClient.NotNull();
     }
 
-    public static HttpClient CreateHttpClient(string actionRuntimeToken, string repository)
+    public static HttpClient CreateHttpClient(GitHubActionRuntimeToken actionRuntimeToken, GitHubRepository repository)
     {
-        actionRuntimeToken.NotNullOrWhiteSpace();
+        actionRuntimeToken.NotNull();
+        repository.NotNull();
+
         var httpClient = new HttpClient();
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", actionRuntimeToken);
         httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
-        httpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", $"share-job-data-cli:{repository}");
+        httpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", $"edumserrano/share-jobs-data:{repository}");
         return httpClient;
     }
 
+    // this process is explained here https://github.com/actions/upload-artifact/issues/180
+    // add something to dev readme about this
     public async Task UploadArtifactAsync(
         GitHubUploadArtifactContainerUrl containerUrl,
         GitHubUploadArtifact artifact)
     {
+        containerUrl.NotNull();
+        artifact.NotNull();
+
         var createArtifactFileContainerResponse = await CreateArtifactFileContainerAsync(containerUrl, artifact.ContainerName);
         Console.WriteLine($"createArtifactFileContainerResponse: {createArtifactFileContainerResponse}");
 
@@ -35,46 +40,97 @@ internal class GitHubUploadArtifactHttpClient
         Console.WriteLine($"finalizeArtifactResponse: {finalizeArtifactResponse}");
     }
 
-    private async Task<UpdateArtifactFileContainerResponse> CreateArtifactFileContainerAsync(GitHubUploadArtifactContainerUrl containerUrl, string containerName)
+    private async Task<GitHubUpdateArtifactFileContainerResponse> CreateArtifactFileContainerAsync(GitHubUploadArtifactContainerUrl containerUrl, string containerName)
     {
-        using var createArtifactFileContainerHttpRequest = new HttpRequestMessage(HttpMethod.Post, containerUrl);
-        var containerRequest = new CreateArtifactFileContainerRequest(containerName);
-        createArtifactFileContainerHttpRequest.Content = JsonContent.Create(containerRequest);
-        var createArtifactFileContainerHttpResponse = await _httpClient.SendAsync(createArtifactFileContainerHttpRequest);
-        createArtifactFileContainerHttpResponse.EnsureSuccessStatusCode(); // TODO improve, check status code and throw error message with body if fails, add extension method for this EnsureSucessStatusCodeWithError()
-        var createArtifactFileContainerResponse = await createArtifactFileContainerHttpResponse.Content.ReadFromJsonAsync<UpdateArtifactFileContainerResponse>();
-        return createArtifactFileContainerResponse.NotNull(); // TODO throw same type of exception that EnsureSucessStatusCodeWithError instead of using NotNull workaround
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Post, containerUrl);
+        var containerRequest = new GitHubCreateArtifactFileContainerRequest(containerName);
+        httpRequest.Content = JsonContent.Create(containerRequest);
+        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            var errorResponseBody = await httpResponse.Content.ReadAsStringAsync();
+            throw new HttpClientResponseException(httpRequest.Method, $"{httpRequest.RequestUri}", httpResponse.StatusCode, errorResponseBody);
+        }
+
+        var createArtifactFileContainerResponse = await httpResponse.Content.ReadFromJsonAsync<GitHubUpdateArtifactFileContainerResponse>();
+        if (createArtifactFileContainerResponse is null)
+        {
+            throw HttpResponseValidationException.JsonDeserializedToNull<GitHubUpdateArtifactFileContainerResponse>();
+        }
+
+        var validator = new GitHubUpdateArtifactFileContainerResponseValidator();
+        var validationResult = validator.Validate(createArtifactFileContainerResponse);
+        if (!validationResult.IsValid)
+        {
+            throw HttpResponseValidationException.ValidationFailed<GitHubUpdateArtifactFileContainerResponse>(validationResult);
+        }
+
+        return createArtifactFileContainerResponse;
     }
 
-    private async Task<UploadArtifactFileResponse> UploadArtifactFileAsync(
+    private async Task<GitHubUpdateArtifactResponse> UploadArtifactFileAsync(
         string fileContainerResourceUrl,
         GitHubUploadArtifact artifact)
     {
         var contentBytes = Encoding.UTF8.GetBytes(artifact.FilePayload);
         using var stream = new MemoryStream(contentBytes);
         var uploadFileUrl = fileContainerResourceUrl.SetQueryParam("itemPath", artifact.FilePath);
-        using var uploadFileHttpRequest = new HttpRequestMessage(HttpMethod.Put, uploadFileUrl);
-        uploadFileHttpRequest.Content = new StreamContent(stream);
-        uploadFileHttpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Octet);
-        uploadFileHttpRequest.Content.Headers.ContentRange = new ContentRangeHeaderValue(from: 0, to: contentBytes.Length - 1, length: contentBytes.Length);
-        var uploadFileHttpResponse = await _httpClient.SendAsync(uploadFileHttpRequest);
-        uploadFileHttpResponse.EnsureSuccessStatusCode(); // TODO improve, check status code and throw error message with body if fails, add extension method for this EnsureSucessStatusCodeWithError()
-        var updateArtifactResponse = await uploadFileHttpResponse.Content.ReadFromJsonAsync<UploadArtifactFileResponse>();
-        return updateArtifactResponse.NotNull(); // TODO throw same type of exception that EnsureSucessStatusCodeWithError instead of using NotNull workaround
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Put, uploadFileUrl);
+        httpRequest.Content = new StreamContent(stream);
+        httpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Octet);
+        httpRequest.Content.Headers.ContentRange = new ContentRangeHeaderValue(from: 0, to: contentBytes.Length - 1, length: contentBytes.Length);
+        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            var errorResponseBody = await httpResponse.Content.ReadAsStringAsync();
+            throw new HttpClientResponseException(httpRequest.Method, $"{httpRequest.RequestUri}", httpResponse.StatusCode, errorResponseBody);
+        }
+
+        var updateArtifactResponse = await httpResponse.Content.ReadFromJsonAsync<GitHubUpdateArtifactResponse>();
+        if (updateArtifactResponse is null)
+        {
+            throw HttpResponseValidationException.JsonDeserializedToNull<GitHubUpdateArtifactResponse>();
+        }
+
+        var validator = new GitHubUpdateArtifactResponseValidator();
+        var validationResult = validator.Validate(updateArtifactResponse);
+        if (!validationResult.IsValid)
+        {
+            throw HttpResponseValidationException.ValidationFailed<GitHubUpdateArtifactResponse>(validationResult);
+        }
+
+        return updateArtifactResponse;
     }
 
-    private async Task<UpdateArtifactFileContainerResponse> FinalizeArtifactContainerAsync(
+    private async Task<GitHubUpdateArtifactFileContainerResponse> FinalizeArtifactContainerAsync(
         GitHubUploadArtifactContainerUrl containerUrl,
         GitHubUploadArtifact artifact,
         int containerSize)
     {
-        var finalizeArtifactContainerRequest = new FinalizeArtifactContainerRequest(containerSize);
+        var finalizeArtifactContainerRequest = new GitHubFinalizeArtifactContainerRequest(containerSize);
         var setArtifactSizeUrl = $"{containerUrl}".SetQueryParam("artifactName", artifact.ContainerName);
-        using var finalizeArtifactContainerHttpRequest = new HttpRequestMessage(HttpMethod.Patch, setArtifactSizeUrl);
-        finalizeArtifactContainerHttpRequest.Content = JsonContent.Create(finalizeArtifactContainerRequest);
-        var finalizeArtifactContainerHttpResponse = await _httpClient.SendAsync(finalizeArtifactContainerHttpRequest);
-        finalizeArtifactContainerHttpResponse.EnsureSuccessStatusCode(); // TODO improve, check status code and throw error message with body if fails, add extension method for this EnsureSucessStatusCodeWithError()
-        var finalizeArtifactContainerResponse = await finalizeArtifactContainerHttpResponse.Content.ReadFromJsonAsync<UpdateArtifactFileContainerResponse>();
-        return finalizeArtifactContainerResponse.NotNull(); // TODO throw same type of exception that EnsureSucessStatusCodeWithError instead of using NotNull workaround
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Patch, setArtifactSizeUrl);
+        httpRequest.Content = JsonContent.Create(finalizeArtifactContainerRequest);
+        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            var errorResponseBody = await httpResponse.Content.ReadAsStringAsync();
+            throw new HttpClientResponseException(httpRequest.Method, $"{httpRequest.RequestUri}", httpResponse.StatusCode, errorResponseBody);
+        }
+
+        var finalizeArtifactContainerResponse = await httpResponse.Content.ReadFromJsonAsync<GitHubUpdateArtifactFileContainerResponse>();
+        if (finalizeArtifactContainerResponse is null)
+        {
+            throw HttpResponseValidationException.JsonDeserializedToNull<GitHubUpdateArtifactFileContainerResponse>();
+        }
+
+        var validator = new GitHubUpdateArtifactFileContainerResponseValidator();
+        var validationResult = validator.Validate(finalizeArtifactContainerResponse);
+        if (!validationResult.IsValid)
+        {
+            throw HttpResponseValidationException.ValidationFailed<GitHubUpdateArtifactFileContainerResponse>(validationResult);
+        }
+
+        return finalizeArtifactContainerResponse;
     }
 }

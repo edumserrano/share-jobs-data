@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.GitHub;
+namespace ShareJobsDataCli.GitHub.Types;
 
 public interface IGitHubEnvironment
 {

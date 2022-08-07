@@ -1,15 +1,17 @@
-namespace ShareJobsDataCli.CliCommands.ShareData;
+namespace ShareJobsDataCli.CliCommands.Commands.ReadData;
 
-[Command("share-data")]
-public class ShareAsWorkflowArtifactCommand : ICommand
+[Command("read-data")]
+public class ReadDataCommand : ICommand
 {
     private readonly HttpClient? _httpClient;
     private readonly IGitHubEnvironment? _gitHubEnvironment;
 
-    public ShareAsWorkflowArtifactCommand() { }
+    public ReadDataCommand()
+    {
+    }
 
     // used for test purposes to be able to mock external dependencies
-    public ShareAsWorkflowArtifactCommand(HttpClient httpClient, IGitHubEnvironment gitHubEnvironment)
+    public ReadDataCommand(HttpClient httpClient, IGitHubEnvironment gitHubEnvironment)
     {
         _httpClient = httpClient.NotNull();
         _gitHubEnvironment = gitHubEnvironment;
@@ -22,12 +24,12 @@ public class ShareAsWorkflowArtifactCommand : ICommand
         Description = "GitHub token used to upload the artifact.")]
     public string AuthToken { get; init; } = default!;
 
-    [CommandOption(
-        "data",
-        IsRequired = true,
-        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
-        Description = "The data to share in YAML format.")]
-    public string DataAsYmlStr { get; init; } = default!;
+    //[CommandOption(
+    //    "data",
+    //    IsRequired = true,
+    //    Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
+    //    Description = "The data to share in YAML format.")]
+    //public string DataAsYmlStr { get; init; } = default!;
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
@@ -36,20 +38,13 @@ public class ShareAsWorkflowArtifactCommand : ICommand
             console.NotNull();
             var authToken = new GitHubAuthToken(AuthToken);
 
-            var deserializer = new DeserializerBuilder()
-                .IgnoreUnmatchedProperties()
-                .Build();
-            var dataAsYml = deserializer.Deserialize<object>(DataAsYmlStr);
-            var dataAsJson = JsonConvert.SerializeObject(dataAsYml, Formatting.Indented);
-
-            await console.Output.WriteLineAsync(dataAsJson);
-
             var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
-            using var httpClient = _httpClient ?? GitHubUploadArtifactHttpClient.CreateHttpClient(githubEnvironment.GitHubActionRuntimeToken, githubEnvironment.GitHubRepository);
-            var containerUrl = new GitHubUploadArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
-            var artifact = new GitHubUploadArtifact("my-dotnet-artifact", "shared-job-data.txt", dataAsJson);
-            var githubHttpClient = new GitHubUploadArtifactHttpClient(httpClient);
-            await githubHttpClient.UploadArtifactAsync(containerUrl, artifact);
+            var repository = new GitHubRepository(githubEnvironment.GitHubRepository);
+            var runId = new GitHubActionRunId(githubEnvironment.GitHubActionRunId);
+            using var httpClient = _httpClient ?? GitHubHttpClient.CreateHttpClient(authToken, repository);
+            var githubHttpClient = new GitHubHttpClient(httpClient);
+            await githubHttpClient.ListArtifactsAsync(repository, runId);
+            //await githubHttpClient.DownloadArtifactAsync(repository, artifact);
             // TODO: also set the values as output for the step
 
 

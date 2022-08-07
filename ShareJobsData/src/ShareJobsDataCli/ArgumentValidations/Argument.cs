@@ -23,4 +23,15 @@ internal static class Argument
             ? value
             : throw new ArgumentException(message);
     }
+
+    public static int Positive(this string value, [CallerArgumentExpression("value")] string name = "")
+    {
+        if (int.TryParse(value, out var parsed))
+        {
+            return parsed;
+        }
+
+        var message = $"{name} must be a positive int value.";
+        throw new ArgumentException(message);
+    }
 }
