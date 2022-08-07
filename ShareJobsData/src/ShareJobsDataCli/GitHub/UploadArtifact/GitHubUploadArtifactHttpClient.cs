@@ -21,10 +21,11 @@ internal class GitHubUploadArtifactHttpClient
         return httpClient;
     }
 
-    // this process is explained here https://github.com/actions/upload-artifact/issues/180
+    // this process is explained here https://github.com/actions/upload-artifact/issues/180#issuecomment-1086306269
     // add something to dev readme about this
+    // no need to gzip since content is always expected to be small json model
     public async Task UploadArtifactAsync(
-        GitHubUploadArtifactContainerUrl containerUrl,
+        GitHubArtifactContainerUrl containerUrl,
         GitHubUploadArtifact artifact)
     {
         containerUrl.NotNull();
@@ -40,7 +41,7 @@ internal class GitHubUploadArtifactHttpClient
         Console.WriteLine($"finalizeArtifactResponse: {finalizeArtifactResponse}");
     }
 
-    private async Task<GitHubUpdateArtifactFileContainerResponse> CreateArtifactFileContainerAsync(GitHubUploadArtifactContainerUrl containerUrl, string containerName)
+    private async Task<GitHubUpdateArtifactFileContainerResponse> CreateArtifactFileContainerAsync(GitHubArtifactContainerUrl containerUrl, string containerName)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, containerUrl);
         var containerRequest = new GitHubCreateArtifactFileContainerRequest(containerName);
@@ -103,7 +104,7 @@ internal class GitHubUploadArtifactHttpClient
     }
 
     private async Task<GitHubUpdateArtifactFileContainerResponse> FinalizeArtifactContainerAsync(
-        GitHubUploadArtifactContainerUrl containerUrl,
+        GitHubArtifactContainerUrl containerUrl,
         GitHubUploadArtifact artifact,
         int containerSize)
     {

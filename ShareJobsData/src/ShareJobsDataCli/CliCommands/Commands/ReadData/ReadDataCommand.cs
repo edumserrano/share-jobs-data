@@ -39,13 +39,12 @@ public class ReadDataCommand : ICommand
             var authToken = new GitHubAuthToken(AuthToken);
 
             var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
-            await console.Output.WriteLineAsync($"RUN ID: {Environment.GetEnvironmentVariable("GITHUB_RUN_ID")}");
-            await console.Output.WriteLineAsync($"{githubEnvironment}");
+            var actionRuntimeToken = new GitHubActionRuntimeToken(githubEnvironment.GitHubActionRuntimeToken);
             var repository = new GitHubRepository(githubEnvironment.GitHubRepository);
-            using var httpClient = _httpClient ?? GitHubHttpClient.CreateHttpClient(authToken, repository);
+            using var httpClient = _httpClient ?? GitHubHttpClient.CreateHttpClient(actionRuntimeToken, repository);
             var githubHttpClient = new GitHubHttpClient(httpClient);
-            var runId = new GitHubActionRunId(githubEnvironment.GitHubActionRunId);
-            await githubHttpClient.ListArtifactsAsync(repository, runId);
+            var containerUrl = new GitHubArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
+            await githubHttpClient.ListArtifactsAsync(containerUrl);
             //await githubHttpClient.DownloadArtifactAsync(repository, artifact);
             // TODO: also set the values as output for the step
 

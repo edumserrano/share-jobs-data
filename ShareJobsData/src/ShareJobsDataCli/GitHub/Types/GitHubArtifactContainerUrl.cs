@@ -1,17 +1,17 @@
-namespace ShareJobsDataCli.GitHub.UploadArtifact.Types;
+namespace ShareJobsDataCli.GitHub.Types;
 
-internal record GitHubUploadArtifactContainerUrl
+internal record GitHubArtifactContainerUrl
 {
     private readonly string _value;
 
-    public GitHubUploadArtifactContainerUrl(string runtimeUrl, string runId)
+    public GitHubArtifactContainerUrl(string runtimeUrl, string runId)
     {
         runtimeUrl.NotNullOrWhiteSpace();
         runId.NotNullOrWhiteSpace();
         _value = $"{runtimeUrl}_apis/pipelines/workflows/{runId}/artifacts?api-version={GitHubApiVersion.Latest}";
     }
 
-    public static implicit operator string(GitHubUploadArtifactContainerUrl containerUrl)
+    public static implicit operator string(GitHubArtifactContainerUrl containerUrl)
     {
         return containerUrl._value;
     }

@@ -9,28 +9,24 @@ internal class GitHubHttpClient
         _httpClient = httpClient.NotNull();
     }
 
-    public static HttpClient CreateHttpClient(GitHubAuthToken authToken, GitHubRepository repository)
+    public static HttpClient CreateHttpClient(GitHubActionRuntimeToken actionRuntimeToken, GitHubRepository repository)
     {
-        authToken.NotNull();
+        actionRuntimeToken.NotNull();
         repository.NotNull();
 
-        var httpClient = new HttpClient
-        {
-            BaseAddress = new Uri("https://api.github.com"),
-        };
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("token", authToken);
-        httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept", "application/vnd.github.v3+json");
+        var httpClient = new HttpClient();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", actionRuntimeToken);
+        httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
         httpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", $"edumserrano/share-jobs-data:{repository}");
         return httpClient;
     }
 
-    // see https://docs.github.com/en/rest/actions/artifacts#list-workflow-run-artifacts
-    public async Task ListArtifactsAsync(GitHubRepository repo, GitHubActionRunId runId)
+    // taken from exploring https://github.com/actions/toolkit/blob/90be12a59c20a6ecc43b234c1885fc2852d3212d/packages/artifact/src/internal/artifact-client.ts#L157
+    public async Task ListArtifactsAsync(GitHubArtifactContainerUrl containerUrl)
     {
-        repo.NotNull();
-        runId.NotNull();
+        containerUrl.NotNull();
 
-        using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"repos/{repo}/actions/runs/{runId}/artifacts");
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{containerUrl}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         Console.WriteLine($"ListArtifactsAsync-status-code: {httpResponse.StatusCode}");
         var raw = await httpResponse.Content.ReadAsStringAsync();
