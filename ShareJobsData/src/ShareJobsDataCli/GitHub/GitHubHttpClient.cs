@@ -27,7 +27,7 @@ internal class GitHubHttpClient
         containerUrl.NotNull();
 
         var listArtifactsResponse = await ListArtifactsAsync(containerUrl);
-        Console.WriteLine($"listArtifactsResponse: {listArtifactsResponse}");
+        Console.WriteLine($"listArtifactsResponse: {listArtifactsResponse.ArtifactFileContainers}");
 
         var artifact = listArtifactsResponse.ArtifactFileContainers.FirstOrDefault(x => x.Name == artifactName);
         if (artifact is null)
@@ -37,7 +37,7 @@ internal class GitHubHttpClient
         }
 
         var containerItemsResponse = await GetContainerItemsAsync(artifact.FileContainerResourceUrl, artifact.Name);
-        Console.WriteLine($"containerItemsResponse: {containerItemsResponse}");
+        Console.WriteLine($"containerItemsResponse: {containerItemsResponse.ContainerItems}");
 
         return null!;
     }
@@ -50,12 +50,12 @@ internal class GitHubHttpClient
         return responseModel;
     }
 
-    private async Task<GitHubListArtifactsResponse> GetContainerItemsAsync(string fileContainerResourceUrl, string artifactName)
+    private async Task<GitHubGetContainerItemsResponse> GetContainerItemsAsync(string fileContainerResourceUrl, string artifactName)
     {
         var getContainerItemsUrl = fileContainerResourceUrl.SetQueryParam("itemPath", artifactName);
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, getContainerItemsUrl);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var responseModel = await httpResponse.ReadFromJsonAsync<GitHubListArtifactsResponse>();
+        var responseModel = await httpResponse.ReadFromJsonAsync<GitHubGetContainerItemsResponse>();
         return responseModel;
     }
 

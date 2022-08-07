@@ -68,7 +68,6 @@ jobs:
       uses: ./
       with:
         command: read-data
-        path: ./test.txt
     - uses: actions/download-artifact@v3
       with:
         name: my-test

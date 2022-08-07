@@ -5,7 +5,7 @@ public record GitHubGetContainerItemsResponse
     public int Count { get; init; }
 
     [JsonPropertyName("value")]
-    public List<GitHubContainerItem> Items { get; init; } = new List<GitHubContainerItem>();
+    public List<GitHubContainerItem> ContainerItems { get; init; } = new List<GitHubContainerItem>();
 }
 
 public record GitHubContainerItem
