@@ -88,7 +88,7 @@ internal class GitHubHttpClient
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         await httpResponse.EnsureSuccessStatusCodeAsync();
 
-        using var memStream = new MemoryStream();
+        //using var memStream = new MemoryStream();
         using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
         //using (var decompressionStream = new GZipStream(responseStream, CompressionMode.Decompress))
         //{
@@ -97,7 +97,7 @@ internal class GitHubHttpClient
         //    memStream.Position = 0;
         //}
 
-        using var reader = new StreamReader(memStream);
+        using var reader = new StreamReader(responseStream);
         var text = await reader.ReadToEndAsync();
         Console.WriteLine(text);
     }
