@@ -47,6 +47,15 @@ internal class GitHubHttpClient
             Console.WriteLine($"containerItemsResponse {i}: {item}");
         }
 
+        var file = containerItemsResponse.ContainerItems.FirstOrDefault(x => x.ItemType == "file"); //TODO could also check if Path contains artifact name or fully matches artifactName/itemName
+        if (file is null)
+        {
+            //abort
+            throw new InvalidOperationException();
+        }
+
+        await DownloadContainerItemAsync(file.ContentLocation);
+
         return null!;
     }
 
@@ -65,6 +74,18 @@ internal class GitHubHttpClient
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         var responseModel = await httpResponse.ReadFromJsonAsync<GitHubGetContainerItemsResponse>();
         return responseModel;
+    }
+
+    private async Task DownloadContainerItemAsync(string contentLocation)
+    {
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Get, contentLocation);
+        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
+        await httpResponse.EnsureSuccessStatusCodeAsync();
+
+        var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+        using var reader = new StreamReader(responseStream);
+        var text = await reader.ReadToEndAsync();
+        Console.WriteLine(text);
     }
 
     // see https://docs.github.com/en/rest/actions/artifacts#download-an-artifact
