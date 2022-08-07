@@ -27,7 +27,11 @@ internal class GitHubHttpClient
         containerUrl.NotNull();
 
         var listArtifactsResponse = await ListArtifactsAsync(containerUrl);
-        Console.WriteLine($"listArtifactsResponse: {listArtifactsResponse.ArtifactFileContainers}");
+        for (var i = 0; i < listArtifactsResponse.ArtifactFileContainers.Count; i++)
+        {
+            var item = listArtifactsResponse.ArtifactFileContainers[i];
+            Console.WriteLine($"listArtifactsResponse {i}: {item}");
+        }
 
         var artifact = listArtifactsResponse.ArtifactFileContainers.FirstOrDefault(x => x.Name == artifactName);
         if (artifact is null)
@@ -37,7 +41,11 @@ internal class GitHubHttpClient
         }
 
         var containerItemsResponse = await GetContainerItemsAsync(artifact.FileContainerResourceUrl, artifact.Name);
-        Console.WriteLine($"containerItemsResponse: {containerItemsResponse.ContainerItems}");
+        for (var i = 0; i < containerItemsResponse.ContainerItems.Count; i++)
+        {
+            var item = containerItemsResponse.ContainerItems[i];
+            Console.WriteLine($"containerItemsResponse {i}: {item}");
+        }
 
         return null!;
     }
