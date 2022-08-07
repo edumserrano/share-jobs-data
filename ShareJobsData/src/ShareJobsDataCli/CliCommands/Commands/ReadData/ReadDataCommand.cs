@@ -39,6 +39,7 @@ public class ReadDataCommand : ICommand
             var authToken = new GitHubAuthToken(AuthToken);
 
             var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
+            await console.Output.WriteLineAsync($"RUN ID: {Environment.GetEnvironmentVariable("GITHUB_RUN_ID")}");
             await console.Output.WriteLineAsync($"{githubEnvironment}");
             var repository = new GitHubRepository(githubEnvironment.GitHubRepository);
             using var httpClient = _httpClient ?? GitHubHttpClient.CreateHttpClient(authToken, repository);
