@@ -1,6 +1,6 @@
-namespace ShareJobsDataCli.GitHub.UploadArtifact.HttpModels;
+namespace ShareJobsDataCli.GitHub.UploadArtifact.HttpModels.Responses;
 
-internal sealed record GitHubUpdateArtifactFileContainerResponse
+internal sealed record GitHubArtifactFileContainerResponse
 (
     int ContainerId,
     int Size,
@@ -11,13 +11,16 @@ internal sealed record GitHubUpdateArtifactFileContainerResponse
     DateTime ExpiresOn
 );
 
-internal sealed class GitHubUpdateArtifactFileContainerResponseValidator : AbstractValidator<GitHubUpdateArtifactFileContainerResponse>
+internal sealed class GitHubArtifactFileContainerResponseValidator : AbstractValidator<GitHubArtifactFileContainerResponse>
 {
-    public GitHubUpdateArtifactFileContainerResponseValidator()
+    public GitHubArtifactFileContainerResponseValidator()
     {
         RuleFor(x => x.FileContainerResourceUrl)
             .Must(BeAValidUrl)
             .WithMessage(x => $"{nameof(x.FileContainerResourceUrl)} is not a valid URL. Actual value: '{x.FileContainerResourceUrl}'.");
+        RuleFor(x => x.Name)
+            .NotEmpty()
+            .WithMessage(x => $"{nameof(x.Name)} must have a value. Actual value: '{x.FileContainerResourceUrl}'.");
     }
 
     private bool BeAValidUrl(string fileContainerResourceUrl)

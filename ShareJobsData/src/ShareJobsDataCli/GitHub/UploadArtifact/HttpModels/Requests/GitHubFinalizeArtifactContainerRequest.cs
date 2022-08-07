@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.GitHub.UploadArtifact.HttpModels;
+namespace ShareJobsDataCli.GitHub.UploadArtifact.HttpModels.Requests;
 
 internal sealed record GitHubFinalizeArtifactContainerRequest
 {

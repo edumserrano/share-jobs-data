@@ -1,3 +1,5 @@
+using ShareJobsDataCli.GitHub.UploadArtifact.HttpModels.Responses;
+
 namespace ShareJobsDataCli.GitHub;
 
 internal class GitHubHttpClient
@@ -22,25 +24,79 @@ internal class GitHubHttpClient
     }
 
     // taken from exploring https://github.com/actions/toolkit/blob/90be12a59c20a6ecc43b234c1885fc2852d3212d/packages/artifact/src/internal/artifact-client.ts#L157
-    public async Task ListArtifactsAsync(GitHubArtifactContainerUrl containerUrl)
+    public async Task<GitHubArtifactFileContainerResponse> DownloadArtifactsAsync(GitHubArtifactContainerUrl containerUrl, string artifactName)
     {
         containerUrl.NotNull();
 
+        var listArtifactsResponse = await ListArtifactsAsync(containerUrl);
+        Console.WriteLine($"listArtifactsResponse: {listArtifactsResponse}");
+
+        var artifact = listArtifactsResponse.Artifacts.FirstOrDefault(x => x.Name == artifactName);
+        if (artifact is null)
+        {
+            //abort
+            throw new InvalidOperationException();
+        }
+
+        await GetContainerItemsAsync(artifact.FileContainerResourceUrl, artifact.Name);
+
+        return null!;
+    }
+
+    private async Task<GitHubListArtifactsResponse> ListArtifactsAsync(GitHubArtifactContainerUrl containerUrl)
+    {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{containerUrl}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        Console.WriteLine($"ListArtifactsAsync-status-code: {httpResponse.StatusCode}");
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            var errorResponseBody = await httpResponse.Content.ReadAsStringAsync();
+            throw new HttpClientResponseException(httpRequest.Method, $"{httpRequest.RequestUri}", httpResponse.StatusCode, errorResponseBody);
+        }
+
+        var listArtifactsResponse = await httpResponse.Content.ReadFromJsonAsync<GitHubListArtifactsResponse>();
+        if (listArtifactsResponse is null)
+        {
+            throw HttpResponseValidationException.JsonDeserializedToNull<GitHubListArtifactsResponse>();
+        }
+
+        var validator = new GitHubListArtifactsResponseValidator();
+        var validationResult = validator.Validate(listArtifactsResponse);
+        if (!validationResult.IsValid)
+        {
+            throw HttpResponseValidationException.ValidationFailed<GitHubListArtifactsResponse>(validationResult);
+        }
+
+        return listArtifactsResponse;
+    }
+
+    private async Task GetContainerItemsAsync(string fileContainerResourceUrl, string artifactName)
+    {
+        var getContainerItemsUrl = fileContainerResourceUrl.SetQueryParam("itemPath", artifactName);
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Get, getContainerItemsUrl);
+        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
+        if (!httpResponse.IsSuccessStatusCode)
+        {
+            var errorResponseBody = await httpResponse.Content.ReadAsStringAsync();
+            throw new HttpClientResponseException(httpRequest.Method, $"{httpRequest.RequestUri}", httpResponse.StatusCode, errorResponseBody);
+        }
+
         var raw = await httpResponse.Content.ReadAsStringAsync();
-        Console.WriteLine($"ListArtifactsAsync-raw: {raw}");
+        Console.WriteLine($"GetContainerItemsAsync-raw: {raw}");
 
-
-        //if (!httpResponse.IsSuccessStatusCode)
+        //var listArtifactsResponse = await httpResponse.Content.ReadFromJsonAsync<GitHubListArtifactsResponse>();
+        //if (listArtifactsResponse is null)
         //{
-        //    var errorResponseBody = await httpResponse.Content.ReadAsStringAsync();
-        //    throw new HttpClientResponseException(httpRequest.Method, $"{httpRequest.RequestUri}", httpResponse.StatusCode, errorResponseBody);
+        //    throw HttpResponseValidationException.JsonDeserializedToNull<GitHubListArtifactsResponse>();
         //}
 
-        //var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-        //return new ZipArchive(responseStream, ZipArchiveMode.Read);
+        //var validator = new GitHubListArtifactsResponseValidator();
+        //var validationResult = validator.Validate(listArtifactsResponse);
+        //if (!validationResult.IsValid)
+        //{
+        //    throw HttpResponseValidationException.ValidationFailed<GitHubListArtifactsResponse>(validationResult);
+        //}
+
+        //return listArtifactsResponse;
     }
 
     // see https://docs.github.com/en/rest/actions/artifacts#download-an-artifact

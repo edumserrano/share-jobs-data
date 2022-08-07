@@ -44,7 +44,7 @@ public class ReadDataCommand : ICommand
             using var httpClient = _httpClient ?? GitHubHttpClient.CreateHttpClient(actionRuntimeToken, repository);
             var githubHttpClient = new GitHubHttpClient(httpClient);
             var containerUrl = new GitHubArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
-            await githubHttpClient.ListArtifactsAsync(containerUrl);
+            await githubHttpClient.DownloadArtifactsAsync(containerUrl, "my-dotnet-artifact");
             //await githubHttpClient.DownloadArtifactAsync(repository, artifact);
             // TODO: also set the values as output for the step
 

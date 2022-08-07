@@ -20,6 +20,7 @@ global using ShareJobsDataCli.GitHub;
 global using ShareJobsDataCli.GitHub.Exceptions;
 global using ShareJobsDataCli.GitHub.Types;
 global using ShareJobsDataCli.GitHub.UploadArtifact;
-global using ShareJobsDataCli.GitHub.UploadArtifact.HttpModels;
+global using ShareJobsDataCli.GitHub.UploadArtifact.HttpModels.Requests;
+global using ShareJobsDataCli.GitHub.UploadArtifact.HttpModels.Responses;
 global using ShareJobsDataCli.GitHub.UploadArtifact.Types;
 global using YamlDotNet.Serialization;
