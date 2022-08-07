@@ -1,6 +1,6 @@
-﻿namespace ShareJobsDataCli.GitHub;
+namespace ShareJobsDataCli.GitHub;
 
-internal sealed class GitHubAuthToken
+internal sealed record GitHubAuthToken
 {
     private readonly string _value;
 

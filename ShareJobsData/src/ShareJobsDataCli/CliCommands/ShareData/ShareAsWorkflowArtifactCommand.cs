@@ -1,10 +1,20 @@
-using ShareJobsDataCli.GitHub;
-
 namespace ShareJobsDataCli.CliCommands.ShareData;
 
 [Command("share-data")]
 public class ShareAsWorkflowArtifactCommand : ICommand
 {
+    private readonly HttpClient? _httpClient;
+    private readonly IGitHubEnvironment? _gitHubEnvironment;
+
+    public ShareAsWorkflowArtifactCommand() { }
+
+    // used for test purposes to be able to mock external dependencies
+    public ShareAsWorkflowArtifactCommand(HttpClient httpClient, IGitHubEnvironment gitHubEnvironment)
+    {
+        _httpClient = httpClient.NotNull();
+        _gitHubEnvironment = gitHubEnvironment;
+    }
+
     [CommandOption(
         "auth-token",
         IsRequired = true,
@@ -33,10 +43,14 @@ public class ShareAsWorkflowArtifactCommand : ICommand
             var dataAsJson = JsonConvert.SerializeObject(dataAsYml, Formatting.Indented);
 
             await console.Output.WriteLineAsync(dataAsJson);
-            await console.Output.WriteLineAsync($"ACTIONS_RUNTIME_URL={Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL")}");
 
-            var githubHttpClient = new GitHubHttpClient();
-            await githubHttpClient.UploadArtifactAsync(dataAsJson);
+
+            var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
+            using var httpClient = _httpClient ?? GitHubUploadArtifactHttpClient.CreateHttpClient(githubEnvironment.ActionRuntimeToken);
+            var containerUrl = new GitHubUploadArtifactContainerUrl(githubEnvironment.ActionRuntimeUrl, githubEnvironment.ActionRunId);
+            var artifact = new GitHubUploadArtifact("my-dotnet-artifact", "shared-job-data.txt", dataAsJson);
+            var githubHttpClient = new GitHubUploadArtifactHttpClient(httpClient);
+            await githubHttpClient.UploadArtifactAsync(containerUrl, artifact);
 
             //var repo = new GitHubRepository(Repo);
             //var runId = new GitHubRunId(RunId);
