@@ -64,7 +64,7 @@ internal class GitHubHttpClient
     private async Task<GitHubListArtifactsResponse> ListArtifactsAsync(GitHubArtifactContainerUrl containerUrl)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{containerUrl}");
-        httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue($"application/json;api-version={GitHubApiVersion.Latest}"));
+        httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         var responseModel = await httpResponse.ReadFromJsonAsync<GitHubListArtifactsResponse>();
         return responseModel;
@@ -74,7 +74,7 @@ internal class GitHubHttpClient
     {
         var getContainerItemsUrl = fileContainerResourceUrl.SetQueryParam("itemPath", artifactName);
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, getContainerItemsUrl);
-        httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue($"application/json;api-version={GitHubApiVersion.Latest}"));
+        httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         var responseModel = await httpResponse.ReadFromJsonAsync<GitHubGetContainerItemsResponse>();
         return responseModel;
@@ -84,7 +84,7 @@ internal class GitHubHttpClient
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, contentLocation);
         httpRequest.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
-        httpRequest.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue($"application/octet-stream;api-version={GitHubApiVersion.Latest}"));
+        httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/octet-stream;api-version={GitHubApiVersion.Latest}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         await httpResponse.EnsureSuccessStatusCodeAsync();
 
