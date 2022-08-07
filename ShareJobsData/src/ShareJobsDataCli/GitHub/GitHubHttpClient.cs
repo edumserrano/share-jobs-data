@@ -90,12 +90,12 @@ internal class GitHubHttpClient
 
         using var memStream = new MemoryStream();
         using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-        using (var decompressionStream = new GZipStream(responseStream, CompressionMode.Decompress))
-        {
-            await decompressionStream.CopyToAsync(memStream);
-            Console.WriteLine($"memStream position after gzip copy: {memStream.Position}");
-            memStream.Position = 0;
-        }
+        //using (var decompressionStream = new GZipStream(responseStream, CompressionMode.Decompress))
+        //{
+        //    await decompressionStream.CopyToAsync(memStream);
+        //    Console.WriteLine($"memStream position after gzip copy: {memStream.Position}");
+        //    memStream.Position = 0;
+        //}
 
         using var reader = new StreamReader(memStream);
         var text = await reader.ReadToEndAsync();
