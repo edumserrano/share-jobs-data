@@ -1,3 +1,5 @@
+using ShareJobsDataCli.GitHub.UploadArtifact.HttpModels;
+
 namespace ShareJobsDataCli.CliCommands.ShareData;
 
 [Command("share-data")]
@@ -43,7 +45,6 @@ public class ShareAsWorkflowArtifactCommand : ICommand
             var dataAsJson = JsonConvert.SerializeObject(dataAsYml, Formatting.Indented);
 
             await console.Output.WriteLineAsync(dataAsJson);
-
 
             var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
             using var httpClient = _httpClient ?? GitHubUploadArtifactHttpClient.CreateHttpClient(githubEnvironment.GitHubActionRuntimeToken, githubEnvironment.GitHubRepository);

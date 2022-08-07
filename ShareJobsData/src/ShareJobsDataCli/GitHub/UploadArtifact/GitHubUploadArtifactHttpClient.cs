@@ -44,16 +44,9 @@ internal class GitHubUploadArtifactHttpClient
         var containerRequest = new CreateArtifactFileContainerRequest(containerName);
         createArtifactFileContainerHttpRequest.Content = JsonContent.Create(containerRequest);
         var createArtifactFileContainerHttpResponse = await _httpClient.SendAsync(createArtifactFileContainerHttpRequest);
-        //createArtifactFileContainerHttpResponse.EnsureSuccessStatusCode(); // TODO improve, check status code and throw error message with body if fails, add extension method for this EnsureSucessStatusCodeWithError()
-        //var createArtifactFileContainerResponse = await createArtifactFileContainerHttpResponse.Content.ReadFromJsonAsync<UpdateArtifactFileContainerResponse>();
-        //return createArtifactFileContainerResponse.NotNull(); // TODO throw same type of exception that EnsureSucessStatusCodeWithError instead of using NotNull workaround
-
         createArtifactFileContainerHttpResponse.EnsureSuccessStatusCode(); // TODO improve, check status code and throw error message with body if fails, add extension method for this EnsureSucessStatusCodeWithError()
-        var raw = await createArtifactFileContainerHttpResponse.Content.ReadAsStringAsync();
-        Console.WriteLine($"createArtifactFileContainerResponse-status: {createArtifactFileContainerHttpResponse.StatusCode}");
-        Console.WriteLine($"createArtifactFileContainerResponse-raw: {raw}");
-
-        return System.Text.Json.JsonSerializer.Deserialize<UpdateArtifactFileContainerResponse>(raw)!;
+        var createArtifactFileContainerResponse = await createArtifactFileContainerHttpResponse.Content.ReadFromJsonAsync<UpdateArtifactFileContainerResponse>();
+        return createArtifactFileContainerResponse.NotNull(); // TODO throw same type of exception that EnsureSucessStatusCodeWithError instead of using NotNull workaround
     }
 
     private async Task<UploadArtifactFileResponse> UploadArtifactFileAsync(
@@ -87,13 +80,7 @@ internal class GitHubUploadArtifactHttpClient
         finalizeArtifactContainerHttpRequest.Content = JsonContent.Create(finalizeArtifactContainerRequest);
         var finalizeArtifactContainerHttpResponse = await _httpClient.SendAsync(finalizeArtifactContainerHttpRequest);
         finalizeArtifactContainerHttpResponse.EnsureSuccessStatusCode(); // TODO improve, check status code and throw error message with body if fails, add extension method for this EnsureSucessStatusCodeWithError()
-        var raw = await finalizeArtifactContainerHttpResponse.Content.ReadAsStringAsync();
-        Console.WriteLine($"finalizeArtifactResponse-status: {finalizeArtifactContainerHttpResponse.StatusCode}");
-        Console.WriteLine($"finalizeArtifactResponse-raw: {raw}");
-
-        return System.Text.Json.JsonSerializer.Deserialize<UpdateArtifactFileContainerResponse>(raw)!;
-
-        //var updateArtifactResponse = await finalizeArtifactContainerHttpResponse.Content.ReadFromJsonAsync<UpdateArtifactResponse>();
-        //return updateArtifactResponse.NotNull(); // TODO throw same type of exception that EnsureSucessStatusCodeWithError instead of using NotNull workaround
+        var finalizeArtifactContainerResponse = await finalizeArtifactContainerHttpResponse.Content.ReadFromJsonAsync<UpdateArtifactFileContainerResponse>();
+        return finalizeArtifactContainerResponse.NotNull(); // TODO throw same type of exception that EnsureSucessStatusCodeWithError instead of using NotNull workaround
     }
 }
