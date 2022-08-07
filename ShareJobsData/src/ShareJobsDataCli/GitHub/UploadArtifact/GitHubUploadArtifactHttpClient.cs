@@ -80,7 +80,13 @@ internal class GitHubUploadArtifactHttpClient
         finalizeArtifactContainerHttpRequest.Content = JsonContent.Create(finalizeArtifactContainerRequest);
         var finalizeArtifactContainerHttpResponse = await _httpClient.SendAsync(finalizeArtifactContainerHttpRequest);
         finalizeArtifactContainerHttpResponse.EnsureSuccessStatusCode(); // TODO improve, check status code and throw error message with body if fails, add extension method for this EnsureSucessStatusCodeWithError()
-        var updateArtifactResponse = await finalizeArtifactContainerHttpResponse.Content.ReadFromJsonAsync<UpdateArtifactResponse>();
-        return updateArtifactResponse.NotNull(); // TODO throw same type of exception that EnsureSucessStatusCodeWithError instead of using NotNull workaround
+        var raw = await finalizeArtifactContainerHttpResponse.Content.ReadAsStringAsync();
+        Console.WriteLine($"finalizeArtifactResponse-status: {finalizeArtifactContainerHttpResponse.StatusCode}");
+        Console.WriteLine($"finalizeArtifactResponse-raw: {raw}");
+
+        return System.Text.Json.JsonSerializer.Deserialize<UpdateArtifactResponse>(raw)!;
+
+        //var updateArtifactResponse = await finalizeArtifactContainerHttpResponse.Content.ReadFromJsonAsync<UpdateArtifactResponse>();
+        //return updateArtifactResponse.NotNull(); // TODO throw same type of exception that EnsureSucessStatusCodeWithError instead of using NotNull workaround
     }
 }
