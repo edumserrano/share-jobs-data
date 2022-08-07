@@ -47,7 +47,7 @@ internal class GitHubUploadArtifactHttpClient
         var containerRequest = new GitHubCreateArtifactFileContainerRequest(containerName);
         httpRequest.Content = JsonContent.Create(containerRequest);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var responseModel = await httpResponse.ReadFromJsonAndValidateAsync<GitHubArtifactFileContainerResponse, GitHubArtifactFileContainerResponseValidator>();
+        var responseModel = await httpResponse.ReadFromJsonAsync<GitHubArtifactFileContainerResponse>();
         return responseModel;
     }
 
@@ -63,7 +63,7 @@ internal class GitHubUploadArtifactHttpClient
         httpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Octet);
         httpRequest.Content.Headers.ContentRange = new ContentRangeHeaderValue(from: 0, to: contentBytes.Length - 1, length: contentBytes.Length);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var responseModel = await httpResponse.ReadFromJsonAndValidateAsync<GitHubUpdateArtifactResponse, GitHubUpdateArtifactResponseValidator>();
+        var responseModel = await httpResponse.ReadFromJsonAsync<GitHubUpdateArtifactResponse>();
         return responseModel;
     }
 
@@ -77,7 +77,7 @@ internal class GitHubUploadArtifactHttpClient
         using var httpRequest = new HttpRequestMessage(HttpMethod.Patch, setArtifactSizeUrl);
         httpRequest.Content = JsonContent.Create(finalizeArtifactContainerRequest);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var responseModel = await httpResponse.ReadFromJsonAndValidateAsync<GitHubArtifactFileContainerResponse, GitHubArtifactFileContainerResponseValidator>();
+        var responseModel = await httpResponse.ReadFromJsonAsync<GitHubArtifactFileContainerResponse>();
         return responseModel;
     }
 }
