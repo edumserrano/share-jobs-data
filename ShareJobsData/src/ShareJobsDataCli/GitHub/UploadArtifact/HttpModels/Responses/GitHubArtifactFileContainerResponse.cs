@@ -20,7 +20,7 @@ internal sealed class GitHubArtifactFileContainerResponseValidator : AbstractVal
             .WithMessage(x => $"{nameof(x.FileContainerResourceUrl)} is not a valid URL. Actual value: '{x.FileContainerResourceUrl}'.");
         RuleFor(x => x.Name)
             .NotEmpty()
-            .WithMessage(x => $"{nameof(x.Name)} must have a value. Actual value: '{x.FileContainerResourceUrl}'.");
+            .WithMessage(x => $"{nameof(x.Name)} must have a value.");
     }
 
     private bool BeAValidUrl(string fileContainerResourceUrl)

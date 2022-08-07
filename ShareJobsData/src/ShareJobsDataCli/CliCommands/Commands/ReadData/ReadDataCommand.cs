@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace ShareJobsDataCli.CliCommands.Commands.ReadData;
 
 [Command("read-data")]
@@ -37,6 +39,27 @@ public class ReadDataCommand : ICommand
         {
             console.NotNull();
             var authToken = new GitHubAuthToken(AuthToken);
+
+            var raw = "{ \"count\":2,\"value\":[{ \"containerId\":1532216,\"scopeIdentifier\":\"00000000-0000-0000-0000-000000000000\",\"path\":\"my-dotnet-artifact\",\"itemType\":\"folder\",\"status\":\"created\",\"dateCreated\":\"2022-08-07T15:31:22.69Z\",\"dateLastModified\":\"2022-08-07T15:31:22.69Z\",\"createdBy\":\"6e9b9734-3d2f-4573-b4ae-ad0d11728d76\",\"lastModifiedBy\":\"6e9b9734-3d2f-4573-b4ae-ad0d11728d76\",\"itemLocation\":\"https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/1532216?itemPath=my-dotnet-artifact&metadata=True\",\"contentLocation\":\"https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/1532216?itemPath=my-dotnet-artifact\",\"contentId\":\"\"},{ \"containerId\":1532216,\"scopeIdentifier\":\"00000000-0000-0000-0000-000000000000\",\"path\":\"my-dotnet-artifact/shared-job-data.txt\",\"itemType\":\"file\",\"status\":\"created\",\"fileLength\":312,\"fileEncoding\":1,\"fileType\":1,\"dateCreated\":\"2022-08-07T15:31:22.69Z\",\"dateLastModified\":\"2022-08-07T15:31:22.73Z\",\"createdBy\":\"6e9b9734-3d2f-4573-b4ae-ad0d11728d76\",\"lastModifiedBy\":\"6e9b9734-3d2f-4573-b4ae-ad0d11728d76\",\"itemLocation\":\"https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/1532216?itemPath=my-dotnet-artifact%2Fshared-job-data.txt&metadata=True\",\"contentLocation\":\"https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/1532216?itemPath=my-dotnet-artifact%2Fshared-job-data.txt\",\"fileId\":2139,\"contentId\":\"\"}]}";
+            var options = new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+            var model = System.Text.Json.JsonSerializer.Deserialize<GitHubGetContainerItemsResponse>(raw,options);
+
+            //var model = new GitHubGetContainerItemsResponse();
+            //var item = new GitHubContainerItem
+            //{
+            //    ContainerId = 0,
+            //};
+            //var item2 = new GitHubContainerItem
+            //{
+            //    ContainerId = 0,
+            //};
+            //model.Value.Add(item);
+            //model.Value.Add(item2);
+            //var validator = new GitHubGetContainerItemsResponseValidator();
+            //var validationResult = validator.Validate(model);
 
             var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
             var actionRuntimeToken = new GitHubActionRuntimeToken(githubEnvironment.GitHubActionRuntimeToken);

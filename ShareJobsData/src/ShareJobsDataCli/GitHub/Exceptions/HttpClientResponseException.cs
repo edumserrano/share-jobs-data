@@ -17,7 +17,7 @@ internal static class HttpClientResponseExceptionExtensions
     }
 }
 
-public class HttpClientResponseException : Exception
+public sealed class HttpClientResponseException : Exception
 {
     internal HttpClientResponseException(
         string method,
