@@ -26,15 +26,12 @@ internal class GitHubUploadArtifactHttpClient
         GitHubUploadArtifact artifact)
     {
         var createArtifactFileContainerResponse = await CreateArtifactFileContainerAsync(containerUrl, artifact.ContainerName);
-        //Console.WriteLine($"create-container-response: {createArtifactFileContainerHttpResponse.StatusCode}");
         Console.WriteLine($"createArtifactFileContainerResponse: {createArtifactFileContainerResponse}");
 
         var uploadFileResponse = await UploadArtifactFileAsync(createArtifactFileContainerResponse.FileContainerResourceUrl, artifact);
-        //Console.WriteLine($"uploadFileResponse-status-code: {uploadFileHttpResponse.StatusCode}");
         Console.WriteLine($"uploadFileResponse: {uploadFileResponse}");
 
         var finalizeArtifactResponse = await FinalizeArtifactContainerAsync(containerUrl, artifact, uploadFileResponse.FileLength);
-        //Console.WriteLine($"setArtifactSizeHttpResponse-status-code: {setArtifactSizeHttpResponse.StatusCode}");
         Console.WriteLine($"finalizeArtifactResponse: {finalizeArtifactResponse}");
     }
 
@@ -54,10 +51,8 @@ internal class GitHubUploadArtifactHttpClient
         GitHubUploadArtifact artifact)
     {
         var contentBytes = Encoding.UTF8.GetBytes(artifact.FilePayload);
-        /*using*/
-        var stream = new MemoryStream(contentBytes);
+        using var stream = new MemoryStream(contentBytes);
         var uploadFileUrl = fileContainerResourceUrl.SetQueryParam("itemPath", artifact.FilePath);
-        //Console.WriteLine($"uploadFileUrl: {uploadFileUrl}");
         using var uploadFileHttpRequest = new HttpRequestMessage(HttpMethod.Put, uploadFileUrl);
         uploadFileHttpRequest.Content = new StreamContent(stream);
         uploadFileHttpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Octet);
@@ -75,7 +70,6 @@ internal class GitHubUploadArtifactHttpClient
     {
         var finalizeArtifactContainerRequest = new FinalizeArtifactContainerRequest(containerSize);
         var setArtifactSizeUrl = $"{containerUrl}".SetQueryParam("artifactName", artifact.ContainerName);
-        //Console.WriteLine($"setArtifactSizeUrl: {setArtifactSizeUrl}");
         using var finalizeArtifactContainerHttpRequest = new HttpRequestMessage(HttpMethod.Patch, setArtifactSizeUrl);
         finalizeArtifactContainerHttpRequest.Content = JsonContent.Create(finalizeArtifactContainerRequest);
         var finalizeArtifactContainerHttpResponse = await _httpClient.SendAsync(finalizeArtifactContainerHttpRequest);

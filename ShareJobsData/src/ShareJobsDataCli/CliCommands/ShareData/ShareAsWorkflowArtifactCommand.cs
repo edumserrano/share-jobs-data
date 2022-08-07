@@ -1,5 +1,3 @@
-using ShareJobsDataCli.GitHub.UploadArtifact.HttpModels;
-
 namespace ShareJobsDataCli.CliCommands.ShareData;
 
 [Command("share-data")]
@@ -52,6 +50,8 @@ public class ShareAsWorkflowArtifactCommand : ICommand
             var artifact = new GitHubUploadArtifact("my-dotnet-artifact", "shared-job-data.txt", dataAsJson);
             var githubHttpClient = new GitHubUploadArtifactHttpClient(httpClient);
             await githubHttpClient.UploadArtifactAsync(containerUrl, artifact);
+            // TODO: also set the values as output for the step
+
 
             //var repo = new GitHubRepository(Repo);
             //var runId = new GitHubRunId(RunId);

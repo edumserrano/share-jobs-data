@@ -12,7 +12,6 @@ global using CliFx.Infrastructure;
 global using Flurl;
 global using Newtonsoft.Json;
 global using ShareJobsDataCli.ArgumentValidations;
-global using ShareJobsDataCli.CliCommands.ShareData;
 global using ShareJobsDataCli.GitHub;
 global using ShareJobsDataCli.GitHub.UploadArtifact;
 global using ShareJobsDataCli.GitHub.UploadArtifact.Types;

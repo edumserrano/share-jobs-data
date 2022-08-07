@@ -2,7 +2,7 @@ namespace ShareJobsDataCli.GitHub.UploadArtifact.HttpModels;
 
 public record UploadArtifactFileResponse
 (
-    int containerId,
+    int ContainerId,
     string ScopeIdentifier,
     string Path,
     string ItemType,
