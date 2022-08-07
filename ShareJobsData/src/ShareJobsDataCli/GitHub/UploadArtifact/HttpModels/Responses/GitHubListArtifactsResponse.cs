@@ -2,23 +2,24 @@ namespace ShareJobsDataCli.GitHub.UploadArtifact.HttpModels.Responses;
 
 internal sealed record GitHubListArtifactsResponse
 (
-    List<GitHubArtifactFileContainerResponse> Artifacts
+    int Count,
+    List<GitHubArtifactFileContainerResponse> Value
 );
 
 internal sealed class GitHubListArtifactsResponseValidator : AbstractValidator<GitHubListArtifactsResponse>
 {
     public GitHubListArtifactsResponseValidator()
     {
-        RuleFor(x => x.Artifacts)
+        RuleFor(x => x.Value)
             .Must(AllArtifactsMustBeValid)
-            .WithMessage(x => $"{nameof(x.Artifacts)} contains invalid elements.");
+            .WithMessage(x => $"{nameof(x.Value)} contains invalid elements.");
     }
 
     private bool AllArtifactsMustBeValid(GitHubListArtifactsResponse instance, List<GitHubArtifactFileContainerResponse> artifacts, ValidationContext<GitHubListArtifactsResponse> context)
     {
         if (artifacts is null)
         {
-            var validationFailure = new ValidationFailure(nameof(instance.Artifacts), "Cannot be null");
+            var validationFailure = new ValidationFailure(nameof(instance.Value), "Cannot be null");
             context.AddFailure(validationFailure);
             return false;
         }

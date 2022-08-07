@@ -29,7 +29,7 @@ internal class GitHubHttpClient
         var listArtifactsResponse = await ListArtifactsAsync(containerUrl);
         Console.WriteLine($"listArtifactsResponse: {listArtifactsResponse}");
 
-        var artifact = listArtifactsResponse.Artifacts.FirstOrDefault(x => x.Name == artifactName);
+        var artifact = listArtifactsResponse.Value.FirstOrDefault(x => x.Name == artifactName);
         if (artifact is null)
         {
             //abort
