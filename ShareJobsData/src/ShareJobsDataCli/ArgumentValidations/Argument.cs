@@ -10,28 +10,34 @@ internal static class Argument
 
     internal static string NotNullOrWhiteSpace([NotNull] this string? value, [CallerArgumentExpression("value")] string name = "")
     {
+        if (!string.IsNullOrWhiteSpace(value))
+        {
+            return value;
+        }
+
         var message = $"{name} cannot be null or whitespace.";
-        return string.IsNullOrWhiteSpace(value)
-            ? throw new ArgumentException(message)
-            : value;
+        throw new ArgumentException(message);
     }
 
     public static int Positive(this int value, [CallerArgumentExpression("value")] string name = "")
     {
-        var message = $"{name} must be a positive value.";
-        return value >= 0
-            ? value
-            : throw new ArgumentException(message);
+        if (value >= 0)
+        {
+            return value;
+        }
+
+        var message = $"{name} must be a positive value. Received '{value}'.";
+        throw new ArgumentException(message);
     }
 
-    public static int Positive(this string value, [CallerArgumentExpression("value")] string name = "")
+    public static long Positive(this string value, [CallerArgumentExpression("value")] string name = "")
     {
-        if (int.TryParse(value, out var parsed))
+        if (long.TryParse(value, out var parsed) && parsed >= 0)
         {
             return parsed;
         }
 
-        var message = $"{name} must be a positive int value.";
+        var message = $"{name} must be a positive value. Received '{value}'.";
         throw new ArgumentException(message);
     }
 }

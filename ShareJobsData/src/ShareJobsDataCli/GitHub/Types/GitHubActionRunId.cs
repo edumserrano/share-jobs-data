@@ -2,14 +2,14 @@ namespace ShareJobsDataCli.GitHub.Types;
 
 internal sealed class GitHubActionRunId
 {
-    private readonly int _value;
+    private readonly long _value;
 
     public GitHubActionRunId(string runId)
     {
         _value = runId.Positive();
     }
 
-    public static implicit operator int(GitHubActionRunId runId)
+    public static implicit operator long(GitHubActionRunId runId)
     {
         return runId._value;
     }
