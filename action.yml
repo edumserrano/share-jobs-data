@@ -4,10 +4,6 @@ branding:
   icon: clipboard
   color: blue
 inputs:
-  auth-token:
-    description: 'GitHub token used to access workflow run logs.'
-    required: true
-    default: ${{ github.token }}
   command:
     description: "Command to use: 'share-data' or 'read-data'."
     required: true
@@ -22,8 +18,8 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.command }}
-    - --auth-token
-    - ${{ inputs.auth-token }}
+    # - --auth-token
+    # - ${{ inputs.auth-token }}
     # # The syntax for the optional parameters uses a kind of way of doing a ternary operator. See https://github.com/actions/runner/issues/409
     # # I don't want to include them in the call to the CLI if the values are the default empty value. Or else the CLI will say the value for that option is missing
     # # So if the optional action inputs below are equal to '' I set them to the default of a space ' ' and then on the entrypoint.ps1 I remove any arg that is empty or whitespace before doing the CLI call

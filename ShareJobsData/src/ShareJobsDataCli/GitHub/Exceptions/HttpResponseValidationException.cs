@@ -2,7 +2,7 @@ namespace ShareJobsDataCli.GitHub.Exceptions;
 
 public sealed class HttpResponseValidationException : Exception
 {
-    public HttpResponseValidationException(string message)
+    internal HttpResponseValidationException(string message)
         : base(message)
     {
     }

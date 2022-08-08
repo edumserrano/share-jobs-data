@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.GitHub.HttpModels.Responses;
 
-internal sealed record GitHubArtifactFileContainerResponse
+internal sealed record GitHubArtifactContainer
 {
     private string _fileContainerResourceUrl = default!;
     private string _name = default!;
@@ -12,7 +12,7 @@ internal sealed record GitHubArtifactFileContainerResponse
     public string FileContainerResourceUrl
     {
         get => _fileContainerResourceUrl;
-        init => _fileContainerResourceUrl = value.ValidUri<GitHubArtifactFileContainerResponse>(nameof(FileContainerResourceUrl));
+        init => _fileContainerResourceUrl = value.ValidUri<GitHubArtifactContainer>(nameof(FileContainerResourceUrl));
     }
 
     public string Type { get; init; } = default!;
@@ -20,7 +20,7 @@ internal sealed record GitHubArtifactFileContainerResponse
     public string Name
     {
         get => _name;
-        init => _name = value.NotNullOrWhiteSpace<GitHubArtifactFileContainerResponse>(nameof(Name));
+        init => _name = value.NotNullOrWhiteSpace<GitHubArtifactContainer>(nameof(Name));
     }
 
     public string Url { get; init; } = default!;

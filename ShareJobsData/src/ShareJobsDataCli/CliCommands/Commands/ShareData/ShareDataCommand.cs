@@ -18,13 +18,6 @@ public class ShareDataCommand : ICommand
     }
 
     [CommandOption(
-        "auth-token",
-        IsRequired = true,
-        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
-        Description = "GitHub token used to upload the artifact.")]
-    public string AuthToken { get; init; } = default!;
-
-    [CommandOption(
         "data",
         IsRequired = true,
         Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
@@ -36,7 +29,6 @@ public class ShareDataCommand : ICommand
         try
         {
             console.NotNull();
-            var authToken = new GitHubAuthToken(AuthToken);
 
             var deserializer = new DeserializerBuilder()
                 .IgnoreUnmatchedProperties()
@@ -48,33 +40,15 @@ public class ShareDataCommand : ICommand
 
             var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
             var actionRuntimeToken = new GitHubActionRuntimeToken(githubEnvironment.GitHubActionRuntimeToken);
-            var repository = new GitHubRepository(githubEnvironment.GitHubRepository);
+            var repository = new GitHubRepositoryName(githubEnvironment.GitHubRepository);
             using var httpClient = _httpClient ?? GitHubArticfactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
-            var containerUrl = new GitHubArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
-            var artifact = new GitHubUploadArtifact("my-dotnet-artifact", "shared-job-data.txt", dataAsJson);
+            var artifactContainerUrl = new GitHubArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
+            var artifactContainerName = new GitHubArtifactContainerName("my-dotnet-artifact");
+            var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, "shared-job-data.txt");
+            var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, dataAsJson);
             var githubHttpClient = new GitHubArticfactHttpClient(httpClient);
-            await githubHttpClient.UploadArtifactAsync(containerUrl, artifact);
+            await githubHttpClient.UploadArtifactFileAsync(artifactContainerUrl, artifactContainerName, artifactFileUploadRequest);
             // TODO: also set the values as output for the step
-
-
-            //var repo = new GitHubRepository(Repo);
-            //var runId = new GitHubRunId(RunId);
-            //var jobName = new GitHubJobName(JobName);
-            //var stepName = new GitHubStepName(StepName);
-            //var outputOptions = new OutputOptions(OutputOptions);
-            //var outputJsonFilePath = new OutputJsonFilepathOption(OutputJsonFilepath);
-            //var outputMarkdownFilePath = new OutputMarkdownFilepathOption(OutputMarkdownFilepath);
-            //var outputFormats = OutputFormats.Create(outputOptions, _file, console, outputJsonFilePath, outputMarkdownFilePath);
-
-            //using var httpClient = _httpClient ?? GitHubHttpClient.Create(authToken);
-            //var gitHubHttpClient = new GitHubHttpClient(httpClient);
-            //var gitHubWorkflowRunLogs = new GitHubWorkflowRunLogs(gitHubHttpClient);
-            //var stepLog = await gitHubWorkflowRunLogs.GetStepLogAsync(repo, runId, jobName, stepName);
-            //var output = MarkdownLinkCheckOutputParser.Parse(stepLog, CaptureErrorsOnly);
-            //foreach (var outputFormat in outputFormats)
-            //{
-            //    await outputFormat.WriteAsync(output);
-            //}
         }
         catch (Exception e)
         {
@@ -85,21 +59,3 @@ Error:
         }
     }
 }
-
-public record GitHubUpdateArtifactResponse2
-(
-    //int ContainerId,
-    string ScopeIdentifier,
-    string Path,
-    string ItemType,
-    string Status
-//int FileLength,
-//int FileEncoding,
-//int FileType,
-//DateTime DateCreated,
-//DateTime DateLastModified,
-//string CreatedBy,
-//string LastModifiedBy,
-//int FileId,
-//string ContentId
-);

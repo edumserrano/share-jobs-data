@@ -1,15 +1,15 @@
 namespace ShareJobsDataCli.GitHub.Types;
 
-internal sealed record GitHubRepository
+internal sealed record GitHubRepositoryName
 {
     private readonly string _value;
 
-    public GitHubRepository(string repository)
+    public GitHubRepositoryName(string repository)
     {
         _value = repository.NotNullOrWhiteSpace();
     }
 
-    public static implicit operator string(GitHubRepository repository)
+    public static implicit operator string(GitHubRepositoryName repository)
     {
         return repository._value;
     }

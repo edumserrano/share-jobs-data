@@ -1,14 +1,6 @@
-namespace ShareJobsDataCli.GitHub.HttpModels.Responses;
+﻿namespace ShareJobsDataCli.GitHub.HttpModels.Responses;
 
-public record GitHubGetContainerItemsResponse
-{
-    public int Count { get; init; }
-
-    [JsonPropertyName("value")]
-    public IReadOnlyList<GitHubContainerItem> ContainerItems { get; init; } = new List<GitHubContainerItem>();
-}
-
-public record GitHubContainerItem
+public record GitHubArtifactContainerItem
 {
     private string _contentLocation = default!;
     private string _path = default!;
@@ -21,13 +13,13 @@ public record GitHubContainerItem
     public string Path
     {
         get => _path;
-        init => _path = value.NotNullOrWhiteSpace<GitHubContainerItem>(nameof(Path));
+        init => _path = value.NotNullOrWhiteSpace<GitHubArtifactContainerItem>(nameof(Path));
     }
 
     public string ItemType
     {
         get => _itemType;
-        init => _itemType = value.NotNullOrWhiteSpace<GitHubContainerItem>(nameof(Path));
+        init => _itemType = value.NotNullOrWhiteSpace<GitHubArtifactContainerItem>(nameof(Path));
     }
 
     public string Status { get; init; } = default!;
@@ -45,7 +37,7 @@ public record GitHubContainerItem
     public string ContentLocation
     {
         get => _contentLocation;
-        init => _contentLocation = value.ValidUri<GitHubContainerItem>(nameof(ContentLocation));
+        init => _contentLocation = value.ValidUri<GitHubArtifactContainerItem>(nameof(ContentLocation));
     }
 
     public string ContentId { get; init; } = default!;

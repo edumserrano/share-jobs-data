@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.GitHub.HttpModels.Responses;
 
-internal sealed record GitHubUpdateArtifactResponse
+internal sealed record GitHubArtifactItem
 {
     private int _fileLength;
 
@@ -17,7 +17,7 @@ internal sealed record GitHubUpdateArtifactResponse
     public int FileLength
     {
         get => _fileLength;
-        init => _fileLength = value.Positive<GitHubUpdateArtifactResponse>(nameof(FileLength));
+        init => _fileLength = value.Positive<GitHubArtifactItem>(nameof(FileLength));
     }
 
     public int FileEncoding { get; init; }
