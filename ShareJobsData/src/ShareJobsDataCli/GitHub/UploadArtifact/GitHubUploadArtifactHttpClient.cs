@@ -24,6 +24,7 @@ internal class GitHubUploadArtifactHttpClient
     // this process is explained here https://github.com/actions/upload-artifact/issues/180#issuecomment-1086306269
     // add something to dev readme about this
     // no need to gzip since content is always expected to be small json model
+    // if I gzip on upload I would have to gzip on download
     public async Task UploadArtifactAsync(
         GitHubArtifactContainerUrl containerUrl,
         GitHubUploadArtifact artifact)

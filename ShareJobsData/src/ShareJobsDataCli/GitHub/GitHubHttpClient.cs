@@ -55,8 +55,8 @@ internal class GitHubHttpClient
             throw new InvalidOperationException();
         }
 
-        Console.WriteLine($"download from {file.ContentLocation}");
-        await DownloadContainerItemAsync(file.ContentLocation);
+        var containerItemContent = await DownloadContainerItemAsync(file.ContentLocation);
+        Console.WriteLine(containerItemContent);
 
         return null!;
     }
@@ -80,26 +80,20 @@ internal class GitHubHttpClient
         return responseModel;
     }
 
-    private async Task DownloadContainerItemAsync(string contentLocation)
+    private async Task<string> DownloadContainerItemAsync(string contentLocation)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, contentLocation);
-        httpRequest.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip");
+        httpRequest.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip"); // not really needed since I'm not uploading gzip compressed stream ?
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/octet-stream;api-version={GitHubApiVersion.Latest}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         await httpResponse.EnsureSuccessStatusCodeAsync();
+        var containerItemContent = await httpResponse.Content.ReadAsStringAsync();
+        return containerItemContent;
 
-        //using var memStream = new MemoryStream();
-        using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
-        //using (var decompressionStream = new GZipStream(responseStream, CompressionMode.Decompress))
-        //{
-        //    await decompressionStream.CopyToAsync(memStream);
-        //    Console.WriteLine($"memStream position after gzip copy: {memStream.Position}");
-        //    memStream.Position = 0;
-        //}
-
-        using var reader = new StreamReader(responseStream);
-        var text = await reader.ReadToEndAsync();
-        Console.WriteLine(text);
+        //using var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+        //using var reader = new StreamReader(responseStream);
+        //var containerItemContent = await reader.ReadToEndAsync();
+        //return containerItemContent;
     }
 
     // see https://docs.github.com/en/rest/actions/artifacts#download-an-artifact
