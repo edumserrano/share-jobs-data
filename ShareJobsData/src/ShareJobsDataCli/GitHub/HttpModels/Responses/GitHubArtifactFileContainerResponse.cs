@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.GitHub.UploadArtifact.HttpModels.Responses;
+namespace ShareJobsDataCli.GitHub.HttpModels.Responses;
 
 internal sealed record GitHubArtifactFileContainerResponse
 {

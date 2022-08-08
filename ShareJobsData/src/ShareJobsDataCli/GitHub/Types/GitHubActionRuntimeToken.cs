@@ -1,4 +1,4 @@
-﻿namespace ShareJobsDataCli.GitHub.UploadArtifact.Types;
+namespace ShareJobsDataCli.GitHub.Types;
 
 internal sealed record GitHubActionRuntimeToken
 {

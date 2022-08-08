@@ -49,10 +49,10 @@ public class ShareDataCommand : ICommand
             var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
             var actionRuntimeToken = new GitHubActionRuntimeToken(githubEnvironment.GitHubActionRuntimeToken);
             var repository = new GitHubRepository(githubEnvironment.GitHubRepository);
-            using var httpClient = _httpClient ?? GitHubUploadArtifactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
+            using var httpClient = _httpClient ?? GitHubArticfactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
             var containerUrl = new GitHubArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
             var artifact = new GitHubUploadArtifact("my-dotnet-artifact", "shared-job-data.txt", dataAsJson);
-            var githubHttpClient = new GitHubUploadArtifactHttpClient(httpClient);
+            var githubHttpClient = new GitHubArticfactHttpClient(httpClient);
             await githubHttpClient.UploadArtifactAsync(containerUrl, artifact);
             // TODO: also set the values as output for the step
 

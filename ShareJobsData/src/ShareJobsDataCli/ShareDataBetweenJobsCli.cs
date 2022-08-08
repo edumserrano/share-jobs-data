@@ -1,8 +1,8 @@
 namespace ShareJobsDataCli;
 
-public class ShareJobsDataCli
+public class ShareDataBetweenJobsCli
 {
-    public ShareJobsDataCli()
+    public ShareDataBetweenJobsCli()
     {
         CliApplicationBuilder = new CliApplicationBuilder().AddCommandsFromThisAssembly();
     }

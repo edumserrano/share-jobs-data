@@ -15,8 +15,7 @@ internal static class Property
 
     internal static string ValidUri<TModel>([NotNull] this string? value, string propertyName)
     {
-        var options = new UriCreationOptions();
-        if(Uri.TryCreate(value, options, out var _))
+        if (Uri.TryCreate(value, default, out var _))
         {
             return value;
         }

@@ -1,11 +1,11 @@
-namespace ShareJobsDataCli.GitHub.UploadArtifact.HttpModels.Responses;
+namespace ShareJobsDataCli.GitHub.HttpModels.Responses;
 
 public record GitHubGetContainerItemsResponse
 {
     public int Count { get; init; }
 
     [JsonPropertyName("value")]
-    public List<GitHubContainerItem> ContainerItems { get; init; } = new List<GitHubContainerItem>();
+    public IReadOnlyList<GitHubContainerItem> ContainerItems { get; init; } = new List<GitHubContainerItem>();
 }
 
 public record GitHubContainerItem
