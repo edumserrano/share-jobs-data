@@ -47,14 +47,6 @@ jobs:
               - first
               - second
               - third
-    - name: Dump github context for debug purposes
-      run: |
-        "hi" > test.txt
-    - name: Upload test
-      uses: actions/upload-artifact@v2
-      with:
-        name: my-test
-        path: ./test.txt
 
   read-job:
     name: read
@@ -68,15 +60,13 @@ jobs:
       uses: ./
       with:
         command: read-data
-    - uses: actions/download-artifact@v3
-      with:
-        name: my-test
-    - name: ls download
-      run: |
-        ls -R
-    - name: cat download
-      run: |
-        cat test.txt
+    # - name: ls download
+    #   run: |
+    #     ls -R
+    # - name: cat download
+    #   run: |
+    #     cat test.txt
+
   # test2:
   #   name: test 2
   #   # permissions:
