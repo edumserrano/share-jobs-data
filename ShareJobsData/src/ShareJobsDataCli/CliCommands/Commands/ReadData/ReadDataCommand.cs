@@ -42,7 +42,7 @@ public class ReadDataCommand : ICommand
             var jobDataKeysAndValues = jobDataJson.ToKeyValues();
             foreach (var (key, value) in jobDataKeysAndValues.KeysAndValues)
             {
-                await console.Output.WriteAsync($"{key} - {value}");
+                await console.Output.WriteLineAsync($"{key} {value}");
             }
 
             // TODO: also set the values as output for the step
