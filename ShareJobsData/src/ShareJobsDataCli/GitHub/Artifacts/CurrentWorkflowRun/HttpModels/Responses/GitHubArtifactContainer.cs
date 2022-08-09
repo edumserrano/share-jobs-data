@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.HttpModels.Responses;
 
-internal sealed record GitHubArtifactContainer
+internal record GitHubArtifactContainer
 {
     private string _fileContainerResourceUrl = default!;
     private string _name = default!;

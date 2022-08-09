@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.JobsData;
 
-internal sealed class JobDataYml
+internal class JobDataYml
 {
     private JobDataJson? _jobDataJson;
     private readonly object _dataAsYml;

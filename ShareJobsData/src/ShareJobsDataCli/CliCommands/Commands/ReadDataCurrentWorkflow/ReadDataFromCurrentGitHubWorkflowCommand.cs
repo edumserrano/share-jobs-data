@@ -1,7 +1,7 @@
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow;
 
 [Command("read-data-current-workflow")]
-public class ReadDataCurrentWorkflow : ICommand
+public sealed class ReadDataCurrentWorkflow : ICommand
 {
     private readonly HttpClient? _httpClient;
     private readonly IGitHubEnvironment? _gitHubEnvironment;

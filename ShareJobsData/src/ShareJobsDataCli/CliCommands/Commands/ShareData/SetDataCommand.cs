@@ -1,7 +1,7 @@
 namespace ShareJobsDataCli.CliCommands.Commands.ShareData;
 
 [Command("set-data")]
-public class SetDataCommand : ICommand
+public sealed class SetDataCommand : ICommand
 {
     private readonly HttpClient? _httpClient;
     private readonly IGitHubEnvironment? _gitHubEnvironment;

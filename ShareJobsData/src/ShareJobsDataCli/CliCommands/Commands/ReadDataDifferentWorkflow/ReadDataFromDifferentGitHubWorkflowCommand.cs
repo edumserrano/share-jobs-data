@@ -1,7 +1,7 @@
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow;
 
 [Command("read-data-different-workflow")]
-public class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
+public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
 {
     private readonly HttpClient? _httpClient;
     private readonly IGitHubEnvironment? _gitHubEnvironment;

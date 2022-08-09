@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.HttpModels.Responses;
 
-internal sealed record GitHubArtifactContainers
+internal record GitHubArtifactContainers
 {
     public int Count { get; init; }
 

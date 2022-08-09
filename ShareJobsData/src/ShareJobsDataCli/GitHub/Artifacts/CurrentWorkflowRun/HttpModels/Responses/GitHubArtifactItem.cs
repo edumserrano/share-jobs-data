@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.HttpModels.Responses;
 
-internal sealed record GitHubArtifactItem
+internal record GitHubArtifactItem
 {
     private int _fileLength;
 

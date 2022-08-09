@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.HttpModels.Responses;
 
-internal sealed record WorkflowRunArtifacts
+internal record WorkflowRunArtifacts
 {
     [JsonPropertyName("total_count")]
     public int TotalCount { get; init; }
@@ -9,7 +9,7 @@ internal sealed record WorkflowRunArtifacts
     public IReadOnlyList<WorkflowRunArtifact> Artifacts { get; init; } = new List<WorkflowRunArtifact>();
 }
 
-public sealed record WorkflowRunArtifact
+internal record WorkflowRunArtifact
 {
     [JsonPropertyName("id")]
     public long Id { get; init; }
@@ -45,7 +45,7 @@ public sealed record WorkflowRunArtifact
     public WorkflowRun WorkflowRun { get; init; } = default!;
 }
 
-public sealed record WorkflowRun
+internal record WorkflowRun
 {
     [JsonPropertyName("id")]
     public long Id { get; init; }

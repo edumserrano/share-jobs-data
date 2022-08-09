@@ -1,6 +1,6 @@
-﻿namespace ShareJobsDataCli.Validations;
+namespace ShareJobsDataCli.Validations;
 
-public class PropertValidationException : Exception
+public sealed class PropertValidationException : Exception
 {
     internal PropertValidationException(string modelName, string validationErrorMessage)
         : base($"Error validating {modelName}: {validationErrorMessage}")
