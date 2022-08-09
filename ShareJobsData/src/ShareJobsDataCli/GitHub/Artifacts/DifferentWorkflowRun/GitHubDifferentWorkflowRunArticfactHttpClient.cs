@@ -1,6 +1,3 @@
-using System.IO.Compression;
-using ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.HttpModels.Responses;
-
 namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun;
 
 internal class GitHubDifferentWorkflowRunArticfactHttpClient
@@ -42,14 +39,14 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         var artifact = workflowRunArtifacts.Artifacts.FirstOrDefault(x => x.Name == artifactContainerName);
         if (artifact is null)
         {
-            throw DownloadArtifactException.ArtifactNotFound(artifactContainerName);
+            throw DownloadArtifactException.ArtifactNotFound(repoName, runId, artifactContainerName);
         }
 
         using var artifactZip = await DownloadArtifactAsync(artifact.ArchiveDownloadUrl);
         var artifactFileAsZip = artifactZip.Entries.FirstOrDefault(e => e.FullName.Equals(artifactItemFilename, StringComparison.InvariantCultureIgnoreCase));
         if (artifactFileAsZip is null)
         {
-            throw DownloadArtifactException.ArtifactFileNotFound(artifactItemFilename);
+            throw DownloadArtifactException.ArtifactFileNotFound(repoName, runId, artifactItemFilename);
         }
 
         using var artifactAsStream = artifactFileAsZip.Open();

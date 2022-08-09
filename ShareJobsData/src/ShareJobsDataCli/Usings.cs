@@ -1,4 +1,5 @@
 global using System.Diagnostics.CodeAnalysis;
+global using System.IO.Compression;
 global using System.Net.Http.Headers;
 global using System.Net.Http.Json;
 global using System.Net.Mime;
@@ -22,7 +23,7 @@ global using ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.HttpModels.Req
 global using ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.HttpModels.Responses;
 global using ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.Types;
 global using ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun;
-global using ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.HttpModels;
+global using ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.HttpModels.Responses;
 global using ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.Types;
 global using ShareJobsDataCli.GitHub.Exceptions;
 global using ShareJobsDataCli.GitHub.Types;
