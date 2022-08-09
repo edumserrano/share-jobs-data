@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.GitHub.HttpModels.Requests;
+namespace ShareJobsDataCli.GitHub.Artifact.SameWorkflowRun.HttpModels.Requests;
 
 internal sealed record GitHubCreateArtifactFileContainerRequest
 {

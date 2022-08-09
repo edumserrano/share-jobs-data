@@ -1,10 +1,10 @@
-namespace ShareJobsDataCli.GitHub;
+namespace ShareJobsDataCli.GitHub.Artifact.SameWorkflowRun;
 
-internal class GitHubArticfactHttpClient
+internal class GitHubSameWorkflowRunArticfactHttpClient
 {
     private readonly HttpClient _httpClient;
 
-    public GitHubArticfactHttpClient(HttpClient httpClient)
+    public GitHubSameWorkflowRunArticfactHttpClient(HttpClient httpClient)
     {
         _httpClient = httpClient.NotNull();
     }

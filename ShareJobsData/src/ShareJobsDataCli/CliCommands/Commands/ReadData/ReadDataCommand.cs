@@ -1,3 +1,5 @@
+using ShareJobsDataCli.GitHub.Artifact.SameWorkflowRun;
+
 namespace ShareJobsDataCli.CliCommands.Commands.ReadData;
 
 [Command("read-data")]
@@ -32,8 +34,8 @@ public class ReadDataCommand : ICommand
             var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
             var actionRuntimeToken = new GitHubActionRuntimeToken(githubEnvironment.GitHubActionRuntimeToken);
             var repository = new GitHubRepositoryName(githubEnvironment.GitHubRepository);
-            using var httpClient = _httpClient ?? GitHubArticfactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
-            var githubHttpClient = new GitHubArticfactHttpClient(httpClient);
+            using var httpClient = _httpClient ?? GitHubSameWorkflowRunArticfactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
+            var githubHttpClient = new GitHubSameWorkflowRunArticfactHttpClient(httpClient);
             var containerUrl = new GitHubArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
             var artifactContainerName = new GitHubArtifactContainerName("my-dotnet-artifact");
             var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, "shared-job-data.txt");

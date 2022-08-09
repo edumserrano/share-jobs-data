@@ -1,3 +1,5 @@
+using ShareJobsDataCli.GitHub.Artifact.SameWorkflowRun;
+
 namespace ShareJobsDataCli.CliCommands.Commands.ShareData;
 
 [Command("share-data")]
@@ -34,12 +36,12 @@ public class ShareDataCommand : ICommand
             var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
             var actionRuntimeToken = new GitHubActionRuntimeToken(githubEnvironment.GitHubActionRuntimeToken);
             var repository = new GitHubRepositoryName(githubEnvironment.GitHubRepository);
-            using var httpClient = _httpClient ?? GitHubArticfactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
+            using var httpClient = _httpClient ?? GitHubSameWorkflowRunArticfactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
             var artifactContainerUrl = new GitHubArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
             var artifactContainerName = new GitHubArtifactContainerName("my-dotnet-artifact");
             var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, "shared-job-data.txt");
             var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, jobDataJson);
-            var githubHttpClient = new GitHubArticfactHttpClient(httpClient);
+            var githubHttpClient = new GitHubSameWorkflowRunArticfactHttpClient(httpClient);
             await githubHttpClient.UploadArtifactFileAsync(artifactContainerUrl, artifactContainerName, artifactFileUploadRequest);
             // TODO: also set the values as output for the step
         }
