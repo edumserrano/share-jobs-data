@@ -29,15 +29,8 @@ public class ShareDataCommand : ICommand
         try
         {
             console.NotNull();
-
-            var deserializer = new DeserializerBuilder()
-                .IgnoreUnmatchedProperties()
-                .Build();
-            var dataAsYml = deserializer.Deserialize<object>(DataAsYmlStr);
-            var dataAsJson = JsonConvert.SerializeObject(dataAsYml, Formatting.Indented);
-
-            await console.Output.WriteLineAsync(dataAsJson);
-
+            var jobDataYml = new JobDataYml(DataAsYmlStr);
+            var jobDataJson = jobDataYml.ToJson();
             var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
             var actionRuntimeToken = new GitHubActionRuntimeToken(githubEnvironment.GitHubActionRuntimeToken);
             var repository = new GitHubRepositoryName(githubEnvironment.GitHubRepository);
@@ -45,7 +38,7 @@ public class ShareDataCommand : ICommand
             var artifactContainerUrl = new GitHubArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
             var artifactContainerName = new GitHubArtifactContainerName("my-dotnet-artifact");
             var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, "shared-job-data.txt");
-            var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, dataAsJson);
+            var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, jobDataJson);
             var githubHttpClient = new GitHubArticfactHttpClient(httpClient);
             await githubHttpClient.UploadArtifactFileAsync(artifactContainerUrl, artifactContainerName, artifactFileUploadRequest);
             // TODO: also set the values as output for the step

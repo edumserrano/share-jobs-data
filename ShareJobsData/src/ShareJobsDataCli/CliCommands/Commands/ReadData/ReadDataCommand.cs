@@ -38,16 +38,20 @@ public class ReadDataCommand : ICommand
             var artifactContainerName = new GitHubArtifactContainerName("my-dotnet-artifact");
             var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, "shared-job-data.txt");
             var sharedDataContent = await githubHttpClient.DownloadArtifactFileAsync(containerUrl, artifactContainerName, artifactFilePath);
-            await console.Output.WriteLineAsync(sharedDataContent);
+            var jobDataJson = new JobDataJson(sharedDataContent);
+            var jobDataKeysAndValues = jobDataJson.ToKeyValues();
+            foreach (var (key, value) in jobDataKeysAndValues.KeysAndValues)
+            {
+                await console.Output.WriteAsync($"{key} - {value}");
+            }
+
             // TODO: also set the values as output for the step
         }
         catch (Exception e)
         {
-            // TODO remove stacktrace from error message
             var message = @$"An error occurred trying to execute the command to parse the log from a Markdown link check step.
 Error:
 - {e.Message}";
-            message += Environment.NewLine + e.StackTrace;
             throw new CommandException(message, innerException: e);
         }
     }
