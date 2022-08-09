@@ -1,23 +1,35 @@
-using ShareJobsDataCli.GitHub.Artifact.SameWorkflowRun;
-
 namespace ShareJobsDataCli.CliCommands.Commands.ShareData;
 
-[Command("share-data")]
-public class ShareDataCommand : ICommand
+[Command("set-data")]
+public class SetDataCommand : ICommand
 {
     private readonly HttpClient? _httpClient;
     private readonly IGitHubEnvironment? _gitHubEnvironment;
 
-    public ShareDataCommand()
+    public SetDataCommand()
     {
     }
 
     // used for test purposes to be able to mock external dependencies
-    public ShareDataCommand(HttpClient httpClient, IGitHubEnvironment gitHubEnvironment)
+    public SetDataCommand(HttpClient httpClient, IGitHubEnvironment gitHubEnvironment)
     {
         _httpClient = httpClient.NotNull();
         _gitHubEnvironment = gitHubEnvironment;
     }
+
+    [CommandOption(
+        "artifact-name",
+        IsRequired = false,
+        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Description = "The name of the artifact.")]
+    public string ArtifactName { get; init; } = "job-data";
+
+    [CommandOption(
+        "data-filename",
+        IsRequired = false,
+        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Description = "The filename that contains the data.")]
+    public string ArtifactFilename { get; init; } = "job-data.json";
 
     [CommandOption(
         "data",
@@ -36,18 +48,18 @@ public class ShareDataCommand : ICommand
             var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
             var actionRuntimeToken = new GitHubActionRuntimeToken(githubEnvironment.GitHubActionRuntimeToken);
             var repository = new GitHubRepositoryName(githubEnvironment.GitHubRepository);
-            using var httpClient = _httpClient ?? GitHubSameWorkflowRunArticfactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
+            using var httpClient = _httpClient ?? GitHubCurrentWorkflowRunArticfactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
             var artifactContainerUrl = new GitHubArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
-            var artifactContainerName = new GitHubArtifactContainerName("my-dotnet-artifact");
-            var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, "shared-job-data.txt");
+            var artifactContainerName = new GitHubArtifactContainerName(ArtifactName);
+            var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, ArtifactFilename);
             var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, jobDataJson);
-            var githubHttpClient = new GitHubSameWorkflowRunArticfactHttpClient(httpClient);
+            var githubHttpClient = new GitHubCurrentWorkflowRunArticfactHttpClient(httpClient);
             await githubHttpClient.UploadArtifactFileAsync(artifactContainerUrl, artifactContainerName, artifactFileUploadRequest);
             // TODO: also set the values as output for the step
         }
         catch (Exception e)
         {
-            var message = @$"An error occurred trying to execute the command to parse the log from a Markdown link check step.
+            var message = @$"An error occurred trying to execute the command to set job data.
 Error:
 - {e.Message}";
             throw new CommandException(message, innerException: e);

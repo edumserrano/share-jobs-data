@@ -1,4 +1,4 @@
-﻿namespace ShareJobsDataCli.GitHub.Artifact.SameWorkflowRun.HttpModels.Responses;
+namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.HttpModels.Responses;
 
 public record GitHubArtifactContainerItem
 {

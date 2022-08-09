@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.GitHub.Artifact.SameWorkflowRun.Types;
+namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.Types;
 
 internal sealed record GitHubArtifactItemContent
 {
