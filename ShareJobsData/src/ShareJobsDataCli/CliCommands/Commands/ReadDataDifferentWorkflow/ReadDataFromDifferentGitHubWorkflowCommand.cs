@@ -69,12 +69,8 @@ public class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
             var sharedDataContent = await githubHttpClient.DownloadArtifactFileAsync(jobDataArtifactRepositoryName, runId, artifactContainerName, artifactItemFilename);
             var jobDataJson = new JobDataJson(sharedDataContent);
             var jobDataKeysAndValues = jobDataJson.ToKeyValues();
-            foreach (var (key, value) in jobDataKeysAndValues.KeysAndValues)
-            {
-                await console.Output.WriteLineAsync($"{key} {value}");
-            }
-
-            // TODO: also set the values as output for the step
+            var stepOutput = new JobDataGitHubActionStepOutput(console);
+            await stepOutput.WriteAsync(jobDataKeysAndValues);
         }
         catch (Exception e)
         {

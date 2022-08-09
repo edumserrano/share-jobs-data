@@ -38,6 +38,11 @@ public class SetDataCommand : ICommand
         Description = "The data to share in YAML format.")]
     public string DataAsYmlStr { get; init; } = default!;
 
+    [CommandOption(
+        "set-step-output",
+        Description = "Whether or not the job data should also be set as a step output.")]
+    public bool SetStepOutput { get; init; }
+
     public async ValueTask ExecuteAsync(IConsole console)
     {
         try
@@ -55,7 +60,12 @@ public class SetDataCommand : ICommand
             var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, jobDataJson);
             var githubHttpClient = new GitHubCurrentWorkflowRunArticfactHttpClient(httpClient);
             await githubHttpClient.UploadArtifactFileAsync(artifactContainerUrl, artifactContainerName, artifactFileUploadRequest);
-            // TODO: also set the values as output for the step
+            if (SetStepOutput)
+            {
+                var jobDataKeysAndValues = jobDataJson.ToKeyValues();
+                var stepOutput = new JobDataGitHubActionStepOutput(console);
+                await stepOutput.WriteAsync(jobDataKeysAndValues);
+            }
         }
         catch (Exception e)
         {
