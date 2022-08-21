@@ -57,9 +57,15 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Run read jobs data
+      id: read
       uses: ./
       with:
         command: read-data-current-workflow
+    - name: Dump outputs from previous step
+      shell: pwsh
+      env:
+        STEP_OUTPUT: ${{ toJSON(steps.read.outputs) }}
+      run: $env:STEP_OUTPUT
     # - name: ls download
     #   run: |
     #     ls -R
