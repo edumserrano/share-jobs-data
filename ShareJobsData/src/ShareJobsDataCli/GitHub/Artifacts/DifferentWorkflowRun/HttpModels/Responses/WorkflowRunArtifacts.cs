@@ -1,64 +1,56 @@
 namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.HttpModels.Responses;
 
-internal record WorkflowRunArtifacts
-{
-    [JsonPropertyName("total_count")]
-    public int TotalCount { get; init; }
+internal record GitHubWorkflowRunArtifacts
+(
+    [property: JsonPropertyName("total_count")] int TotalCount,
+    [property: JsonPropertyName("artifacts")] IReadOnlyList<GitHubWorkflowRunArtifact> Artifacts
+);
 
-    [JsonPropertyName("artifacts")]
-    public IReadOnlyList<WorkflowRunArtifact> Artifacts { get; init; } = new List<WorkflowRunArtifact>();
+internal record GitHubWorkflowRunArtifact
+(
+    [property: JsonPropertyName("id")] long Id,
+    [property: JsonPropertyName("node_id")] long NodeId,
+    [property: JsonPropertyName("name")] string Name,
+    [property: JsonPropertyName("size_in_bytes")] long SizeInBytes,
+    [property: JsonPropertyName("url")] string Url,
+    [property: JsonPropertyName("archive_download_url")] string ArchiveDownloadUrl,
+    [property: JsonPropertyName("expired")] bool Expired,
+    [property: JsonPropertyName("created_at")] DateTime CreatedAt,
+    [property: JsonPropertyName("expires_at")] DateTime ExpiresAt,
+    [property: JsonPropertyName("updated_at")] DateTime UpdatedAt,
+    [property: JsonPropertyName("workflow_run")] GitHubWorkflowRun WorkflowRun
+);
+
+internal record GitHubWorkflowRun
+(
+    [property: JsonPropertyName("id")] long Id,
+    [property: JsonPropertyName("repository_id")] long RepositoryId,
+    [property: JsonPropertyName("head_repository_id")] long HeadRepositoryId,
+    [property: JsonPropertyName("head_branch")] string HeadBranch,
+    [property: JsonPropertyName("head_sha")] string HeadSha
+);
+
+internal sealed class WorkflowRunArtifactsValidator : AbstractValidator<GitHubWorkflowRunArtifacts>
+{
+    public WorkflowRunArtifactsValidator()
+    {
+        RuleFor(x => x.Artifacts)
+            .Must(x => x is not null)
+            .WithMessage(x => $"{nameof(x.Artifacts)} is missing from JSON response. {nameof(GitHubWorkflowRunArtifacts)}.{nameof(x.Artifacts)} cannot be null.");
+        RuleForEach(x => x.Artifacts)
+            .SetValidator(new GitHubWorkflowRunArtifactValidator($"{nameof(GitHubWorkflowRunArtifacts)}.{nameof(GitHubWorkflowRunArtifacts.Artifacts)}"));
+    }
 }
 
-internal record WorkflowRunArtifact
+internal sealed class GitHubWorkflowRunArtifactValidator : AbstractValidator<GitHubWorkflowRunArtifact>
 {
-    [JsonPropertyName("id")]
-    public long Id { get; init; }
-
-    [JsonPropertyName("node_id")]
-    public string NodeId { get; init; } = default!;
-
-    [JsonPropertyName("name")]
-    public string Name { get; init; } = default!;
-
-    [JsonPropertyName("size_in_bytes")]
-    public long SizeInBytes { get; init; }
-
-    [JsonPropertyName("url")]
-    public string Url { get; init; } = default!;
-
-    [JsonPropertyName("archive_download_url")]
-    public string ArchiveDownloadUrl { get; init; } = default!;
-
-    [JsonPropertyName("expired")]
-    public bool Expired { get; init; }
-
-    [JsonPropertyName("created_at")]
-    public DateTime CreatedAt { get; init; }
-
-    [JsonPropertyName("expires_at")]
-    public DateTime ExpiresAt { get; init; }
-
-    [JsonPropertyName("updated_at")]
-    public DateTime UpdatedAt { get; init; }
-
-    [JsonPropertyName("workflow_run")]
-    public WorkflowRun WorkflowRun { get; init; } = default!;
-}
-
-internal record WorkflowRun
-{
-    [JsonPropertyName("id")]
-    public long Id { get; init; }
-
-    [JsonPropertyName("repository_id")]
-    public long RepositoryId { get; init; }
-
-    [JsonPropertyName("head_repository_id")]
-    public long HeadRepositoryId { get; init; }
-
-    [JsonPropertyName("head_branch")]
-    public string HeadBranch { get; init; } = default!;
-
-    [JsonPropertyName("head_sha")]
-    public string HeadSha { get; init; } = default!;
+    public GitHubWorkflowRunArtifactValidator(string collectionPath)
+    {
+        RuleFor(x => x.Name)
+            .NotEmpty()
+            .WithMessage(x => $"{collectionPath}[{{CollectionIndex}}].{nameof(x.Name)} must have a value.");
+        RuleFor(x => x.ArchiveDownloadUrl)
+            .Must(contentLocation => Uri.TryCreate(contentLocation, default(UriCreationOptions), out var _))
+            .WithMessage(x => $"{collectionPath}[{{CollectionIndex}}].{nameof(x.ArchiveDownloadUrl)} is not a valid URL. Actual value: '{x.ArchiveDownloadUrl}'.");
+    }
 }

@@ -1,4 +1,6 @@
-namespace ShareJobsDataCli.CliCommands.Commands.ShareData;
+using ShareJobsDataCli.ArgumentValidations;
+
+namespace ShareJobsDataCli.CliCommands.Commands.SetData;
 
 [Command("set-data")]
 public sealed class SetDataCommand : ICommand

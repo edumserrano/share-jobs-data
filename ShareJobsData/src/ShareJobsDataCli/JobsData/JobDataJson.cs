@@ -1,3 +1,5 @@
+using ShareJobsDataCli.ArgumentValidations;
+
 namespace ShareJobsDataCli.JobsData;
 
 internal sealed record JobDataJson

@@ -1,3 +1,5 @@
+using ShareJobsDataCli.ArgumentValidations;
+
 namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun;
 
 internal class GitHubCurrentWorkflowRunArticfactHttpClient
@@ -72,7 +74,7 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         var containerRequest = new GitHubCreateArtifactFileContainerRequest(containerName);
         httpRequest.Content = JsonContent.Create(containerRequest);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var artifactContainer = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainer>();
+        var artifactContainer = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainer, GitHubArtifactContainerValidator>();
         return artifactContainer;
     }
 
@@ -89,14 +91,14 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         httpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Octet);
         httpRequest.Content.Headers.ContentRange = new ContentRangeHeaderValue(from: 0, to: contentBytes.Length - 1, length: contentBytes.Length);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var artifactItem = await httpResponse.ReadFromJsonAsync<GitHubArtifactItem>();
+        var artifactItem = await httpResponse.ReadFromJsonAsync<GitHubArtifactItem, GitHubArtifactItemValidator>();
         return artifactItem;
     }
 
     private async Task<GitHubArtifactContainer> FinalizeArtifactContainerAsync(
         GitHubArtifactContainerUrl containerUrl,
         GitHubArtifactContainerName containerName,
-        int containerSize)
+        long containerSize)
     {
         var finalizeArtifactContainerRequest = new GitHubFinalizeArtifactContainerRequest(containerSize);
         var setArtifactSizeUrl = $"{containerUrl}".SetQueryParam("artifactName", containerName);
@@ -104,7 +106,7 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
         httpRequest.Content = JsonContent.Create(finalizeArtifactContainerRequest);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var artifactContainer = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainer>();
+        var artifactContainer = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainer, GitHubArtifactContainerValidator>();
         return artifactContainer;
     }
 
@@ -113,7 +115,7 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{containerUrl}");
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var artifactContainers = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainers>();
+        var artifactContainers = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainers, GitHubArtifactContainersValidator>();
         return artifactContainers;
     }
 
@@ -123,7 +125,7 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, getContainerItemsUrl);
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var artifactContainerItems = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainerItems>();
+        var artifactContainerItems = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainerItems, GitHubArtifactContainerItemsValidator>();
         return artifactContainerItems;
     }
 

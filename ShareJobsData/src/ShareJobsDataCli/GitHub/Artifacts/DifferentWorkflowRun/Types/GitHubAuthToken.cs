@@ -1,3 +1,5 @@
+using ShareJobsDataCli.ArgumentValidations;
+
 namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.Types;
 
 internal sealed record GitHubAuthToken

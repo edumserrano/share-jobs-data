@@ -1,11 +1,13 @@
+using ShareJobsDataCli.ArgumentValidations;
+
 namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.HttpModels.Requests;
 
 internal sealed record GitHubFinalizeArtifactContainerRequest
 {
-    public GitHubFinalizeArtifactContainerRequest(int artifactContainerSize)
+    public GitHubFinalizeArtifactContainerRequest(long artifactContainerSize)
     {
         Size = artifactContainerSize.Positive();
     }
 
-    public int Size { get; }
+    public long Size { get; }
 }
