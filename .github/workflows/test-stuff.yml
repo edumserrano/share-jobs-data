@@ -32,7 +32,7 @@ jobs:
     - name: Run share jobs data
       uses: ./
       with:
-        command: share-data
+        command: set-data
         data: |
           name: George Washington
           age: 89
@@ -59,7 +59,7 @@ jobs:
     - name: Run read jobs data
       uses: ./
       with:
-        command: read-data
+        command: read-data-current-workflow
     # - name: ls download
     #   run: |
     #     ls -R

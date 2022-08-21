@@ -5,7 +5,7 @@ branding:
   color: blue
 inputs:
   command:
-    description: "Command to use: 'share-data' or 'read-data'."
+    description: "Command to use: 'set-data', 'read-data-current-workflow' or 'read-data-different-workflow'."
     required: true
   data:
     description: 'YAML representation of the data to share.'
