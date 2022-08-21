@@ -1,9 +1,19 @@
 namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.HttpModels.Responses;
 
 internal record GitHubArtifactContainers
-{
-    public int Count { get; init; }
+(
+    int Count,
+    [property: JsonPropertyName("value")] IReadOnlyList<GitHubArtifactContainer> Containers
+);
 
-    [JsonPropertyName("value")]
-    public IReadOnlyList<GitHubArtifactContainer> Containers { get; init; } = new List<GitHubArtifactContainer>();
+internal sealed class GitHubArtifactContainersValidator : AbstractValidator<GitHubArtifactContainers>
+{
+    public GitHubArtifactContainersValidator()
+    {
+        RuleFor(x => x.Containers)
+            .Must(x => x is not null)
+            .WithMessage(x => $"{nameof(x.Containers)} is missing from JSON response. {nameof(GitHubArtifactContainers)}.{nameof(x.Containers)} cannot be null.");
+        RuleForEach(x => x.Containers)
+            .SetValidator(new GitHubArtifactContainerValidator($"{nameof(GitHubArtifactContainers)}.{nameof(GitHubArtifactContainers.Containers)}"));
+    }
 }

@@ -1,38 +1,29 @@
 namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.HttpModels.Responses;
 
 internal record GitHubArtifactItem
+(
+    long ContainerId,
+    string ScopeIdentifier,
+    string Path,
+    string ItemType,
+    string Status,
+    long FileLength,
+    int FileEncoding,
+    int FileType,
+    DateTime DateCreated,
+    DateTime DateLastModified,
+    string CreatedBy,
+    string LastModifiedBy,
+    long FileId,
+    string ContentId
+);
+
+internal sealed class GitHubArtifactItemValidator : AbstractValidator<GitHubArtifactItem>
 {
-    private int _fileLength;
-
-    public int ContainerId { get; init; }
-
-    public string ScopeIdentifier { get; init; } = default!;
-
-    public string Path { get; init; } = default!;
-
-    public string ItemType { get; init; } = default!;
-
-    public string Status { get; init; } = default!;
-
-    public int FileLength
+    public GitHubArtifactItemValidator()
     {
-        get => _fileLength;
-        init => _fileLength = value.Positive<GitHubArtifactItem>(nameof(FileLength));
+        RuleFor(x => x.FileLength)
+            .Must(fileLength => fileLength > 0)
+            .WithMessage(x => $"{nameof(x.FileLength)} is must be a positive value. Actual value: '{x.FileLength}'.");
     }
-
-    public int FileEncoding { get; init; }
-
-    public int FileType { get; init; }
-
-    public DateTime DateCreated { get; init; }
-
-    public DateTime DateLastModified { get; init; }
-
-    public string CreatedBy { get; init; } = default!;
-
-    public string LastModifiedBy { get; init; } = default!;
-
-    public int FileId { get; init; }
-
-    public string ContentId { get; init; } = default!;
 }

@@ -1,3 +1,5 @@
+using ShareJobsDataCli.ArgumentValidations;
+
 namespace ShareJobsDataCli.GitHub.Types;
 
 internal sealed record GitHubRepositoryName

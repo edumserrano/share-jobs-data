@@ -1,3 +1,5 @@
+using ShareJobsDataCli.ArgumentValidations;
+
 namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun;
 
 internal class GitHubDifferentWorkflowRunArticfactHttpClient
@@ -55,11 +57,11 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         return new GitHubArtifactItemContent(artifactFileContent);
     }
 
-    private async Task<WorkflowRunArtifacts> ListWorkflowRunArtifactsAsync(string repoName)
+    private async Task<GitHubWorkflowRunArtifacts> ListWorkflowRunArtifactsAsync(string repoName)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"repos/{repoName}/actions/artifacts");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var workflowRunArtifacts = await httpResponse.ReadFromJsonAsync<WorkflowRunArtifacts>();
+        var workflowRunArtifacts = await httpResponse.ReadFromJsonAsync<GitHubWorkflowRunArtifacts, WorkflowRunArtifactsValidator>();
         return workflowRunArtifacts;
     }
 

@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.Validations;
+namespace ShareJobsDataCli.ArgumentValidations;
 
 internal static class Argument
 {
@@ -19,22 +19,11 @@ internal static class Argument
         throw new ArgumentException(message);
     }
 
-    public static int Positive(this int value, [CallerArgumentExpression("value")] string expression = "")
+    public static long Positive(this long value, [CallerArgumentExpression("value")] string expression = "")
     {
         if (value >= 0)
         {
             return value;
-        }
-
-        var message = $"{expression} must be a positive value. Received '{value}'.";
-        throw new ArgumentException(message);
-    }
-
-    public static long Positive(this string value, [CallerArgumentExpression("value")] string expression = "")
-    {
-        if (long.TryParse(value, out var parsed) && parsed >= 0)
-        {
-            return parsed;
         }
 
         var message = $"{expression} must be a positive value. Received '{value}'.";
