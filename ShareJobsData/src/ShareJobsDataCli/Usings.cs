@@ -28,5 +28,4 @@ global using ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.Types;
 global using ShareJobsDataCli.GitHub.Exceptions;
 global using ShareJobsDataCli.GitHub.Types;
 global using ShareJobsDataCli.JobsData;
-global using ShareJobsDataCli.Validations;
 global using YamlDotNet.Serialization;
