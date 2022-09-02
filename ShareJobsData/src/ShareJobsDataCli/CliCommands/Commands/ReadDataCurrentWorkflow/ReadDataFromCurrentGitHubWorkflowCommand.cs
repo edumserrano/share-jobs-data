@@ -1,4 +1,4 @@
-using ShareJobsDataCli.ArgumentValidations;
+using static ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.DownloadArtifactFile.Results.DownloadArtifactFileFromCurrentWorkflowResult;
 
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow;
 
@@ -35,29 +35,30 @@ public sealed class ReadDataCurrentWorkflow : ICommand
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
-        try
+        console.NotNull();
+
+        var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
+        var actionRuntimeToken = new GitHubActionRuntimeToken(githubEnvironment.GitHubActionRuntimeToken);
+        var repository = new GitHubRepositoryName(githubEnvironment.GitHubRepository);
+        var containerUrl = new GitHubArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
+        var artifactContainerName = new GitHubArtifactContainerName(ArtifactName);
+        var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, ArtifactFilename);
+
+        using var httpClient = _httpClient ?? GitHubCurrentWorkflowRunArticfactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
+        var githubHttpClient = new GitHubCurrentWorkflowRunArticfactHttpClient(httpClient);
+        var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(containerUrl, artifactContainerName, artifactFilePath);
+        switch (downloadResult)
         {
-            console.NotNull();
-            var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
-            var actionRuntimeToken = new GitHubActionRuntimeToken(githubEnvironment.GitHubActionRuntimeToken);
-            var repository = new GitHubRepositoryName(githubEnvironment.GitHubRepository);
-            using var httpClient = _httpClient ?? GitHubCurrentWorkflowRunArticfactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
-            var githubHttpClient = new GitHubCurrentWorkflowRunArticfactHttpClient(httpClient);
-            var containerUrl = new GitHubArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
-            var artifactContainerName = new GitHubArtifactContainerName(ArtifactName);
-            var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, ArtifactFilename);
-            var sharedDataContent = await githubHttpClient.DownloadArtifactFileAsync(containerUrl, artifactContainerName, artifactFilePath);
-            var jobDataJson = new JobDataJson(sharedDataContent);
-            var jobDataKeysAndValues = jobDataJson.ToKeyValues();
-            var stepOutput = new JobDataGitHubActionStepOutput(console);
-            await stepOutput.WriteAsync(jobDataKeysAndValues);
-        }
-        catch (Exception e)
-        {
-            var message = @$"An error occurred trying to execute the command to read job data from the current workflow run.
-Error:
-- {e.Message}";
-            throw new CommandException(message, innerException: e);
+            case Ok ok:
+                var stepOutput = new JobDataGitHubActionStepOutput(console);
+                await stepOutput.WriteAsync(ok.GitHubArtifactItem);
+                break;
+            case ArtifactNotFound artifactNotFound:
+                throw artifactNotFound.ToCommandException();
+            case ArtifactFileNotFound artifactFileNotFound:
+                throw artifactFileNotFound.ToCommandException();
+            default:
+                throw new UnhandledValueException(downloadResult);
         }
     }
 }

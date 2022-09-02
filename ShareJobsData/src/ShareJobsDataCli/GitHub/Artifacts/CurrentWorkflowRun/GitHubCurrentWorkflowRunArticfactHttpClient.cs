@@ -1,4 +1,4 @@
-using ShareJobsDataCli.ArgumentValidations;
+using static ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.DownloadArtifactFile.Results.DownloadArtifactFileFromCurrentWorkflowResult;
 
 namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun;
 
@@ -41,7 +41,7 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
     }
 
     // taken from exploring https://github.com/actions/toolkit/blob/90be12a59c20a6ecc43b234c1885fc2852d3212d/packages/artifact/src/internal/artifact-client.ts#L157
-    public async Task<GitHubArtifactItemContent> DownloadArtifactFileAsync(
+    public async Task<DownloadArtifactFileFromCurrentWorkflowResult> DownloadArtifactFileAsync(
         GitHubArtifactContainerUrl containerUrl,
         GitHubArtifactContainerName containerName,
         GitHubArtifactItemFilePath itemFilePath)
@@ -53,14 +53,14 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         var artifactContainer = artifactContainers.Containers.FirstOrDefault(x => x.Name == containerName);
         if (artifactContainer is null)
         {
-            throw DownloadArtifactException.ArtifactNotFound(containerName);
+            return new ArtifactNotFound(containerName);
         }
 
         var artifactContainerItems = await GetContainerItemsAsync(artifactContainer.FileContainerResourceUrl, artifactContainer.Name);
         var artifactContainerFileItem = artifactContainerItems.ContainerItems.FirstOrDefault(x => x.ItemType == "file" && x.Path == itemFilePath);
         if (artifactContainerFileItem is null)
         {
-            throw DownloadArtifactException.ArtifactFileNotFound(itemFilePath);
+            return new ArtifactFileNotFound(itemFilePath);
         }
 
         var containerItemContent = await DownloadContainerItemAsync(artifactContainerFileItem.ContentLocation);

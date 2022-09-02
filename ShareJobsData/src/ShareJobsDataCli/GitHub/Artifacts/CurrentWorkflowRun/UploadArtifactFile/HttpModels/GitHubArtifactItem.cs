@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.HttpModels.Responses;
+namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.UploadArtifactFile.HttpModels;
 
 internal record GitHubArtifactItem
 (

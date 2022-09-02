@@ -1,6 +1,4 @@
-using ShareJobsDataCli.ArgumentValidations;
-
-namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.Types;
+namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArtifactFile.Types;
 
 internal sealed class GitHubRunId
 {

@@ -1,5 +1,3 @@
-using Shouldly;
-
 namespace ShareJobsDataCli.Tests;
 
 public class UnitTest1

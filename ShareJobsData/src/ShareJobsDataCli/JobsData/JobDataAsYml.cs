@@ -1,11 +1,11 @@
 namespace ShareJobsDataCli.JobsData;
 
-internal class JobDataYml
+internal class JobDataAsYml
 {
-    private JobDataJson? _jobDataJson;
+    private JobDataAsJson? _jobDataJson;
     private readonly object _dataAsYml;
 
-    public JobDataYml(string yml)
+    public JobDataAsYml(string yml)
     {
         var deserializer = new DeserializerBuilder()
             .IgnoreUnmatchedProperties()
@@ -13,14 +13,14 @@ internal class JobDataYml
         _dataAsYml = deserializer.Deserialize<object>(yml);
     }
 
-    public JobDataJson ToJson()
+    public JobDataAsJson ToJson()
     {
         return _jobDataJson ??= YamlToJson();
 
-        JobDataJson YamlToJson()
+        JobDataAsJson YamlToJson()
         {
             var dataAsJson = JsonConvert.SerializeObject(_dataAsYml, Formatting.Indented);
-            return new JobDataJson(dataAsJson);
+            return new JobDataAsJson(dataAsJson);
         }
     }
 }

@@ -1,5 +1,3 @@
-using ShareJobsDataCli.ArgumentValidations;
-
 namespace ShareJobsDataCli.JobsData;
 
 internal class JobDataGitHubActionStepOutput
@@ -11,7 +9,19 @@ internal class JobDataGitHubActionStepOutput
         _console = console.NotNull();
     }
 
-    public async Task WriteAsync(JobDataKeysAndValues jobDataKeysAndValues)
+    public Task WriteAsync(GitHubArtifactItemContent artifactItemContent)
+    {
+        var jobDataAsJson = new JobDataAsJson(artifactItemContent);
+        return WriteAsync(jobDataAsJson);
+    }
+
+    public Task WriteAsync(JobDataAsJson jobDataAsJson)
+    {
+        var jobDataAsKeysAndValues = jobDataAsJson.ToKeyValues();
+        return WriteAsync(jobDataAsKeysAndValues);
+    }
+
+    public async Task WriteAsync(JobDataAsKeysAndValues jobDataKeysAndValues)
     {
         foreach (var (key, value) in jobDataKeysAndValues.KeysAndValues)
         {

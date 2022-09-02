@@ -1,6 +1,4 @@
-using ShareJobsDataCli.ArgumentValidations;
-
-namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.Types;
+namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.DownloadArtifactFile.Types;
 
 internal sealed record GitHubArtifactItemFilePath
 {

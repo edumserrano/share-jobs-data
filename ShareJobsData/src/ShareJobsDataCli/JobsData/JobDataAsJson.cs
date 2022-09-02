@@ -1,22 +1,20 @@
-using ShareJobsDataCli.ArgumentValidations;
-
 namespace ShareJobsDataCli.JobsData;
 
-internal sealed record JobDataJson
+internal sealed record JobDataAsJson
 {
     private readonly string _value;
 
-    public JobDataJson(string json)
+    public JobDataAsJson(string json)
     {
         _value = json.NotNullOrWhiteSpace();
     }
 
-    public static implicit operator string(JobDataJson json)
+    public static implicit operator string(JobDataAsJson json)
     {
         return json._value;
     }
 
-    public JobDataKeysAndValues ToKeyValues()
+    public JobDataAsKeysAndValues ToKeyValues()
     {
         var obj = JObject.Parse(_value);
         var kvp = obj.DescendantsAndSelf()
@@ -24,7 +22,7 @@ internal sealed record JobDataJson
             .Where(jp => jp.Value is JValue)
             .Select(jp => new JobDataKeyAndValue(jp.Path, jp.Value.ToString()))
             .ToList();
-        return new JobDataKeysAndValues(kvp);
+        return new JobDataAsKeysAndValues(kvp);
     }
 
     public override string ToString() => (string)this;

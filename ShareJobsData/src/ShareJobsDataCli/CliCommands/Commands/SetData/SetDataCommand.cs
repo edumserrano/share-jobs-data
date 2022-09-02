@@ -1,5 +1,3 @@
-using ShareJobsDataCli.ArgumentValidations;
-
 namespace ShareJobsDataCli.CliCommands.Commands.SetData;
 
 [Command("set-data")]
@@ -47,34 +45,25 @@ public sealed class SetDataCommand : ICommand
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
-        try
+        console.NotNull();
+
+        var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
+        var actionRuntimeToken = new GitHubActionRuntimeToken(githubEnvironment.GitHubActionRuntimeToken);
+        var repository = new GitHubRepositoryName(githubEnvironment.GitHubRepository);
+        var artifactContainerUrl = new GitHubArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
+        var artifactContainerName = new GitHubArtifactContainerName(ArtifactName);
+        var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, ArtifactFilename);
+        var jobDataAsYml = new JobDataAsYml(DataAsYmlStr);
+        var jobDataAsJson = jobDataAsYml.ToJson();
+        var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, jobDataAsJson);
+
+        using var httpClient = _httpClient ?? GitHubCurrentWorkflowRunArticfactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
+        var githubHttpClient = new GitHubCurrentWorkflowRunArticfactHttpClient(httpClient);
+        await githubHttpClient.UploadArtifactFileAsync(artifactContainerUrl, artifactContainerName, artifactFileUploadRequest);
+        if (SetStepOutput)
         {
-            console.NotNull();
-            var jobDataYml = new JobDataYml(DataAsYmlStr);
-            var jobDataJson = jobDataYml.ToJson();
-            var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
-            var actionRuntimeToken = new GitHubActionRuntimeToken(githubEnvironment.GitHubActionRuntimeToken);
-            var repository = new GitHubRepositoryName(githubEnvironment.GitHubRepository);
-            using var httpClient = _httpClient ?? GitHubCurrentWorkflowRunArticfactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
-            var artifactContainerUrl = new GitHubArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
-            var artifactContainerName = new GitHubArtifactContainerName(ArtifactName);
-            var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, ArtifactFilename);
-            var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, jobDataJson);
-            var githubHttpClient = new GitHubCurrentWorkflowRunArticfactHttpClient(httpClient);
-            await githubHttpClient.UploadArtifactFileAsync(artifactContainerUrl, artifactContainerName, artifactFileUploadRequest);
-            if (SetStepOutput)
-            {
-                var jobDataKeysAndValues = jobDataJson.ToKeyValues();
-                var stepOutput = new JobDataGitHubActionStepOutput(console);
-                await stepOutput.WriteAsync(jobDataKeysAndValues);
-            }
-        }
-        catch (Exception e)
-        {
-            var message = @$"An error occurred trying to execute the command to set job data.
-Error:
-- {e.Message}";
-            throw new CommandException(message, innerException: e);
+            var stepOutput = new JobDataGitHubActionStepOutput(console);
+            await stepOutput.WriteAsync(jobDataAsJson);
         }
     }
 }

@@ -1,4 +1,4 @@
-using ShareJobsDataCli.ArgumentValidations;
+using static ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArtifactFile.Results.DownloadArtifactFileFromDifferentWorkflowResult;
 
 namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun;
 
@@ -26,7 +26,7 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         return httpClient;
     }
 
-    public async Task<GitHubArtifactItemContent> DownloadArtifactFileAsync(
+    public async Task<DownloadArtifactFileFromDifferentWorkflowResult> DownloadArtifactFileAsync(
         GitHubRepositoryName repoName,
         GitHubRunId runId,
         GitHubArtifactContainerName artifactContainerName,
@@ -41,14 +41,14 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         var artifact = workflowRunArtifacts.Artifacts.FirstOrDefault(x => x.Name == artifactContainerName);
         if (artifact is null)
         {
-            throw DownloadArtifactException.ArtifactNotFound(repoName, runId, artifactContainerName);
+            return new ArtifactNotFound(repoName, runId, artifactContainerName);
         }
 
         using var artifactZip = await DownloadArtifactAsync(artifact.ArchiveDownloadUrl);
         var artifactFileAsZip = artifactZip.Entries.FirstOrDefault(e => e.FullName.Equals(artifactItemFilename, StringComparison.InvariantCultureIgnoreCase));
         if (artifactFileAsZip is null)
         {
-            throw DownloadArtifactException.ArtifactFileNotFound(repoName, runId, artifactItemFilename);
+            return new ArtifactFileNotFound(repoName, runId, artifactContainerName, artifactItemFilename);
         }
 
         using var artifactAsStream = artifactFileAsZip.Open();
@@ -57,11 +57,11 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         return new GitHubArtifactItemContent(artifactFileContent);
     }
 
-    private async Task<GitHubWorkflowRunArtifacts> ListWorkflowRunArtifactsAsync(string repoName)
+    private async Task<GitHubWorkflowRunArtifactsHttpResponse> ListWorkflowRunArtifactsAsync(string repoName)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"repos/{repoName}/actions/artifacts");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var workflowRunArtifacts = await httpResponse.ReadFromJsonAsync<GitHubWorkflowRunArtifacts, WorkflowRunArtifactsValidator>();
+        var workflowRunArtifacts = await httpResponse.ReadFromJsonAsync<GitHubWorkflowRunArtifactsHttpResponse, GitHubWorkflowRunArtifactsHttpResponseValidator>();
         return workflowRunArtifacts;
     }
 

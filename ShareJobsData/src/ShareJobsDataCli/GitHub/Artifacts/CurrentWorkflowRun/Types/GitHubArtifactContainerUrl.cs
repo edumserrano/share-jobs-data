@@ -1,5 +1,3 @@
-using ShareJobsDataCli.ArgumentValidations;
-
 namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.Types;
 
 internal record GitHubArtifactContainerUrl

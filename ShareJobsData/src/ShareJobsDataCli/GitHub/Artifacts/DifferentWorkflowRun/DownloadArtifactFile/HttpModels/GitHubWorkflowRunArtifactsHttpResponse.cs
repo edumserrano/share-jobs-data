@@ -1,6 +1,6 @@
-namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.HttpModels.Responses;
+namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArtifactFile.HttpModels;
 
-internal record GitHubWorkflowRunArtifacts
+internal record GitHubWorkflowRunArtifactsHttpResponse
 (
     [property: JsonPropertyName("total_count")] int TotalCount,
     [property: JsonPropertyName("artifacts")] IReadOnlyList<GitHubWorkflowRunArtifact> Artifacts
@@ -30,15 +30,15 @@ internal record GitHubWorkflowRun
     [property: JsonPropertyName("head_sha")] string HeadSha
 );
 
-internal sealed class WorkflowRunArtifactsValidator : AbstractValidator<GitHubWorkflowRunArtifacts>
+internal sealed class GitHubWorkflowRunArtifactsHttpResponseValidator : AbstractValidator<GitHubWorkflowRunArtifactsHttpResponse>
 {
-    public WorkflowRunArtifactsValidator()
+    public GitHubWorkflowRunArtifactsHttpResponseValidator()
     {
         RuleFor(x => x.Artifacts)
             .Must(x => x is not null)
-            .WithMessage(x => $"{nameof(x.Artifacts)} is missing from JSON response. {nameof(GitHubWorkflowRunArtifacts)}.{nameof(x.Artifacts)} cannot be null.");
+            .WithMessage(x => $"{nameof(x.Artifacts)} is missing from JSON response. {nameof(GitHubWorkflowRunArtifactsHttpResponse)}.{nameof(x.Artifacts)} cannot be null.");
         RuleForEach(x => x.Artifacts)
-            .SetValidator(new GitHubWorkflowRunArtifactValidator($"{nameof(GitHubWorkflowRunArtifacts)}.{nameof(GitHubWorkflowRunArtifacts.Artifacts)}"));
+            .SetValidator(new GitHubWorkflowRunArtifactValidator($"{nameof(GitHubWorkflowRunArtifactsHttpResponse)}.{nameof(GitHubWorkflowRunArtifactsHttpResponse.Artifacts)}"));
     }
 }
 

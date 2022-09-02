@@ -1,6 +1,4 @@
-using ShareJobsDataCli.ArgumentValidations;
-
-namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.HttpModels.Requests;
+namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.UploadArtifactFile.HttpModels;
 
 internal sealed record GitHubFinalizeArtifactContainerRequest
 {

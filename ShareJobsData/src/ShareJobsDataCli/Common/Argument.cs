@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.ArgumentValidations;
+namespace ShareJobsDataCli.Common;
 
 internal static class Argument
 {

@@ -1,10 +1,8 @@
-using ShareJobsDataCli.ArgumentValidations;
-
 namespace ShareJobsDataCli.JobsData;
 
-internal record JobDataKeysAndValues
+internal record JobDataAsKeysAndValues
 {
-    public JobDataKeysAndValues(List<JobDataKeyAndValue> keysAndValues)
+    public JobDataAsKeysAndValues(List<JobDataKeyAndValue> keysAndValues)
     {
         KeysAndValues = keysAndValues;
     }
