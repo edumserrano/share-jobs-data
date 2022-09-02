@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.DownloadArtifactFile.Types;
+namespace ShareJobsDataCli.GitHub.Artifacts.Types;
 
 internal sealed record GitHubArtifactItemFilePath
 {

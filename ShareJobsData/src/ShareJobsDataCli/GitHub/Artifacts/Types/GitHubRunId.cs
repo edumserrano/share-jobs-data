@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArtifactFile.Types;
+namespace ShareJobsDataCli.GitHub.Artifacts.Types;
 
 internal sealed class GitHubRunId
 {

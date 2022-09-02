@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.UploadArtifactFile.Types;
+namespace ShareJobsDataCli.GitHub.Artifacts.Types;
 
 internal sealed record GitHubArtifactFileUploadRequest
 {

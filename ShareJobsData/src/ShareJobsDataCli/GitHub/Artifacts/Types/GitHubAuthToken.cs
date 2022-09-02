@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.Types;
+namespace ShareJobsDataCli.GitHub.Artifacts.Types;
 
 internal sealed record GitHubAuthToken
 {
