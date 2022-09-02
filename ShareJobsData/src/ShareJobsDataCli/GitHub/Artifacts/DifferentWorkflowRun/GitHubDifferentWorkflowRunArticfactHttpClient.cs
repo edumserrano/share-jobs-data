@@ -1,5 +1,6 @@
 using static ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArtifactFile.Results.DownloadArtifactFileFromDifferentWorkflowResult;
 using static ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArtifactFile.Results.DownloadArtifactZipResult;
+using static ShareJobsDataCli.GitHub.JsonHttpResult<T>;
 
 namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun;
 
@@ -38,9 +39,35 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         artifactContainerName.NotNull();
         artifactItemFilename.NotNull();
 
+
         var workflowRunArtifactsResult = await ListWorkflowRunArtifactsAsync(repoName);
+
+        //(Ok okResult, NotOk errorResult) = await ListWorkflowRunArtifactsAsync(repoName);
+        //if(errorResult is not null)
+        //{
+        //    //then it's an error
+        //}
+        // it's ok, use the okResult
+        // how do I guarantee that okResult is not null here?
+
         if (workflowRunArtifactsResult is not JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.Ok okWorkflowRunArtifactResult)
         {
+            var notOk = (JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.Error)workflowRunArtifactsResult;
+            switch (notOk)
+            {
+                case JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.Ok:
+                    const int a = 2;
+                    break;
+                case JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.JsonDeserializedToNull:
+                    const int b = 3;
+                    break;
+                case JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.JsonModelValidationFailed:
+                    const int C = 3;
+                    break;
+                case JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.FailedStatusCode:
+                    const int d = 3;
+                    break;
+            }
             return new FailedToListWorkflowRunArtifacts(workflowRunArtifactsResult);
         }
 

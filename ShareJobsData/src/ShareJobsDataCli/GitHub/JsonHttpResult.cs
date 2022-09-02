@@ -19,17 +19,24 @@ internal abstract record JsonHttpResult<T>
     {
     }
 
+    public interface INotOk
+    {
+    }
+
     public record Ok(T Response)
         : JsonHttpResult<T>;
 
-    public record JsonDeserializedToNull()
+    public record Error()
         : JsonHttpResult<T>;
+
+    public record JsonDeserializedToNull()
+        : Error;
 
     public record JsonModelValidationFailed(ValidationResult ValidationResult)
-        : JsonHttpResult<T>;
+        : Error;
 
     public record FailedStatusCode(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
-        : JsonHttpResult<T>;
+        : Error;
 
     public static implicit operator JsonHttpResult<T>(T response) => new Ok(response);
 }
