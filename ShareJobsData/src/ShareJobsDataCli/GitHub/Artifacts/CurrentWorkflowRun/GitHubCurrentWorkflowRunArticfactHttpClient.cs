@@ -64,7 +64,7 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         }
 
         var containerItemContent = await DownloadContainerItemAsync(artifactContainerFileItem.ContentLocation);
-        return new GitHubArtifactItemContent(containerItemContent);
+        return containerItemContent;
     }
 
     private async Task<GitHubArtifactContainer> CreateArtifactContainerAsync(GitHubArtifactContainerUrl containerUrl, GitHubArtifactContainerName containerName)
@@ -129,14 +129,15 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         return artifactContainerItems;
     }
 
-    private async Task<string> DownloadContainerItemAsync(string contentLocation)
+    private async Task<GitHubArtifactItemContent> DownloadContainerItemAsync(string contentLocation)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, contentLocation);
         httpRequest.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip"); // not really needed since I'm not uploading gzip compressed stream ?
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/octet-stream;api-version={GitHubApiVersion.Latest}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        await httpResponse.EnsureSuccessStatusCodeAsync();
+        var ensureSuccessStatusResult = await httpResponse.EnsureSuccessStatusCodeAsync();
+        // TODO check ensureSuccessStatusResult
         var containerItemContent = await httpResponse.Content.ReadAsStringAsync();
-        return containerItemContent;
+        return new GitHubArtifactItemContent(containerItemContent);
     }
 }

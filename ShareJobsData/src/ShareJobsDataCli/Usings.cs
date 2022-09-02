@@ -27,6 +27,6 @@ global using ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun;
 global using ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArtifactFile.HttpModels;
 global using ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArtifactFile.Results;
 global using ShareJobsDataCli.GitHub.Artifacts.Types;
-global using ShareJobsDataCli.GitHub.Exceptions;
 global using ShareJobsDataCli.JobsData;
 global using YamlDotNet.Serialization;
+global using static ShareJobsDataCli.Common.NoneStaticUsingExtensions;

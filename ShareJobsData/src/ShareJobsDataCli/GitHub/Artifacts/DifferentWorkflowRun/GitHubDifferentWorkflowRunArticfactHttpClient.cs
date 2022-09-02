@@ -1,4 +1,5 @@
 using static ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArtifactFile.Results.DownloadArtifactFileFromDifferentWorkflowResult;
+using static ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArtifactFile.Results.DownloadArtifactZipResult;
 
 namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun;
 
@@ -37,14 +38,26 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         artifactContainerName.NotNull();
         artifactItemFilename.NotNull();
 
-        var workflowRunArtifacts = await ListWorkflowRunArtifactsAsync(repoName);
+        var workflowRunArtifactsResult = await ListWorkflowRunArtifactsAsync(repoName);
+        if (workflowRunArtifactsResult is not JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.Ok okWorkflowRunArtifactResult)
+        {
+            return new FailedToListWorkflowRunArtifacts(workflowRunArtifactsResult);
+        }
+
+        var workflowRunArtifacts = okWorkflowRunArtifactResult.Response;
         var artifact = workflowRunArtifacts.Artifacts.FirstOrDefault(x => x.Name == artifactContainerName);
         if (artifact is null)
         {
             return new ArtifactNotFound(repoName, runId, artifactContainerName);
         }
 
-        using var artifactZip = await DownloadArtifactAsync(artifact.ArchiveDownloadUrl);
+        var downloadArtifactResult = await DownloadArtifactAsync(artifact.ArchiveDownloadUrl);
+        if (downloadArtifactResult is not DownloadArtifactZipResult.Ok okDownloadArtifactAzipResult)
+        {
+            return new FailedToDownloadArtifact(downloadArtifactResult);
+        }
+
+        using var artifactZip = okDownloadArtifactAzipResult.ZipArchive;
         var artifactFileAsZip = artifactZip.Entries.FirstOrDefault(e => e.FullName.Equals(artifactItemFilename, StringComparison.InvariantCultureIgnoreCase));
         if (artifactFileAsZip is null)
         {
@@ -57,19 +70,24 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         return new GitHubArtifactItemContent(artifactFileContent);
     }
 
-    private async Task<GitHubWorkflowRunArtifactsHttpResponse> ListWorkflowRunArtifactsAsync(string repoName)
+    private async Task<JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>> ListWorkflowRunArtifactsAsync(string repoName)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"repos/{repoName}/actions/artifacts");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var workflowRunArtifacts = await httpResponse.ReadFromJsonAsync<GitHubWorkflowRunArtifactsHttpResponse, GitHubWorkflowRunArtifactsHttpResponseValidator>();
-        return workflowRunArtifacts;
+        var jsonHttpResult = await httpResponse.ReadFromJsonAsync<GitHubWorkflowRunArtifactsHttpResponse, GitHubWorkflowRunArtifactsHttpResponseValidator>();
+        return jsonHttpResult;
     }
 
-    private async Task<ZipArchive> DownloadArtifactAsync(string archiveDownloadUrl)
+    private async Task<DownloadArtifactZipResult> DownloadArtifactAsync(string archiveDownloadUrl)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, archiveDownloadUrl);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        await httpResponse.EnsureSuccessStatusCodeAsync();
+        var ensureSuccessStatusCodeResult = await httpResponse.EnsureSuccessStatusCodeAsync();
+        if (ensureSuccessStatusCodeResult is not EnsureSuccessStatusCodeResult.Ok)
+        {
+            return new FailedToDownloadArtifactZip(ensureSuccessStatusCodeResult);
+        }
+
         var responseStream = await httpResponse.Content.ReadAsStreamAsync();
         return new ZipArchive(responseStream, ZipArchiveMode.Read);
     }
