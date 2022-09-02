@@ -9,20 +9,11 @@ internal abstract record DownloadArtifactZipResult
     public record Ok(ZipArchive ZipArchive)
         : DownloadArtifactZipResult;
 
-    public record FailedToDownloadArtifactZip : DownloadArtifactZipResult
-    {
-        public FailedToDownloadArtifactZip(EnsureSuccessStatusCodeResult errorResult)
-        {
-            if (errorResult is EnsureSuccessStatusCodeResult.Ok)
-            {
-                NotAnErrorResultException.Throw(errorResult);
-            }
+    public record Error()
+        : DownloadArtifactZipResult;
 
-            ErrorResult = errorResult;
-        }
-
-        public EnsureSuccessStatusCodeResult ErrorResult { get; }
-    }
+    public record FailedToDownloadArtifactZip(EnsureSuccessStatusCodeResult.Error ErrorResult)
+        : Error;
 
     public static implicit operator DownloadArtifactZipResult(ZipArchive zipArchive) => new Ok(zipArchive);
 }

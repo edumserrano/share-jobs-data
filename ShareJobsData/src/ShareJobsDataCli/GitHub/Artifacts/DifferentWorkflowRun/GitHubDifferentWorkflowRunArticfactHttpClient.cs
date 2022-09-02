@@ -1,6 +1,5 @@
 using static ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArtifactFile.Results.DownloadArtifactFileFromDifferentWorkflowResult;
 using static ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArtifactFile.Results.DownloadArtifactZipResult;
-using static ShareJobsDataCli.GitHub.JsonHttpResult<T>;
 
 namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun;
 
@@ -52,23 +51,8 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
 
         if (workflowRunArtifactsResult is not JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.Ok okWorkflowRunArtifactResult)
         {
-            var notOk = (JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.Error)workflowRunArtifactsResult;
-            switch (notOk)
-            {
-                case JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.Ok:
-                    const int a = 2;
-                    break;
-                case JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.JsonDeserializedToNull:
-                    const int b = 3;
-                    break;
-                case JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.JsonModelValidationFailed:
-                    const int C = 3;
-                    break;
-                case JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.FailedStatusCode:
-                    const int d = 3;
-                    break;
-            }
-            return new FailedToListWorkflowRunArtifacts(workflowRunArtifactsResult);
+            var error = (JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.Error)workflowRunArtifactsResult;
+            return new FailedToListWorkflowRunArtifacts(error);
         }
 
         var workflowRunArtifacts = okWorkflowRunArtifactResult.Response;
@@ -81,7 +65,8 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         var downloadArtifactResult = await DownloadArtifactAsync(artifact.ArchiveDownloadUrl);
         if (downloadArtifactResult is not DownloadArtifactZipResult.Ok okDownloadArtifactAzipResult)
         {
-            return new FailedToDownloadArtifact(downloadArtifactResult);
+            var error = (DownloadArtifactZipResult.Error)downloadArtifactResult;
+            return new FailedToDownloadArtifact(error);
         }
 
         using var artifactZip = okDownloadArtifactAzipResult.ZipArchive;
@@ -112,7 +97,8 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         var ensureSuccessStatusCodeResult = await httpResponse.EnsureSuccessStatusCodeAsync();
         if (ensureSuccessStatusCodeResult is not EnsureSuccessStatusCodeResult.Ok)
         {
-            return new FailedToDownloadArtifactZip(ensureSuccessStatusCodeResult);
+            var error = (EnsureSuccessStatusCodeResult.Error)ensureSuccessStatusCodeResult;
+            return new FailedToDownloadArtifactZip(error);
         }
 
         var responseStream = await httpResponse.Content.ReadAsStreamAsync();

@@ -9,8 +9,11 @@ internal abstract record EnsureSuccessStatusCodeResult
     public record Ok()
         : EnsureSuccessStatusCodeResult;
 
-    public record NonSuccessStatusCode(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
+    public record Error()
         : EnsureSuccessStatusCodeResult;
+
+    public record NonSuccessStatusCode(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
+        : Error;
 
     public static implicit operator EnsureSuccessStatusCodeResult(FailedStatusCodeHttpResponse failedStatusCodeHttpResponse) => new NonSuccessStatusCode(failedStatusCodeHttpResponse);
 
