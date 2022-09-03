@@ -5,7 +5,7 @@ public static class NoneStaticUsingExtensions
     public static NoneResult None => NoneResult.Instance;
 }
 
-public record NoneResult
+public sealed record NoneResult
 {
     private static readonly Lazy<NoneResult> _instance = new Lazy<NoneResult>(() => new NoneResult());
 

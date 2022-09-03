@@ -38,17 +38,7 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         artifactContainerName.NotNull();
         artifactItemFilename.NotNull();
 
-
         var workflowRunArtifactsResult = await ListWorkflowRunArtifactsAsync(repoName);
-
-        //(Ok okResult, NotOk errorResult) = await ListWorkflowRunArtifactsAsync(repoName);
-        //if(errorResult is not null)
-        //{
-        //    //then it's an error
-        //}
-        // it's ok, use the okResult
-        // how do I guarantee that okResult is not null here?
-
         if (workflowRunArtifactsResult is not JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.Ok okWorkflowRunArtifactResult)
         {
             var error = (JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.Error)workflowRunArtifactsResult;
@@ -63,23 +53,24 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         }
 
         var downloadArtifactResult = await DownloadArtifactAsync(artifact.ArchiveDownloadUrl);
-        if (downloadArtifactResult is not DownloadArtifactZipResult.Ok okDownloadArtifactAzipResult)
+        if (!downloadArtifactResult.IsOk(out var artifactZip, out var downloadArtifactError))
         {
-            var error = (DownloadArtifactZipResult.Error)downloadArtifactResult;
-            return new FailedToDownloadArtifact(error);
+            return new FailedToDownloadArtifact(downloadArtifactError);
         }
 
-        using var artifactZip = okDownloadArtifactAzipResult.ZipArchive;
-        var artifactFileAsZip = artifactZip.Entries.FirstOrDefault(e => e.FullName.Equals(artifactItemFilename, StringComparison.InvariantCultureIgnoreCase));
-        if (artifactFileAsZip is null)
+        using (artifactZip)
         {
-            return new ArtifactFileNotFound(repoName, runId, artifactContainerName, artifactItemFilename);
-        }
+            var artifactFileAsZip = artifactZip.Entries.FirstOrDefault(e => e.FullName.Equals(artifactItemFilename, StringComparison.InvariantCultureIgnoreCase));
+            if (artifactFileAsZip is null)
+            {
+                return new ArtifactFileNotFound(repoName, runId, artifactContainerName, artifactItemFilename);
+            }
 
-        using var artifactAsStream = artifactFileAsZip.Open();
-        using var streamReader = new StreamReader(artifactAsStream, Encoding.UTF8);
-        var artifactFileContent = await streamReader.ReadToEndAsync();
-        return new GitHubArtifactItemContent(artifactFileContent);
+            using var artifactAsStream = artifactFileAsZip.Open();
+            using var streamReader = new StreamReader(artifactAsStream, Encoding.UTF8);
+            var artifactFileContent = await streamReader.ReadToEndAsync();
+            return new GitHubArtifactItemContent(artifactFileContent);
+        }
     }
 
     private async Task<JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>> ListWorkflowRunArtifactsAsync(string repoName)

@@ -6,14 +6,27 @@ namespace ShareJobsDataCli.GitHub;
 // something like JsonDeserializedToNull<TModel>() instead of JsonHttpResult.JsonDeserializedToNull<TModel>() 
 internal static class JsonHttpResult
 {
-    public static JsonHttpResult<T> JsonDeserializedToNull<T>() => new JsonHttpResult<T>.JsonDeserializedToNull();
+    public static JsonHttpResult<T> JsonDeserializedToNull<T>()
+        where T : class
+    {
+        return new JsonHttpResult<T>.JsonDeserializedToNull();
+    }
 
-    public static JsonHttpResult<T> JsonModelValidationFailed<T>(ValidationResult validationResult) => new JsonHttpResult<T>.JsonModelValidationFailed(validationResult);
+    public static JsonHttpResult<T> JsonModelValidationFailed<T>(ValidationResult validationResult)
+        where T : class
+    {
+        return new JsonHttpResult<T>.JsonModelValidationFailed(validationResult);
+    }
 
-    public static JsonHttpResult<T> FailedStatusCode<T>(FailedStatusCodeHttpResponse failedStatusCodeHttpResponse) => new JsonHttpResult<T>.FailedStatusCode(failedStatusCodeHttpResponse);
+    public static JsonHttpResult<T> FailedStatusCode<T>(FailedStatusCodeHttpResponse failedStatusCodeHttpResponse)
+        where T : class
+    {
+        return new JsonHttpResult<T>.FailedStatusCode(failedStatusCodeHttpResponse);
+    }
 }
 
 internal abstract record JsonHttpResult<T>
+    where T : class
 {
     private JsonHttpResult()
     {
@@ -39,4 +52,21 @@ internal abstract record JsonHttpResult<T>
         : Error;
 
     public static implicit operator JsonHttpResult<T>(T response) => new Ok(response);
+
+    public bool IsOk(
+        [NotNullWhen(returnValue: true)] out T? response,
+        [NotNullWhen(returnValue: false)] out Error? error)
+    {
+        response = null;
+        error = null;
+
+        if (this is Ok ok)
+        {
+            response = ok.Response;
+            return true;
+        }
+
+        error = (Error)this;
+        return false;
+    }
 }
