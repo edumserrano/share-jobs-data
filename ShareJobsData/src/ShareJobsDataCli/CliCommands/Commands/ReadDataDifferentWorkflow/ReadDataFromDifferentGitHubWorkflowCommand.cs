@@ -1,5 +1,3 @@
-using static ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArtifactFile.Results.DownloadArtifactFileFromDifferentWorkflowResult;
-
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow;
 
 [Command("read-data-different-workflow")]
@@ -69,18 +67,12 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
         using var httpClient = _httpClient ?? GitHubDifferentWorkflowRunArticfactHttpClient.CreateHttpClient(authToken, sourceRepositoryName);
         var githubHttpClient = new GitHubDifferentWorkflowRunArticfactHttpClient(httpClient);
         var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(jobDataArtifactRepositoryName, runId, artifactContainerName, artifactItemFilename);
-        switch (downloadResult)
+        if (!downloadResult.IsOk(out var gitHubArtifactItem, out var downloadError))
         {
-            case Ok ok:
-                var stepOutput = new JobDataGitHubActionStepOutput(console);
-                await stepOutput.WriteAsync(ok.GitHubArtifactItem);
-                break;
-            case ArtifactNotFound artifactNotFound:
-                throw artifactNotFound.ToCommandException();
-            case ArtifactFileNotFound artifactFileNotFound:
-                throw artifactFileNotFound.ToCommandException();
-            default:
-                throw new UnhandledValueException(downloadResult);
+            throw downloadError.ToCommandException();
         }
+
+        var stepOutput = new JobDataGitHubActionStepOutput(console);
+        await stepOutput.WriteAsync(gitHubArtifactItem);
     }
 }

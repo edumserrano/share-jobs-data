@@ -9,15 +9,22 @@ internal abstract record EnsureSuccessStatusCodeResult
     public record Ok()
         : EnsureSuccessStatusCodeResult;
 
-    public record Error()
-        : EnsureSuccessStatusCodeResult;
-
     public record NonSuccessStatusCode(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
-        : Error;
+        : EnsureSuccessStatusCodeResult;
 
     public static implicit operator EnsureSuccessStatusCodeResult(FailedStatusCodeHttpResponse failedStatusCodeHttpResponse) => new NonSuccessStatusCode(failedStatusCodeHttpResponse);
 
-    public static implicit operator EnsureSuccessStatusCodeResult(NoneResult _) => new Ok();
+    public bool IsOk([NotNullWhen(returnValue: false)] out FailedStatusCodeHttpResponse? failedStatusCodeHttpResponse)
+    {
+        if (this is NonSuccessStatusCode nonSuccessStatusCode)
+        {
+            failedStatusCodeHttpResponse = nonSuccessStatusCode.FailedStatusCodeHttpResponse;
+            return false;
+        }
+
+        failedStatusCodeHttpResponse = null;
+        return true;
+    }
 }
 
 public record FailedStatusCodeHttpResponse
@@ -27,3 +34,16 @@ public record FailedStatusCodeHttpResponse
     string StatusCode,
     string ResponseBody
 );
+
+public static class FailedStatusCodeHttpResponseExtensions
+{
+    public static FailedStatusCodeHttpResponse ToFailedStatusCodeHttpResponse(this HttpResponseMessage httpResponse, string responseBody)
+    {
+        httpResponse.NotNull();
+
+        var method = httpResponse.RequestMessage?.Method?.ToString() ?? "Unknown";
+        var url = httpResponse.RequestMessage?.RequestUri?.ToString() ?? "Unknown";
+        var statusCode = httpResponse.StatusCode.ToString();
+        return new FailedStatusCodeHttpResponse(method, url, statusCode, responseBody);
+    }
+}

@@ -14,10 +14,10 @@ public sealed class NotAnErrorResultException : Exception
     internal static void Throw(object result) => throw CreateNotAnErrorResultException(result);
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private static Exception CreateNotAnErrorResultException(object result, [CallerArgumentExpression("result")] string expression = "")
+    private static NotAnErrorResultException CreateNotAnErrorResultException(object result, [CallerArgumentExpression("result")] string expression = "")
     {
         var type = result.GetType();
         var message = $"{expression} should be a failed result but was {type.Name}.";
-        throw new NotAnErrorResultException(message);
+        return new NotAnErrorResultException(message);
     }
 }

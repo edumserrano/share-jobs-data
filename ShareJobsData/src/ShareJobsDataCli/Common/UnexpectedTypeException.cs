@@ -14,10 +14,10 @@ public sealed class UnexpectedTypeException : Exception
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    internal static UnexpectedTypeException UnexpectedType(object value)
+    internal static UnexpectedTypeException Create(object value, [CallerArgumentExpression("value")] string expression = "")
     {
         var type = value.GetType();
-        var message = $"Unhandled type: '{type.Name}' in '{type.Namespace}'.";
+        var message = $"{expression} represented an unhandled type: '{type.Name}' in '{type.Namespace}'.";
         return new UnexpectedTypeException(message);
     }
 }

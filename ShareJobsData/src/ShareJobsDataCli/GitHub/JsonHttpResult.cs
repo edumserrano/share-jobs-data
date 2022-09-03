@@ -3,7 +3,7 @@ namespace ShareJobsDataCli.GitHub;
 // The purpose of this class is just for syntax usage of the JsonHttpResult<T> class.
 // It allow the following syntax: JsonHttpResult.JsonDeserializedToNull<TModel>() instead of new JsonHttpResult<TModel>.JsonDeserializedToNull();
 // It also allows for better usage of the JsonHttpResult<T> by declaring a static using on this class JsonHttpResult and then just doing
-// something like JsonDeserializedToNull<TModel>() instead of JsonHttpResult.JsonDeserializedToNull<TModel>() 
+// something like JsonDeserializedToNull<TModel>() instead of JsonHttpResult.JsonDeserializedToNull<TModel>()
 internal static class JsonHttpResult
 {
     public static JsonHttpResult<T> JsonDeserializedToNull<T>()
@@ -29,10 +29,6 @@ internal abstract record JsonHttpResult<T>
     where T : class
 {
     private JsonHttpResult()
-    {
-    }
-
-    public interface INotOk
     {
     }
 

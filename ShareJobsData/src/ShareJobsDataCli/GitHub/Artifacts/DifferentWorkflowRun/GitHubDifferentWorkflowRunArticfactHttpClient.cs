@@ -39,13 +39,11 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         artifactItemFilename.NotNull();
 
         var workflowRunArtifactsResult = await ListWorkflowRunArtifactsAsync(repoName);
-        if (workflowRunArtifactsResult is not JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.Ok okWorkflowRunArtifactResult)
+        if (!workflowRunArtifactsResult.IsOk(out var workflowRunArtifacts, out var errorJsonHttpResult))
         {
-            var error = (JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.Error)workflowRunArtifactsResult;
-            return new FailedToListWorkflowRunArtifacts(error);
+            return new FailedToListWorkflowRunArtifacts(errorJsonHttpResult);
         }
 
-        var workflowRunArtifacts = okWorkflowRunArtifactResult.Response;
         var artifact = workflowRunArtifacts.Artifacts.FirstOrDefault(x => x.Name == artifactContainerName);
         if (artifact is null)
         {
@@ -53,9 +51,9 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         }
 
         var downloadArtifactResult = await DownloadArtifactAsync(artifact.ArchiveDownloadUrl);
-        if (!downloadArtifactResult.IsOk(out var artifactZip, out var downloadArtifactError))
+        if (!downloadArtifactResult.IsOk(out var artifactZip, out var failedStatusCodeHttpResponse))
         {
-            return new FailedToDownloadArtifact(downloadArtifactError);
+            return new FailedToDownloadArtifact(failedStatusCodeHttpResponse);
         }
 
         using (artifactZip)
@@ -86,10 +84,9 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, archiveDownloadUrl);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         var ensureSuccessStatusCodeResult = await httpResponse.EnsureSuccessStatusCodeAsync();
-        if (ensureSuccessStatusCodeResult is not EnsureSuccessStatusCodeResult.Ok)
+        if (!ensureSuccessStatusCodeResult.IsOk(out var failedStatusCodeHttpResponse))
         {
-            var error = (EnsureSuccessStatusCodeResult.Error)ensureSuccessStatusCodeResult;
-            return new FailedToDownloadArtifactZip(error);
+            return new FailedToDownloadArtifactZip(failedStatusCodeHttpResponse);
         }
 
         var responseStream = await httpResponse.Content.ReadAsStreamAsync();

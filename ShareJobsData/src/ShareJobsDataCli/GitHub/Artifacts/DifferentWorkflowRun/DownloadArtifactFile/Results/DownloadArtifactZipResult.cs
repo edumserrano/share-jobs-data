@@ -9,20 +9,17 @@ internal abstract record DownloadArtifactZipResult
     public record Ok(ZipArchive ZipArchive)
         : DownloadArtifactZipResult;
 
-    public record Error()
+    public record FailedToDownloadArtifactZip(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
         : DownloadArtifactZipResult;
-
-    public record FailedToDownloadArtifactZip(EnsureSuccessStatusCodeResult.Error ErrorResult)
-        : Error;
 
     public static implicit operator DownloadArtifactZipResult(ZipArchive zipArchive) => new Ok(zipArchive);
 
     public bool IsOk(
         [NotNullWhen(returnValue: true)] out ZipArchive? zipArchive,
-        [NotNullWhen(returnValue: false)] out Error? error)
+        [NotNullWhen(returnValue: false)] out FailedStatusCodeHttpResponse? failedStatusCodeHttpResponse)
     {
         zipArchive = null;
-        error = null;
+        failedStatusCodeHttpResponse = null;
 
         if (this is Ok ok)
         {
@@ -30,7 +27,8 @@ internal abstract record DownloadArtifactZipResult
             return true;
         }
 
-        error = (Error)this;
+        var failedToDownloadArtifactZip = (FailedToDownloadArtifactZip)this;
+        failedStatusCodeHttpResponse = failedToDownloadArtifactZip.FailedStatusCodeHttpResponse;
         return false;
     }
 }

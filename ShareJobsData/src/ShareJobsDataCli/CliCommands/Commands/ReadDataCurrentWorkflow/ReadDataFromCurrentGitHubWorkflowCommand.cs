@@ -1,19 +1,17 @@
-using static ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.DownloadArtifactFile.Results.DownloadArtifactFileFromCurrentWorkflowResult;
-
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow;
 
 [Command("read-data-current-workflow")]
-public sealed class ReadDataCurrentWorkflow : ICommand
+public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
 {
     private readonly HttpClient? _httpClient;
     private readonly IGitHubEnvironment? _gitHubEnvironment;
 
-    public ReadDataCurrentWorkflow()
+    public ReadDataFromCurrentGitHubWorkflowCommand()
     {
     }
 
     // used for test purposes to be able to mock external dependencies
-    public ReadDataCurrentWorkflow(HttpClient httpClient, IGitHubEnvironment gitHubEnvironment)
+    public ReadDataFromCurrentGitHubWorkflowCommand(HttpClient httpClient, IGitHubEnvironment gitHubEnvironment)
     {
         _httpClient = httpClient.NotNull();
         _gitHubEnvironment = gitHubEnvironment;
@@ -47,18 +45,12 @@ public sealed class ReadDataCurrentWorkflow : ICommand
         using var httpClient = _httpClient ?? GitHubCurrentWorkflowRunArticfactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
         var githubHttpClient = new GitHubCurrentWorkflowRunArticfactHttpClient(httpClient);
         var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(containerUrl, artifactContainerName, artifactFilePath);
-        switch (downloadResult)
+        if (!downloadResult.IsOk(out var gitHubArtifactItemContent, out var downloadError))
         {
-            case Ok ok:
-                var stepOutput = new JobDataGitHubActionStepOutput(console);
-                await stepOutput.WriteAsync(ok.GitHubArtifactItem);
-                break;
-            case ArtifactNotFound artifactNotFound:
-                throw artifactNotFound.ToCommandException();
-            case ArtifactFileNotFound artifactFileNotFound:
-                throw artifactFileNotFound.ToCommandException();
-            default:
-                throw new UnhandledValueException(downloadResult);
+            throw downloadError.ToCommandException();
         }
+
+        var stepOutput = new JobDataGitHubActionStepOutput(console);
+        await stepOutput.WriteAsync(gitHubArtifactItemContent);
     }
 }

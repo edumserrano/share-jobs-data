@@ -59,7 +59,11 @@ public sealed class SetDataCommand : ICommand
 
         using var httpClient = _httpClient ?? GitHubCurrentWorkflowRunArticfactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
         var githubHttpClient = new GitHubCurrentWorkflowRunArticfactHttpClient(httpClient);
-        await githubHttpClient.UploadArtifactFileAsync(artifactContainerUrl, artifactContainerName, artifactFileUploadRequest);
+        var uploadArtifact = await githubHttpClient.UploadArtifactFileAsync(artifactContainerUrl, artifactContainerName, artifactFileUploadRequest);
+        if (!uploadArtifact.IsOk(out var gitHubArtifactContainer, out var uploadError))
+        {
+            throw uploadError.ToCommandException();
+        }
 
         if (SetStepOutput)
         {

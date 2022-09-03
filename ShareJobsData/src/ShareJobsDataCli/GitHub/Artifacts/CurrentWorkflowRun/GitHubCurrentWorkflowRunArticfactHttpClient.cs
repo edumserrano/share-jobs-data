@@ -1,4 +1,6 @@
 using static ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.DownloadArtifactFile.Results.DownloadArtifactFileFromCurrentWorkflowResult;
+using static ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.DownloadArtifactFile.Results.DownloadContainerItemResult;
+using static ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.UploadArtifactFile.Results.UploadArtifactFileResult;
 
 namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun;
 
@@ -26,7 +28,7 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
     // add something to dev readme about this
     // no need to gzip since content is always expected to be small json model
     // if I gzip on upload I would have to gzip on download
-    public async Task UploadArtifactFileAsync(
+    public async Task<UploadArtifactFileResult> UploadArtifactFileAsync(
         GitHubArtifactContainerUrl containerUrl,
         GitHubArtifactContainerName containerName,
         GitHubArtifactFileUploadRequest fileUploadRequest)
@@ -35,9 +37,25 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         containerName.NotNull();
         fileUploadRequest.NotNull();
 
-        var artifactContainer = await CreateArtifactContainerAsync(containerUrl, containerName);
-        var artifactItem = await UploadArtifactFileAsync(artifactContainer.FileContainerResourceUrl, fileUploadRequest);
-        _ = await FinalizeArtifactContainerAsync(containerUrl, containerName, containerSize: artifactItem.FileLength);
+        var createArtifactContainer = await CreateArtifactContainerAsync(containerUrl, containerName);
+        if (!createArtifactContainer.IsOk(out var artifactContainer, out var createArtifactContainerError))
+        {
+            return new FailedToCreateArtifactContainer(createArtifactContainerError);
+        }
+
+        var uploadArtifactItem = await UploadArtifactFileAsync(artifactContainer.FileContainerResourceUrl, fileUploadRequest);
+        if (!uploadArtifactItem.IsOk(out var artifactItem, out var uploadError))
+        {
+            return new FailedToUploadArtifact(uploadError);
+        }
+
+        var finalizeArttifact = await FinalizeArtifactContainerAsync(containerUrl, containerName, containerSize: artifactItem.FileLength);
+        if (!finalizeArttifact.IsOk(out var gitHubArtifactContainer, out var finalizeError))
+        {
+            return new FailedToFinalizeArtifactContainer(finalizeError);
+        }
+
+        return gitHubArtifactContainer;
     }
 
     // taken from exploring https://github.com/actions/toolkit/blob/90be12a59c20a6ecc43b234c1885fc2852d3212d/packages/artifact/src/internal/artifact-client.ts#L157
@@ -49,36 +67,51 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         containerUrl.NotNull();
         containerName.NotNull();
 
-        var artifactContainers = await ListWorkflowRunArtifactsAsync(containerUrl);
+        var workflowRunArtifactsResult = await ListWorkflowRunArtifactsAsync(containerUrl);
+        if (!workflowRunArtifactsResult.IsOk(out var artifactContainers, out var listError))
+        {
+            return new FailedToListWorkflowRunArtifacts(listError);
+        }
+
         var artifactContainer = artifactContainers.Containers.FirstOrDefault(x => x.Name == containerName);
         if (artifactContainer is null)
         {
             return new ArtifactNotFound(containerName);
         }
 
-        var artifactContainerItems = await GetContainerItemsAsync(artifactContainer.FileContainerResourceUrl, artifactContainer.Name);
+        var containerItemsResult = await GetContainerItemsAsync(artifactContainer.FileContainerResourceUrl, artifactContainer.Name);
+        if (!containerItemsResult.IsOk(out var artifactContainerItems, out var getContainerItemsError))
+        {
+            return new FailedToGetContainerItems(getContainerItemsError);
+        }
+
         var artifactContainerFileItem = artifactContainerItems.ContainerItems.FirstOrDefault(x => x.ItemType == "file" && x.Path == itemFilePath);
         if (artifactContainerFileItem is null)
         {
-            return new ArtifactFileNotFound(itemFilePath);
+            return new ArtifactContainerItemNotFound(itemFilePath);
         }
 
-        var containerItemContent = await DownloadContainerItemAsync(artifactContainerFileItem.ContentLocation);
-        return containerItemContent;
+        var downloadContainerItemResult = await DownloadContainerItemAsync(artifactContainerFileItem.ContentLocation);
+        if (!downloadContainerItemResult.IsOk(out var artifactItemContent, out var downloadContainerItemError))
+        {
+            return new FailedToDownloadArtifact(downloadContainerItemError);
+        }
+
+        return artifactItemContent;
     }
 
-    private async Task<GitHubArtifactContainer> CreateArtifactContainerAsync(GitHubArtifactContainerUrl containerUrl, GitHubArtifactContainerName containerName)
+    private async Task<JsonHttpResult<GitHubArtifactContainer>> CreateArtifactContainerAsync(GitHubArtifactContainerUrl containerUrl, GitHubArtifactContainerName containerName)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Post, containerUrl);
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
         var containerRequest = new GitHubCreateArtifactFileContainerRequest(containerName);
         httpRequest.Content = JsonContent.Create(containerRequest);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var artifactContainer = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainer, GitHubArtifactContainerValidator>();
-        return artifactContainer;
+        var jsonHttpResult = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainer, GitHubArtifactContainerValidator>();
+        return jsonHttpResult;
     }
 
-    private async Task<GitHubArtifactItem> UploadArtifactFileAsync(
+    private async Task<JsonHttpResult<GitHubArtifactItem>> UploadArtifactFileAsync(
         string fileContainerResourceUrl,
         GitHubArtifactFileUploadRequest fileUploadRequest)
     {
@@ -91,11 +124,11 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         httpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Octet);
         httpRequest.Content.Headers.ContentRange = new ContentRangeHeaderValue(from: 0, to: contentBytes.Length - 1, length: contentBytes.Length);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var artifactItem = await httpResponse.ReadFromJsonAsync<GitHubArtifactItem, GitHubArtifactItemValidator>();
-        return artifactItem;
+        var jsonHttpResult = await httpResponse.ReadFromJsonAsync<GitHubArtifactItem, GitHubArtifactItemValidator>();
+        return jsonHttpResult;
     }
 
-    private async Task<GitHubArtifactContainer> FinalizeArtifactContainerAsync(
+    private async Task<JsonHttpResult<GitHubArtifactContainer>> FinalizeArtifactContainerAsync(
         GitHubArtifactContainerUrl containerUrl,
         GitHubArtifactContainerName containerName,
         long containerSize)
@@ -106,37 +139,41 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
         httpRequest.Content = JsonContent.Create(finalizeArtifactContainerRequest);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var artifactContainer = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainer, GitHubArtifactContainerValidator>();
-        return artifactContainer;
+        var jsonHttpResult = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainer, GitHubArtifactContainerValidator>();
+        return jsonHttpResult;
     }
 
-    private async Task<GitHubArtifactContainers> ListWorkflowRunArtifactsAsync(GitHubArtifactContainerUrl containerUrl)
+    private async Task<JsonHttpResult<GitHubArtifactContainers>> ListWorkflowRunArtifactsAsync(GitHubArtifactContainerUrl containerUrl)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{containerUrl}");
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var artifactContainers = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainers, GitHubArtifactContainersValidator>();
-        return artifactContainers;
+        var jsonHttpResult = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainers, GitHubArtifactContainersValidator>();
+        return jsonHttpResult;
     }
 
-    private async Task<GitHubArtifactContainerItems> GetContainerItemsAsync(string fileContainerResourceUrl, string artifactName)
+    private async Task<JsonHttpResult<GitHubArtifactContainerItems>> GetContainerItemsAsync(string fileContainerResourceUrl, string artifactName)
     {
         var getContainerItemsUrl = fileContainerResourceUrl.SetQueryParam("itemPath", artifactName);
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, getContainerItemsUrl);
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var artifactContainerItems = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainerItems, GitHubArtifactContainerItemsValidator>();
-        return artifactContainerItems;
+        var jsonHttpResult = await httpResponse.ReadFromJsonAsync<GitHubArtifactContainerItems, GitHubArtifactContainerItemsValidator>();
+        return jsonHttpResult;
     }
 
-    private async Task<GitHubArtifactItemContent> DownloadContainerItemAsync(string contentLocation)
+    private async Task<DownloadContainerItemResult> DownloadContainerItemAsync(string contentLocation)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, contentLocation);
         httpRequest.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip"); // not really needed since I'm not uploading gzip compressed stream ?
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/octet-stream;api-version={GitHubApiVersion.Latest}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var ensureSuccessStatusResult = await httpResponse.EnsureSuccessStatusCodeAsync();
-        // TODO check ensureSuccessStatusResult
+        var ensureSuccessStatusCodeResult = await httpResponse.EnsureSuccessStatusCodeAsync();
+        if (!ensureSuccessStatusCodeResult.IsOk(out var failedStatusCodeHttpResponse))
+        {
+            return new FailedToDownloadContainerItem(failedStatusCodeHttpResponse);
+        }
+
         var containerItemContent = await httpResponse.Content.ReadAsStringAsync();
         return new GitHubArtifactItemContent(containerItemContent);
     }

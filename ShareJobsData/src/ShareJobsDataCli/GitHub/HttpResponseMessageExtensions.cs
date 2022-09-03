@@ -8,43 +8,36 @@ internal static class HttpResponseMessageExtensions
     {
         if (httpResponse.IsSuccessStatusCode)
         {
-            return None;
+            return new EnsureSuccessStatusCodeResult.Ok();
         }
 
-        var method = httpResponse.RequestMessage?.Method?.ToString() ?? "Unknown";
-        var url = httpResponse.RequestMessage?.RequestUri?.ToString() ?? "Unknown";
-        var statusCode = httpResponse.StatusCode.ToString();
         var errorResponseBody = await httpResponse.Content.ReadAsStringAsync();
-        return new FailedStatusCodeHttpResponse(method, url, statusCode, errorResponseBody);
+        return httpResponse.ToFailedStatusCodeHttpResponse(errorResponseBody);
     }
 
     public static async Task<JsonHttpResult<TModel>> ReadFromJsonAsync<TModel, TValidator>(this HttpResponseMessage httpResponse)
+         where TModel : class
          where TValidator : AbstractValidator<TModel>, new()
     {
         var ensureSuccessStatusCodeResult = await httpResponse.EnsureSuccessStatusCodeAsync();
-        if (ensureSuccessStatusCodeResult is EnsureSuccessStatusCodeResult.NonSuccessStatusCode failed)
+        if (!ensureSuccessStatusCodeResult.IsOk(out var failedStatusCodeHttpResponse))
         {
-            return FailedStatusCode<TModel>(failed.FailedStatusCodeHttpResponse);
+            return FailedStatusCode<TModel>(failedStatusCodeHttpResponse);
         }
 
-        if (ensureSuccessStatusCodeResult is EnsureSuccessStatusCodeResult.Ok)
+        var responseModel = await httpResponse.Content.ReadFromJsonAsync<TModel>();
+        if (responseModel is null)
         {
-            var responseModel = await httpResponse.Content.ReadFromJsonAsync<TModel>();
-            if (responseModel is null)
-            {
-                return JsonDeserializedToNull<TModel>();
-            }
-
-            var validator = new TValidator();
-            var validationResult = validator.Validate(responseModel);
-            if (!validationResult.IsValid)
-            {
-                return JsonModelValidationFailed<TModel>(validationResult);
-            }
-
-            return responseModel;
+            return JsonDeserializedToNull<TModel>();
         }
 
-        throw UnexpectedTypeException.UnexpectedType(ensureSuccessStatusCodeResult);
+        var validator = new TValidator();
+        var validationResult = validator.Validate(responseModel);
+        if (!validationResult.IsValid)
+        {
+            return JsonModelValidationFailed<TModel>(validationResult);
+        }
+
+        return responseModel;
     }
 }
