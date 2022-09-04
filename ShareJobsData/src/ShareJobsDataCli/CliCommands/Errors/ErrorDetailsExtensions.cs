@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.Common;
+namespace ShareJobsDataCli.CliCommands.Errors;
 
 internal static class ErrorDetailsExtensions
 {

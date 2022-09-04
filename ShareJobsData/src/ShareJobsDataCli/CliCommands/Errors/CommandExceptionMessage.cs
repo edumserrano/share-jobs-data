@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.Common;
+namespace ShareJobsDataCli.CliCommands.Errors;
 
 public record CommandExceptionMessage(string ErrorMessage, string Cause, string Details)
 {

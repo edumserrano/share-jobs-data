@@ -16,6 +16,7 @@ global using FluentValidation.Results;
 global using Flurl;
 global using Newtonsoft.Json;
 global using Newtonsoft.Json.Linq;
+global using ShareJobsDataCli.CliCommands.Errors;
 global using ShareJobsDataCli.CliCommands.Validators;
 global using ShareJobsDataCli.Common;
 global using ShareJobsDataCli.GitHub;
