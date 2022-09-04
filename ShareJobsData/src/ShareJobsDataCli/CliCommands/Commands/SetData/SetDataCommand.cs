@@ -22,14 +22,14 @@ public sealed class SetDataCommand : ICommand
         IsRequired = false,
         Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The name of the artifact.")]
-    public string ArtifactName { get; init; } = "job-data";
+    public string ArtifactName { get; init; } = CommandDefaults.ArtifactName;
 
     [CommandOption(
         "data-filename",
         IsRequired = false,
         Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The filename that contains the data.")]
-    public string ArtifactFilename { get; init; } = "job-data.json";
+    public string ArtifactFilename { get; init; } = CommandDefaults.ArtifactFilename;
 
     [CommandOption(
         "data",
