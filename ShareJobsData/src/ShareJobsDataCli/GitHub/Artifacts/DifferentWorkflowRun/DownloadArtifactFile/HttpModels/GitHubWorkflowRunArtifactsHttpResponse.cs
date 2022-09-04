@@ -1,13 +1,11 @@
 namespace ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArtifactFile.HttpModels;
 
-internal record GitHubWorkflowRunArtifactsHttpResponse
-(
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes. Referenced via JSON generic type deserialization.
+internal record GitHubWorkflowRunArtifactsHttpResponse(
     [property: JsonPropertyName("total_count")] int TotalCount,
-    [property: JsonPropertyName("artifacts")] IReadOnlyList<GitHubWorkflowRunArtifact> Artifacts
-);
+    [property: JsonPropertyName("artifacts")] IReadOnlyList<GitHubWorkflowRunArtifact> Artifacts);
 
-internal record GitHubWorkflowRunArtifact
-(
+internal record GitHubWorkflowRunArtifact(
     [property: JsonPropertyName("id")] long Id,
     [property: JsonPropertyName("node_id")] long NodeId,
     [property: JsonPropertyName("name")] string Name,
@@ -18,17 +16,15 @@ internal record GitHubWorkflowRunArtifact
     [property: JsonPropertyName("created_at")] DateTime CreatedAt,
     [property: JsonPropertyName("expires_at")] DateTime ExpiresAt,
     [property: JsonPropertyName("updated_at")] DateTime UpdatedAt,
-    [property: JsonPropertyName("workflow_run")] GitHubWorkflowRun WorkflowRun
-);
+    [property: JsonPropertyName("workflow_run")] GitHubWorkflowRun WorkflowRun);
 
-internal record GitHubWorkflowRun
-(
+internal record GitHubWorkflowRun(
     [property: JsonPropertyName("id")] long Id,
     [property: JsonPropertyName("repository_id")] long RepositoryId,
     [property: JsonPropertyName("head_repository_id")] long HeadRepositoryId,
     [property: JsonPropertyName("head_branch")] string HeadBranch,
-    [property: JsonPropertyName("head_sha")] string HeadSha
-);
+    [property: JsonPropertyName("head_sha")] string HeadSha);
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes. Referenced via JSON generic type deserialization.
 
 internal sealed class GitHubWorkflowRunArtifactsHttpResponseValidator : AbstractValidator<GitHubWorkflowRunArtifactsHttpResponse>
 {

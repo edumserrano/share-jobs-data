@@ -9,5 +9,5 @@ internal sealed record GitHubCreateArtifactFileContainerRequest
 
     public string Name { get; }
 
-    public string Type => "actions_storage";
+    public string Type { get; } = "actions_storage";
 }

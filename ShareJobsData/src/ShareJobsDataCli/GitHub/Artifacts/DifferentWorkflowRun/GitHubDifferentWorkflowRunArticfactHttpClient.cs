@@ -58,7 +58,7 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
 
         using (artifactZip)
         {
-            var artifactFileAsZip = artifactZip.Entries.FirstOrDefault(e => e.FullName.Equals(artifactItemFilename, StringComparison.InvariantCultureIgnoreCase));
+            var artifactFileAsZip = artifactZip.Entries.FirstOrDefault(e => e.FullName.Equals(artifactItemFilename, StringComparison.OrdinalIgnoreCase));
             if (artifactFileAsZip is null)
             {
                 return new ArtifactFileNotFound(repoName, runId, artifactContainerName, artifactItemFilename);

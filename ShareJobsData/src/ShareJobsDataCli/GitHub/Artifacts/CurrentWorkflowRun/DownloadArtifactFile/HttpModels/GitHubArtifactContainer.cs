@@ -1,15 +1,16 @@
 namespace ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.DownloadArtifactFile.HttpModels;
 
-internal record GitHubArtifactContainer
-(
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes. Referenced via JSON generic type deserialization.
+internal record GitHubArtifactContainer(
     long ContainerId,
     long Size,
     string FileContainerResourceUrl,
     string Type,
     string Name,
     string Url,
-    DateTime ExpiresOn
-);
+    DateTime ExpiresOn);
+
+#pragma warning disable CA1812 // Avoid uninstantiated internal classes. Referenced via JSON generic type deserialization.
 
 internal sealed class GitHubArtifactContainerValidator : AbstractValidator<GitHubArtifactContainer>
 {
