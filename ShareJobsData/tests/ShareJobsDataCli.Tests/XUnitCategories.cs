@@ -7,4 +7,5 @@ public static class XUnitCategories
     public const string Commands = "commands";
     public const string Integration = "integration";
     public const string Validation = "validation";
+    public const string ReadDataFromDifferentGitHubWorkflowCommand = "read-data-different-workflow";
 }

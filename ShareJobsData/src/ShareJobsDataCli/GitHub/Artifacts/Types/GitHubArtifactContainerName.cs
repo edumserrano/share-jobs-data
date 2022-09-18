@@ -4,14 +4,14 @@ internal sealed record GitHubArtifactContainerName
 {
     private readonly string _value;
 
-    public GitHubArtifactContainerName(string name)
+    public GitHubArtifactContainerName(string artifactName)
     {
-        _value = name.NotNullOrWhiteSpace();
+        _value = artifactName.NotNullOrWhiteSpace();
     }
 
-    public static implicit operator string(GitHubArtifactContainerName name)
+    public static implicit operator string(GitHubArtifactContainerName artifactName)
     {
-        return name._value;
+        return artifactName._value;
     }
 
     public override string ToString() => (string)this;

@@ -3,7 +3,7 @@
     "ShareJobsDataCli": {
       "commandName": "Project",
       //"commandLineArgs": "share-data --data \"name: George Washington\\r\\nage: 89\""
-      "commandLineArgs": "read-data-different-workflow --auth-token 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 --repo edumserrano/share-jobs-data --run-id 2986349448"
+      "commandLineArgs": "read-data-different-workflow --auth-token <token> --repo edumserrano/share-jobs-data --run-id 2986349448"
       //"commandLineArgs": "read-data"
     }
   }

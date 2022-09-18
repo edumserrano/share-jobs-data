@@ -2,6 +2,11 @@
   {
     RequestUri: 'https://api.github.com/repos/test-repo-name/actions/runs/test-run-id/artifacts',
     RequestMethod: GET,
+    RequestHeaders: {
+      Accept: application/vnd.github+json,
+      Authorization: token auth-token,
+      User-Agent: edumserrano/share-jobs-data:source-repo
+    },
     ResponseStatus: OK,
     ResponseContent:
 {
@@ -33,6 +38,11 @@
   {
     RequestUri: 'https://api.github.com/repos/edumserrano/share-jobs-data/actions/artifacts/351670722/zip',
     RequestMethod: GET,
+    RequestHeaders: {
+      Accept: application/vnd.github+json,
+      Authorization: token auth-token,
+      User-Agent: edumserrano/share-jobs-data:source-repo
+    },
     ResponseStatus: InternalServerError
   }
 ]

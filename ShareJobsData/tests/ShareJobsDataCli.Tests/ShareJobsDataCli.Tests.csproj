@@ -26,6 +26,30 @@
   </ItemGroup>
 
   <ItemGroup>   
+    <None Update="CliCommands\ReadDataDifferentWorkflow\ReadDataFromDifferentGitHubWorkflowCommandErrorTests.ArtifactFileNotFound.console-output.verified.txt">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+      <DependentUpon>ReadDataFromDifferentGitHubWorkflowCommandErrorTests.cs</DependentUpon>
+    </None>   
+    <None Update="CliCommands\ReadDataDifferentWorkflow\ReadDataFromDifferentGitHubWorkflowCommandErrorTests.ArtifactFileNotFound.http-calls.verified.txt">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+      <DependentUpon>ReadDataFromDifferentGitHubWorkflowCommandErrorTests.cs</DependentUpon>
+    </None>   
+    <None Update="CliCommands\ReadDataDifferentWorkflow\ReadDataFromDifferentGitHubWorkflowCommandErrorTests.ArtifactNotFound.console-output.verified.txt">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+      <DependentUpon>ReadDataFromDifferentGitHubWorkflowCommandErrorTests.cs</DependentUpon>
+    </None>   
+    <None Update="CliCommands\ReadDataDifferentWorkflow\ReadDataFromDifferentGitHubWorkflowCommandErrorTests.ArtifactNotFound.http-calls.verified.txt">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+      <DependentUpon>ReadDataFromDifferentGitHubWorkflowCommandErrorTests.cs</DependentUpon>
+    </None>   
+    <None Update="CliCommands\ReadDataDifferentWorkflow\ReadDataFromDifferentGitHubWorkflowCommandErrorTests.Success.console-output.verified.txt">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+      <DependentUpon>ReadDataFromDifferentGitHubWorkflowCommandErrorTests.cs</DependentUpon>
+    </None>   
+    <None Update="CliCommands\ReadDataDifferentWorkflow\ReadDataFromDifferentGitHubWorkflowCommandErrorTests.Success.http-calls.verified.txt">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+      <DependentUpon>ReadDataFromDifferentGitHubWorkflowCommandErrorTests.cs</DependentUpon>
+    </None>   
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -37,6 +61,28 @@
     <None Update="**\*.http-response.*" Condition="$(Language) == 'C#'">
       <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
       <DependentUpon>%(ParentFile).cs</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="CliCommands\ReadDataDifferentWorkflow\ReadDataFromDifferentGitHubWorkflowCommandErrorTests.ArtifactFileNotFound.http-response.download-artifact.zip">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+      <DependentUpon>ReadDataFromDifferentGitHubWorkflowCommandErrorTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\ReadDataDifferentWorkflow\ReadDataFromDifferentGitHubWorkflowCommandErrorTests.ArtifactFileNotFound.http-response.list-artifacts.json">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+      <DependentUpon>ReadDataFromDifferentGitHubWorkflowCommandErrorTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\ReadDataDifferentWorkflow\ReadDataFromDifferentGitHubWorkflowCommandErrorTests.ArtifactNotFound.http-response.list-artifacts.json">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+      <DependentUpon>ReadDataFromDifferentGitHubWorkflowCommandErrorTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\ReadDataDifferentWorkflow\ReadDataFromDifferentGitHubWorkflowCommandErrorTests.Success.http-response.download-artifact.zip">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+      <DependentUpon>ReadDataFromDifferentGitHubWorkflowCommandErrorTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\ReadDataDifferentWorkflow\ReadDataFromDifferentGitHubWorkflowCommandErrorTests.Success.http-response.list-artifacts.json">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+      <DependentUpon>ReadDataFromDifferentGitHubWorkflowCommandErrorTests.cs</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

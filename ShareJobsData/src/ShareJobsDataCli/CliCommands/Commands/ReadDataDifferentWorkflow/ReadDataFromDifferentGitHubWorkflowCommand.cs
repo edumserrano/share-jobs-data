@@ -3,18 +3,20 @@ namespace ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow;
 [Command("read-data-different-workflow")]
 public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
 {
-    private readonly HttpClient? _httpClient;
-    private readonly IGitHubEnvironment? _gitHubEnvironment;
+    private readonly HttpClient _httpClient;
+    private readonly IGitHubEnvironment _gitHubEnvironment;
 
     public ReadDataFromDifferentGitHubWorkflowCommand()
+        : this(null, null)
     {
     }
 
-    // used for test purposes to be able to mock external dependencies
-    public ReadDataFromDifferentGitHubWorkflowCommand(HttpClient httpClient, IGitHubEnvironment gitHubEnvironment)
+    // Input parameters are available for test purposes.
+    // Allows mocking external dependencies.
+    public ReadDataFromDifferentGitHubWorkflowCommand(HttpClient? httpClient = default, IGitHubEnvironment? gitHubEnvironment = default)
     {
-        _httpClient = httpClient.NotNull();
-        _gitHubEnvironment = gitHubEnvironment;
+        _httpClient = httpClient ?? new HttpClient();
+        _gitHubEnvironment = gitHubEnvironment ?? new GitHubEnvironment();
     }
 
     [CommandOption(
@@ -56,15 +58,14 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
     {
         console.NotNull();
 
-        var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
-        var sourceRepositoryName = new GitHubRepositoryName(githubEnvironment.GitHubRepository);
+        var sourceRepositoryName = new GitHubRepositoryName(_gitHubEnvironment.GitHubRepository);
         var authToken = new GitHubAuthToken(AuthToken);
         var jobDataArtifactRepositoryName = new GitHubRepositoryName(Repo);
         var runId = new GitHubRunId(RunId);
         var artifactContainerName = new GitHubArtifactContainerName(ArtifactName);
         var artifactItemFilename = new GitHubArtifactItemFilename(ArtifactFilename);
 
-        using var httpClient = _httpClient ?? GitHubDifferentWorkflowRunArticfactHttpClient.CreateHttpClient(authToken, sourceRepositoryName);
+        using var httpClient = _httpClient.ConfigureGitHubDifferentWorkflowRunArticfactHttpClient(authToken, sourceRepositoryName);
         var githubHttpClient = new GitHubDifferentWorkflowRunArticfactHttpClient(httpClient);
         var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(jobDataArtifactRepositoryName, runId, artifactContainerName, artifactItemFilename);
         if (!downloadResult.IsOk(out var gitHubArtifactItemContent, out var downloadError))
