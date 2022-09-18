@@ -1,6 +1,14 @@
-global using Shouldly;
-global using Xunit;
-global using ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow;
 global using System.Net;
+global using System.Net.Http.Headers;
+global using System.Net.Mime;
+global using CliFx.Exceptions;
+global using CliFx.Infrastructure;
 global using DotNet.Sdk.Extensions.Testing.HttpMocking.HttpMessageHandlers;
 global using DotNet.Sdk.Extensions.Testing.HttpMocking.HttpMessageHandlers.ResponseMocking;
+global using NSubstitute;
+global using ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow;
+global using ShareJobsDataCli.GitHub;
+global using ShareJobsDataCli.Tests.Auxiliary;
+global using Shouldly;
+global using VerifyTests.Http;
+global using Xunit;

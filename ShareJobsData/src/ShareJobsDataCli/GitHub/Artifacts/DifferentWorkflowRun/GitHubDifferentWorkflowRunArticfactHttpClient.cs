@@ -38,7 +38,7 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         artifactContainerName.NotNull();
         artifactItemFilename.NotNull();
 
-        var workflowRunArtifactsResult = await ListWorkflowRunArtifactsAsync(repoName);
+        var workflowRunArtifactsResult = await ListWorkflowRunArtifactsAsync(repoName, runId);
         if (!workflowRunArtifactsResult.IsOk(out var workflowRunArtifacts, out var errorJsonHttpResult))
         {
             return new FailedToListWorkflowRunArtifacts(errorJsonHttpResult);
@@ -71,9 +71,9 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
         }
     }
 
-    private async Task<JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>> ListWorkflowRunArtifactsAsync(string repoName)
+    private async Task<JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>> ListWorkflowRunArtifactsAsync(GitHubRepositoryName repoName, GitHubRunId runId)
     {
-        using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"repos/{repoName}/actions/artifacts");
+        using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"repos/{repoName}/actions/runs/{runId}/artifacts");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         var jsonHttpResult = await httpResponse.ReadFromJsonAsync<GitHubWorkflowRunArtifactsHttpResponse, GitHubWorkflowRunArtifactsHttpResponseValidator>();
         return jsonHttpResult;

@@ -1,0 +1,7 @@
+﻿[
+  {
+    RequestUri: 'https://api.github.com/repos/test-repo-name/actions/runs/test-run-id/artifacts',
+    RequestMethod: GET,
+    ResponseStatus: InternalServerError
+  }
+]

@@ -1,25 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-
     <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject> <!-- This shouldn't be needed because it should be added by the Microsoft.NET.Test.Sdk package but for now it's required as explained here https://github.com/dotnet/sdk/issues/3790#issuecomment-1100773198 -->
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="CliCommands\ReadDataDifferentWorkflow\ReadDataFromDifferentGitHubWorkflowCommandTests.Test1.verified.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="CliCommands\ReadDataDifferentWorkflow\ReadDataFromDifferentGitHubWorkflowCommandTests.Test1.verified.txt" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="DotNet-Sdk-Extensions-Testing" Version="1.0.15-alpha" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
-    <PackageReference Include="Verify.Xunit" Version="17.10.2" />
+    <PackageReference Include="Verify.Http" Version="2.5.0" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -35,14 +25,22 @@
     <ProjectReference Include="..\..\src\ShareJobsDataCli\ShareJobsDataCli.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup>   
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
+  <!--Adds file nesting for *.httpresponse.* files-->
+  <!--Copied from https://github.com/VerifyTests/Verify/blob/c7fe88c4b1f6ff3b15f0788bf8d8742eb1874a93/src/Verify/buildTransitive/Verify.targets-->
   <ItemGroup>
-    <Folder Include="Auxiliary\" />
+    <None Update="**\*.http-response.*" Condition="$(Language) == 'C#'">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+      <DependentUpon>%(ParentFile).cs</DependentUpon>
+    </None>
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Update="Verify.Xunit" Version="17.10.2" />
+  </ItemGroup>
+  
 </Project>

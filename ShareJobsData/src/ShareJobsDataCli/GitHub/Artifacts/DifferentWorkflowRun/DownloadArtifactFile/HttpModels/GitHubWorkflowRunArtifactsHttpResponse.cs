@@ -7,7 +7,7 @@ internal record GitHubWorkflowRunArtifactsHttpResponse(
 
 internal record GitHubWorkflowRunArtifact(
     [property: JsonPropertyName("id")] long Id,
-    [property: JsonPropertyName("node_id")] long NodeId,
+    [property: JsonPropertyName("node_id")] string NodeId,
     [property: JsonPropertyName("name")] string Name,
     [property: JsonPropertyName("size_in_bytes")] long SizeInBytes,
     [property: JsonPropertyName("url")] string Url,

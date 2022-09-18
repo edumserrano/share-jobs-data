@@ -8,7 +8,9 @@ public record CommandExceptionMessage(string ErrorMessage, string Cause, string 
         return new CommandException(message);
     }
 
-    public override string ToString()
+    // sealed keyword is required to stop the compiler from auto-generating the ToString
+    // see https://stackoverflow.com/questions/64094373/c-sharp-9-0-records-tostring-not-inherited
+    public sealed override string ToString()
     {
         return @$"{ErrorMessage}
 Error:

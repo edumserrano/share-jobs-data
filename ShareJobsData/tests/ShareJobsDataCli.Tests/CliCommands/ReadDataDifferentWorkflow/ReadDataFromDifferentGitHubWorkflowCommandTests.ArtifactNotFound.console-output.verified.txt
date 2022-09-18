@@ -1,0 +1,12 @@
+﻿{
+  Type: CommandException,
+  ExitCode: 1,
+  ShowHelp: false,
+  Message:
+An error occurred trying to execute the command to read job data from a different workflow run.
+Error:
+Failed to download GitHub artifact.
+Details:
+Couldn't find artifact 'not-gonna-find-it' in workflow run id 'test-run-id' at repo 'test-repo-name'.,
+  StackTrace: at ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow.ReadDataFromDifferentGitHubWorkflowCommand.ExecuteAsync(IConsole console)
+}
