@@ -7,7 +7,6 @@ namespace ShareJobsDataCli.Tests.CliCommands.ReadDataDifferentWorkflow;
 /// </summary>
 [Trait("Category", XUnitCategories.Validation)]
 [Trait("Category", XUnitCategories.ReadDataFromDifferentGitHubWorkflowCommand)]
-[UsesVerify]
 public class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
 {
     /// <summary>
@@ -100,7 +99,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
     }
 
     /// <summary>
-    /// Validation test for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand.ArtifactFilename> command option.
+    /// Validation test for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand.ArtifactFilename"/> command option.
     /// </summary>
     [Theory]
     [InlineData(null)]

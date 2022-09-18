@@ -2,6 +2,7 @@ global using System.Net;
 global using System.Net.Http.Headers;
 global using System.Net.Mime;
 global using CliFx.Exceptions;
+global using CliFx.Extensibility;
 global using CliFx.Infrastructure;
 global using DotNet.Sdk.Extensions.Testing.HttpMocking.HttpMessageHandlers;
 global using DotNet.Sdk.Extensions.Testing.HttpMocking.HttpMessageHandlers.ResponseMocking;

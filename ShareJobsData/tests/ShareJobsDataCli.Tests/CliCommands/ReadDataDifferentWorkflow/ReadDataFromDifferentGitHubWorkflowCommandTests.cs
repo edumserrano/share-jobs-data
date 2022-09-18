@@ -17,12 +17,12 @@ public class ReadDataFromDifferentGitHubWorkflowCommandTests
     {
         const string repoName = "test-repo-name";
         const string runId = "test-run-id";
-        const string baseRelativeFilepath = $"tests/ShareJobsDataCli.Tests/CliCommands/ReadDataDifferentWorkflow/{nameof(ReadDataFromDifferentGitHubWorkflowCommandTests)}.{nameof(Success)}.http-response";
+        const string baseRelativeFilepath = $"tests/ShareJobsDataCli.Tests/CliCommands/ReadDataDifferentWorkflow/{nameof(ReadDataFromDifferentGitHubWorkflowCommandTests)}.{nameof(Success)}";
         var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
             .RespondWith(_ =>
             {
-                const string listArtifactsResponseRelativePath = $"{baseRelativeFilepath}.list-artifacts.json";
+                const string listArtifactsResponseRelativePath = $"{baseRelativeFilepath}.list-artifacts.http-response.json";
                 var listArtifactsResponseFilepath = TestsProj.GetAbsoluteFilepath(listArtifactsResponseRelativePath);
                 var responseContent = File.ReadAllText(listArtifactsResponseFilepath);
                 return new HttpResponseMessage(HttpStatusCode.OK)
@@ -35,7 +35,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandTests
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.PathAndQuery.Equals("/repos/edumserrano/share-jobs-data/actions/artifacts/351670722/zip", StringComparison.OrdinalIgnoreCase))
             .RespondWith(_ =>
             {
-                const string downloadArtifactResponseRelativePath = $"{baseRelativeFilepath}.download-artifact.zip";
+                const string downloadArtifactResponseRelativePath = $"{baseRelativeFilepath}.download-artifact.http-response.zip";
                 var downloadArtifactResponseFilepath = TestsProj.GetAbsoluteFilepath(downloadArtifactResponseRelativePath);
                 var fileStream = File.Open(downloadArtifactResponseFilepath, FileMode.Open);
                 var response = new HttpResponseMessage(HttpStatusCode.OK)
@@ -69,6 +69,6 @@ public class ReadDataFromDifferentGitHubWorkflowCommandTests
         var output = console.ReadOutputString();
 
         await Verify(output).UseMethodName($"{nameof(Success)}.console-output");
-        await Verify(outgoingHttpCallsHandler.Sends).UseMethodName($"{nameof(Success)}.http-calls");
+        await Verify(outgoingHttpCallsHandler.Sends).UseMethodName($"{nameof(Success)}.outbound-http");
     }
 }

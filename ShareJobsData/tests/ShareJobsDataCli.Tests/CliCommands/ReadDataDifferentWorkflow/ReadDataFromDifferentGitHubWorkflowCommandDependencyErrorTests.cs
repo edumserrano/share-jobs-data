@@ -40,8 +40,8 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
         using var console = new FakeInMemoryConsole();
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 
-        await Verify(exception).UseMethodName($"{nameof(FailedHttpToListWorkflowRunArtifacts)}.console-output");
-        await Verify(outgoingHttpCallsHandler.Sends).UseMethodName($"{nameof(FailedHttpToListWorkflowRunArtifacts)}.http-calls");
+        await Verify(exception.Message).UseMethodName($"{nameof(FailedHttpToListWorkflowRunArtifacts)}.console-output");
+        await Verify(outgoingHttpCallsHandler.Sends).UseMethodName($"{nameof(FailedHttpToListWorkflowRunArtifacts)}.outbound-http");
     }
 
     /// <summary>
@@ -54,12 +54,12 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     {
         const string repoName = "test-repo-name";
         const string runId = "test-run-id";
-        const string baseRelativeFilepath = $"tests/ShareJobsDataCli.Tests/CliCommands/ReadDataDifferentWorkflow/{nameof(ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests)}.{nameof(FailedHttpToDownloadArtifact)}.http-response";
+        const string baseRelativeFilepath = $"tests/ShareJobsDataCli.Tests/CliCommands/ReadDataDifferentWorkflow/{nameof(ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests)}.{nameof(FailedHttpToDownloadArtifact)}";
         var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
             .RespondWith(_ =>
             {
-                const string listArtifactsResponseRelativePath = $"{baseRelativeFilepath}.list-artifacts.json";
+                const string listArtifactsResponseRelativePath = $"{baseRelativeFilepath}.list-artifacts.http-response.json";
                 var listArtifactsResponseFilepath = TestsProj.GetAbsoluteFilepath(listArtifactsResponseRelativePath);
                 var responseContent = File.ReadAllText(listArtifactsResponseFilepath);
                 return new HttpResponseMessage(HttpStatusCode.OK)
@@ -92,7 +92,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
         using var console = new FakeInMemoryConsole();
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 
-        await Verify(exception).UseMethodName($"{nameof(FailedHttpToDownloadArtifact)}.console-output");
-        await Verify(outgoingHttpCallsHandler.Sends).UseMethodName($"{nameof(FailedHttpToDownloadArtifact)}.http-calls");
+        await Verify(exception.Message).UseMethodName($"{nameof(FailedHttpToDownloadArtifact)}.console-output");
+        await Verify(outgoingHttpCallsHandler.Sends).UseMethodName($"{nameof(FailedHttpToDownloadArtifact)}.outbound-http");
     }
 }

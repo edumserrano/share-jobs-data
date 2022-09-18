@@ -43,6 +43,6 @@
       Authorization: token auth-token,
       User-Agent: edumserrano/share-jobs-data:source-repo
     },
-    ResponseStatus: OK
+    ResponseStatus: InternalServerError
   }
 ]
