@@ -6,7 +6,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.ReadDataDifferentWorkflow;
 [Trait("Category", XUnitCategories.Commands)]
 [Trait("Category", XUnitCategories.ReadDataFromDifferentGitHubWorkflowCommand)]
 [UsesVerify]
-public class ReadDataFromDifferentGitHubWorkflowCommandTests
+public class ReadDataFromDifferentGitHubWorkflowCommandOkTests
 {
     /// <summary>
     /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> downloads the workflow artifact with the shared
@@ -17,7 +17,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandTests
     {
         const string repoName = "test-repo-name";
         const string runId = "test-run-id";
-        const string baseRelativeFilepath = $"tests/ShareJobsDataCli.Tests/CliCommands/ReadDataDifferentWorkflow/{nameof(ReadDataFromDifferentGitHubWorkflowCommandTests)}.{nameof(Success)}";
+        const string baseRelativeFilepath = $"tests/ShareJobsDataCli.Tests/CliCommands/ReadDataDifferentWorkflow/{nameof(ReadDataFromDifferentGitHubWorkflowCommandOkTests)}.{nameof(Success)}";
         var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
             .RespondWith(_ =>

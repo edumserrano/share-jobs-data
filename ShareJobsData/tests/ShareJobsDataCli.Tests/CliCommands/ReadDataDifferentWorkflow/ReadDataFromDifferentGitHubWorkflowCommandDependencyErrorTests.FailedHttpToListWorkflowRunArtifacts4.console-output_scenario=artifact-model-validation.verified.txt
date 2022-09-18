@@ -1,0 +1,7 @@
+﻿An error occurred trying to execute the command to read job data from a different workflow run.
+Error:
+Failed to download GitHub artifact.
+Details:
+HTTP response from 'listing GitHub workflow artifacts' validation.
+GitHubWorkflowRunArtifactsHttpResponse.Artifacts[0].Name must have a value.
+GitHubWorkflowRunArtifactsHttpResponse.Artifacts[0].ArchiveDownloadUrl is not a valid URL. Actual value: ''.

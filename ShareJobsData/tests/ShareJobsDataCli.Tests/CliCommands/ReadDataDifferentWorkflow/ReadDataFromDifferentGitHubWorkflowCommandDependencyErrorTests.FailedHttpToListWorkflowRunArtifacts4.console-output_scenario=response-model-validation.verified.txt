@@ -1,0 +1,6 @@
+﻿An error occurred trying to execute the command to read job data from a different workflow run.
+Error:
+Failed to download GitHub artifact.
+Details:
+HTTP response from 'listing GitHub workflow artifacts' validation.
+Artifacts is missing from JSON response. GitHubWorkflowRunArtifactsHttpResponse.Artifacts cannot be null.

@@ -23,7 +23,7 @@ internal static class ErrorDetailsExtensions
     {
         var responseBody = string.IsNullOrEmpty(httpResponse.ResponseBody)
             ? "<empty>"
-            : $"{Environment.NewLine}---START---{httpResponse.ResponseBody}---END---";
+            : $"{Environment.NewLine}---START---{Environment.NewLine}{httpResponse.ResponseBody}{Environment.NewLine}---END---";
         return @$"HTTP Method: {httpResponse.Method}
 Request URL: {httpResponse.RequestUrl}
 Response status code: {httpResponse.StatusCode}
