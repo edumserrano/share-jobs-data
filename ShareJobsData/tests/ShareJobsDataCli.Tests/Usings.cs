@@ -1,6 +1,7 @@
 global using System.Net;
 global using System.Net.Http.Headers;
 global using System.Net.Mime;
+global using System.Runtime.CompilerServices;
 global using CliFx.Exceptions;
 global using CliFx.Extensibility;
 global using CliFx.Infrastructure;
