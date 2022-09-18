@@ -1,5 +1,5 @@
 ﻿Missing required option(s):
---auth-token, --repo, --run-id
+--auth-token
 
 {scrubbed app name} v15.0.0
 

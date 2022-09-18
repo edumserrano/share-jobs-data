@@ -1,0 +1,16 @@
+﻿{scrubbed app name} v15.0.0
+
+USAGE
+  {scrubbed app name} [options]
+  {scrubbed app name} [command] [...]
+
+OPTIONS
+  -h|--help         Shows help text. 
+  --version         Shows version information. 
+
+COMMANDS
+  set-data          
+  read-data-different-workflow  
+  read-data-current-workflow  
+
+You can run `{scrubbed app name} [command] --help` to show help on a specific command.

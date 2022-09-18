@@ -6,13 +6,16 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
     private readonly HttpClient _httpClient;
     private readonly IGitHubEnvironment _gitHubEnvironment;
 
+    // Default type activator is only capable of instantiating a type if it has a public parameterless constructor.
+    // This ctor is used to avoid having to register the command in a more specific way as shown in:
+    // https://github.com/Tyrrrz/CliFx#type-activation
     public ReadDataFromDifferentGitHubWorkflowCommand()
-        : this(null, null)
+        : this(httpClient: null, gitHubEnvironment: null)
     {
     }
 
-    // Input parameters are available for test purposes.
-    // Allows mocking external dependencies.
+
+    // Input parameters are available for test purposes as they allow mocking external dependencies.
     public ReadDataFromDifferentGitHubWorkflowCommand(HttpClient? httpClient = default, IGitHubEnvironment? gitHubEnvironment = default)
     {
         _httpClient = httpClient ?? new HttpClient();

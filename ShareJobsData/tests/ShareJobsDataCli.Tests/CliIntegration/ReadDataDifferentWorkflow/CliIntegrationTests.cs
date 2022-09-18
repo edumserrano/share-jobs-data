@@ -1,5 +1,3 @@
-using System.Text.RegularExpressions;
-
 namespace ShareJobsDataCli.Tests.CliIntegration.ReadDataDifferentWorkflow;
 
 /// <summary>
@@ -7,13 +5,14 @@ namespace ShareJobsDataCli.Tests.CliIntegration.ReadDataDifferentWorkflow;
 /// IE: if the command name changes or the options change then these tests would pick that up.
 /// These tests also test the <see cref="IBindingValidator"/> validators of the command options.
 /// </summary>
-[Trait("Category", XUnitCategories.Integration)]
+[Trait("Category", XUnitCategories.CliIntegration)]
 [Trait("Category", XUnitCategories.ReadDataFromDifferentGitHubWorkflowCommand)]
 [UsesVerify]
 public class CliIntegrationTests
 {
     /// <summary>
-    /// Tests that if no arguments are passed the CLI returns the help text.
+    /// Tests that if no arguments are passed the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> command,
+    /// the CLI  returns the help text for the command.
     /// </summary>
     [Fact]
     public async Task NoArguments()
@@ -21,28 +20,130 @@ public class CliIntegrationTests
         using var console = new FakeInMemoryConsole();
         var app = new ShareDataBetweenJobsCli();
         app.CliApplicationBuilder.UseConsole(console);
-        await app.RunAsync();
-        var output = console.ReadOutputString();
+        await app.RunAsync("read-data-different-workflow");
+        var output = console.ReadAllAsString();
+
+        var settings = new VerifySettings();
+        settings.ScrubAppName();
+        await Verify(output, settings);
+    }
+
+    /// <summary>
+    /// Tests that the --auth-token option is required for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> command.
+    /// </summary>
+    [Fact]
+    public async Task AuthTokenOptionIsRequired()
+    {
+        using var console = new FakeInMemoryConsole();
+        var app = new ShareDataBetweenJobsCli();
+        app.CliApplicationBuilder.UseConsole(console);
+        var args = new[]
+        {
+            "read-data-different-workflow",
+            "--repo", "some repo",
+            "--run-id", "some run id",
+        };
+        await app.RunAsync(args);
+        var output = console.ReadAllAsString();
+        var settings = new VerifySettings();
+        settings.ScrubAppName();
+        await Verify(output, settings);
+    }
+
+    /// <summary>
+    /// Tests that the --repo option is required for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> command.
+    /// </summary>
+    [Fact]
+    public async Task RepoOptionIsRequired()
+    {
+        using var console = new FakeInMemoryConsole();
+        var app = new ShareDataBetweenJobsCli();
+        app.CliApplicationBuilder.UseConsole(console);
+        var args = new[]
+        {
+            "read-data-different-workflow",
+            "--auth-token", "some auth token",
+            "--run-id", "some run id",
+        };
+        await app.RunAsync(args);
+        var output = console.ReadAllAsString();
+
+        var settings = new VerifySettings();
+        settings.ScrubAppName();
+        await Verify(output, settings);
+    }
+
+    /// <summary>
+    /// Tests that the --run-id option is required for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> command.
+    /// </summary>
+    [Fact]
+    public async Task RunIdOptionIsRequired()
+    {
+        using var console = new FakeInMemoryConsole();
+        var app = new ShareDataBetweenJobsCli();
+        app.CliApplicationBuilder.UseConsole(console);
+        var args = new[]
+        {
+            "read-data-different-workflow",
+            "--auth-token", "some auth token",
+            "--repo", "some repo",
+        };
+        await app.RunAsync(args);
+        var output = console.ReadAllAsString();
+
+        var settings = new VerifySettings();
+        settings.ScrubAppName();
+        await Verify(output, settings);
+    }
+
+    /// <summary>
+    /// Tests that the --artifact-name option is must have a value for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> command.
+    /// </summary>
+    [Fact]
+    public async Task ArtifactNameMustHaveValue()
+    {
+        using var console = new FakeInMemoryConsole();
+        var app = new ShareDataBetweenJobsCli();
+        app.CliApplicationBuilder.UseConsole(console);
+        var args = new[]
+        {
+            "read-data-different-workflow",
+            "--auth-token", "some auth token",
+            "--repo", "some repo",
+            "--run-id", "some run id",
+            "--artifact-name", "  ",
+        };
+        await app.RunAsync(args);
+        var output = console.ReadAllAsString();
+
+        var settings = new VerifySettings();
+        settings.ScrubAppName();
+        await Verify(output, settings);
+    }
+
+    /// <summary>
+    /// Tests that the --data-filename option is must have a value for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> command.
+    /// </summary>
+    [Fact]
+    public async Task ArtifactFilenameMustHaveValue()
+    {
+        using var console = new FakeInMemoryConsole();
+        var app = new ShareDataBetweenJobsCli();
+        app.CliApplicationBuilder.UseConsole(console);
+        var args = new[]
+        {
+            "read-data-different-workflow",
+            "--auth-token", "some auth token",
+            "--repo", "some repo",
+            "--run-id", "some run id",
+            "--artifact-name", "some artifact name",
+            "--data-filename", "  ",
+        };
+        await app.RunAsync(args);
+        var output = console.ReadAllAsString();
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
         await Verify(output, settings);
     }
 }
-
-internal static class ScrubExtensions
-{
-    public static void ScrubAppName(this VerifySettings settings)
-    {
-        settings.ScrubLinesWithReplace(line =>
-        {
-            // when running on windows the app name is set to 'testhost'
-            // when running on unix the app name is set to 'dotnet testhost.dll'
-            // this scrubber makes sure the output is equal on both
-            return line
-                .Replace("dotnet testhost.dll", "{scrubbed app name}", StringComparison.OrdinalIgnoreCase)
-                .Replace("testhost", "{scrubbed app name}", StringComparison.OrdinalIgnoreCase);
-        });
-    }
-}
-

@@ -9,7 +9,7 @@ public class ShareDataBetweenJobsCli
 
     public CliApplicationBuilder CliApplicationBuilder { get; }
 
-    public ValueTask<int> RunAsync(IReadOnlyList<string> args = default!)
+    public ValueTask<int> RunAsync(params string[] args)
     {
         args ??= Array.Empty<string>();
         return CliApplicationBuilder
