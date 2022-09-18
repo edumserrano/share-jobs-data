@@ -1,5 +1,3 @@
-using System.Net.Http;
-
 namespace ShareJobsDataCli.Tests.CliCommands.ReadDataDifferentWorkflow;
 
 /// <summary>
@@ -147,13 +145,11 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     {
         const string repoName = "test-repo-name";
         const string runId = "test-run-id";
-        const string baseRelativeFilepath = $"tests/ShareJobsDataCli.Tests/CliCommands/ReadDataDifferentWorkflow/{nameof(ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests)}.{nameof(FailedHttpToListWorkflowRunArtifacts4)}";
         var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
             .RespondWith(httpRequestMessage =>
             {
-                var listArtifactsResponseRelativePath = $"{baseRelativeFilepath}.{listArtifactsResponseScenario}.http-response.json";
-                var listArtifactsResponseFilepath = TestsProj.GetAbsoluteFilepath(listArtifactsResponseRelativePath);
+                var listArtifactsResponseFilepath = TestFiles.GetAbsoluteFilepath($"{listArtifactsResponseScenario}.http-response.json");
                 var responseContent = File.ReadAllText(listArtifactsResponseFilepath);
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {
@@ -198,13 +194,11 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     {
         const string repoName = "test-repo-name";
         const string runId = "test-run-id";
-        const string baseRelativeFilepath = $"tests/ShareJobsDataCli.Tests/CliCommands/ReadDataDifferentWorkflow/{nameof(ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests)}.{nameof(FailedHttpToDownloadArtifact)}";
         var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
             .RespondWith(_ =>
             {
-                const string listArtifactsResponseRelativePath = $"{baseRelativeFilepath}.list-artifacts.http-response.json";
-                var listArtifactsResponseFilepath = TestsProj.GetAbsoluteFilepath(listArtifactsResponseRelativePath);
+                var listArtifactsResponseFilepath = TestFiles.GetAbsoluteFilepath("list-artifacts.http-response.json");
                 var responseContent = File.ReadAllText(listArtifactsResponseFilepath);
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {

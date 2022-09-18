@@ -17,13 +17,11 @@ public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
     {
         const string repoName = "test-repo-name";
         const string runId = "test-run-id";
-        const string baseRelativeFilepath = $"tests/ShareJobsDataCli.Tests/CliCommands/ReadDataDifferentWorkflow/{nameof(ReadDataFromDifferentGitHubWorkflowCommandErrorTests)}.{nameof(ArtifactNotFound)}";
         var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
             .RespondWith(_ =>
             {
-                const string listArtifactsResponseRelativePath = $"{baseRelativeFilepath}.list-artifacts.http-response.json";
-                var listArtifactsResponseFilepath = TestsProj.GetAbsoluteFilepath(listArtifactsResponseRelativePath);
+                var listArtifactsResponseFilepath = TestFiles.GetAbsoluteFilepath("list-artifacts.http-response.json");
                 var responseContent = File.ReadAllText(listArtifactsResponseFilepath);
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {
@@ -64,13 +62,11 @@ public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
     {
         const string repoName = "test-repo-name";
         const string runId = "test-run-id";
-        const string baseRelativeFilepath = $"tests/ShareJobsDataCli.Tests/CliCommands/ReadDataDifferentWorkflow/{nameof(ReadDataFromDifferentGitHubWorkflowCommandErrorTests)}.{nameof(ArtifactFileNotFound)}";
         var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
             .RespondWith(_ =>
             {
-                const string listArtifactsResponseRelativePath = $"{baseRelativeFilepath}.list-artifacts.http-response.json";
-                var listArtifactsResponseFilepath = TestsProj.GetAbsoluteFilepath(listArtifactsResponseRelativePath);
+                var listArtifactsResponseFilepath = TestFiles.GetAbsoluteFilepath("list-artifacts.http-response.json");
                 var responseContent = File.ReadAllText(listArtifactsResponseFilepath);
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {
@@ -82,8 +78,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.PathAndQuery.Equals("/repos/edumserrano/share-jobs-data/actions/artifacts/351670722/zip", StringComparison.OrdinalIgnoreCase))
             .RespondWith(_ =>
             {
-                const string downloadArtifactResponseRelativePath = $"{baseRelativeFilepath}.download-artifact.http-response.zip";
-                var downloadArtifactResponseFilepath = TestsProj.GetAbsoluteFilepath(downloadArtifactResponseRelativePath);
+                var downloadArtifactResponseFilepath = TestFiles.GetAbsoluteFilepath("download-artifact.http-response.zip");
                 var fileStream = File.Open(downloadArtifactResponseFilepath, FileMode.Open);
                 var response = new HttpResponseMessage(HttpStatusCode.OK)
                 {

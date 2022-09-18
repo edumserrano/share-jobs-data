@@ -14,7 +14,6 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
     {
     }
 
-
     // Input parameters are available for test purposes as they allow mocking external dependencies.
     public ReadDataFromDifferentGitHubWorkflowCommand(HttpClient? httpClient = default, IGitHubEnvironment? gitHubEnvironment = default)
     {
