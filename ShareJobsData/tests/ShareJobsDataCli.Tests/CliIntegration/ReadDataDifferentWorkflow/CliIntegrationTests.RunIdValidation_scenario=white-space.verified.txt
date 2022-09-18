@@ -1,0 +1,16 @@
+﻿Option --run-id has been provided with an invalid value.
+Error(s):
+- Cannot be null or whitespace.
+
+{scrubbed app name} v15.0.0
+
+USAGE
+  {scrubbed app name} read-data-different-workflow --auth-token <value> --repo <value> --run-id <value> [options]
+
+OPTIONS
+* --auth-token      GitHub token used to download the job data artifact. 
+* --repo            The repository for the workflow run in the format of {owner}/{repo}. 
+* --run-id          The unique identifier of the workflow run that contains the job data artifact. 
+  --artifact-name   The data to share in YAML format. Default: "job-data".
+  --data-filename   The data to share in YAML format. Default: "job-data.json".
+  -h|--help         Shows help text. 
