@@ -1,21 +1,22 @@
 namespace ShareJobsDataCli.Tests.Auxiliary.Http.GitHubHttpClient;
 
-internal abstract class BaseResponseMockBuilder
+internal abstract class BaseResponseMockBuilder<T>
+    where T : BaseResponseMockBuilder<T>
 {
     protected HttpStatusCode ResponseHttpStatusCode { get; set; } = HttpStatusCode.OK;
 
     protected TestFilepath? ResponseContentFilepath { get; set; }
 
-    public BaseResponseMockBuilder WithResponseStatusCode(HttpStatusCode responseHttpStatusCode)
+    public T WithResponseStatusCode(HttpStatusCode responseHttpStatusCode)
     {
         ResponseHttpStatusCode = responseHttpStatusCode;
-        return this;
+        return (T)this;
     }
 
-    public BaseResponseMockBuilder WithResponseContentFromFilepath(TestFilepath responseContentFilepath)
+    public T WithResponseContentFromFilepath(TestFilepath responseContentFilepath)
     {
         ResponseContentFilepath = responseContentFilepath;
-        return this;
+        return (T)this;
     }
 
     public abstract void Build(HttpResponseMessageMockBuilder httpResponseMessageMockBuilder);

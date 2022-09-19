@@ -19,8 +19,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
     public async Task ValidateAuthTokenOption(string authToken)
     {
         using var console = new FakeInMemoryConsole();
-        var githubEnvironment = Substitute.For<IGitHubEnvironment>();
-        githubEnvironment.GitHubRepository.Returns("source-repo");
+        var githubEnvironment = new TestsGitHubEnvironment();
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(gitHubEnvironment: githubEnvironment)
         {
             AuthToken = authToken,
@@ -41,8 +40,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
     public async Task ValidateRepoOption(string repo)
     {
         using var console = new FakeInMemoryConsole();
-        var githubEnvironment = Substitute.For<IGitHubEnvironment>();
-        githubEnvironment.GitHubRepository.Returns("source-repo");
+        var githubEnvironment = new TestsGitHubEnvironment();
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(gitHubEnvironment: githubEnvironment)
         {
             AuthToken = "auth-token",
@@ -63,8 +61,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
     public async Task ValidateRunIdOption(string runId)
     {
         using var console = new FakeInMemoryConsole();
-        var githubEnvironment = Substitute.For<IGitHubEnvironment>();
-        githubEnvironment.GitHubRepository.Returns("source-repo");
+        var githubEnvironment = new TestsGitHubEnvironment();
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(gitHubEnvironment: githubEnvironment)
         {
             AuthToken = "auth-token",
@@ -85,8 +82,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
     public async Task ValidateArtifactNameOption(string artifactName)
     {
         using var console = new FakeInMemoryConsole();
-        var githubEnvironment = Substitute.For<IGitHubEnvironment>();
-        githubEnvironment.GitHubRepository.Returns("source-repo");
+        var githubEnvironment = new TestsGitHubEnvironment();
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(gitHubEnvironment: githubEnvironment)
         {
             AuthToken = "auth-token",
@@ -108,8 +104,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
     public async Task ValidateArtifactFilenameOption(string artifactFilename)
     {
         using var console = new FakeInMemoryConsole();
-        var githubEnvironment = Substitute.For<IGitHubEnvironment>();
-        githubEnvironment.GitHubRepository.Returns("source-repo");
+        var githubEnvironment = new TestsGitHubEnvironment();
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(gitHubEnvironment: githubEnvironment)
         {
             AuthToken = "auth-token",

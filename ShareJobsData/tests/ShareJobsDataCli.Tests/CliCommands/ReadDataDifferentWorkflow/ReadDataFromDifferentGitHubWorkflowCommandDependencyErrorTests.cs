@@ -18,19 +18,16 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     {
         const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
-        var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
-            .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
-            .RespondWith(httpRequestMessage => new HttpResponseMessage(HttpStatusCode.InternalServerError) { RequestMessage = httpRequestMessage })
-            .Build();
-        using var testHandler = new TestHttpMessageHandler();
-        testHandler.MockHttpResponse(listArtifactsHttpMock);
-        using var outgoingHttpCallsHandler = new RecordingHandler
+        using var testHttpMessageHandler = new TestHttpMessageHandler();
+        testHttpMessageHandler.MockListArtifactsFromDifferentWorkflowRun(builder =>
         {
-            InnerHandler = testHandler,
-        };
-        using var httpClient = new HttpClient(outgoingHttpCallsHandler);
-        var githubEnvironment = Substitute.For<IGitHubEnvironment>();
-        githubEnvironment.GitHubRepository.Returns("source-repo");
+            builder
+                .FromWorkflowRun(repoName, runId)
+                .WithResponseStatusCode(HttpStatusCode.InternalServerError);
+        });
+        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        var githubEnvironment = new TestsGitHubEnvironment();
+
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
             AuthToken = "auth-token",
@@ -40,8 +37,8 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
         using var console = new FakeInMemoryConsole();
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 
-        await Verify(exception.Message).UseMethodName($"{nameof(FailedHttpToListWorkflowRunArtifacts1)}.console-output");
-        await Verify(outgoingHttpCallsHandler.Sends).UseMethodName($"{nameof(FailedHttpToListWorkflowRunArtifacts1)}.outbound-http");
+        await Verify(exception.Message).AppendToMethodName("console-output");
+        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -55,26 +52,17 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     {
         const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
-        var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
-            .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
-            .RespondWith(httpRequestMessage =>
-            {
-                return new HttpResponseMessage(HttpStatusCode.InternalServerError)
-                {
-                    Content = new StringContent("Oops, something went wrong."),
-                    RequestMessage = httpRequestMessage,
-                };
-            })
-            .Build();
-        using var testHandler = new TestHttpMessageHandler();
-        testHandler.MockHttpResponse(listArtifactsHttpMock);
-        using var outgoingHttpCallsHandler = new RecordingHandler
+        using var testHttpMessageHandler = new TestHttpMessageHandler();
+        testHttpMessageHandler.MockListArtifactsFromDifferentWorkflowRun(builder =>
         {
-            InnerHandler = testHandler,
-        };
-        using var httpClient = new HttpClient(outgoingHttpCallsHandler);
-        var githubEnvironment = Substitute.For<IGitHubEnvironment>();
-        githubEnvironment.GitHubRepository.Returns("source-repo");
+            builder
+                .FromWorkflowRun(repoName, runId)
+                .WithResponseStatusCode(HttpStatusCode.InternalServerError)
+                .WithResponseContent("Oops, something went wrong.");
+        });
+        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        var githubEnvironment = new TestsGitHubEnvironment();
+
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
             AuthToken = "auth-token",
@@ -84,8 +72,8 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
         using var console = new FakeInMemoryConsole();
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 
-        await Verify(exception.Message).UseMethodName($"{nameof(FailedHttpToListWorkflowRunArtifacts2)}.console-output");
-        await Verify(outgoingHttpCallsHandler.Sends).UseMethodName($"{nameof(FailedHttpToListWorkflowRunArtifacts2)}.outbound-http");
+        await Verify(exception.Message).AppendToMethodName("console-output");
+        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -99,26 +87,17 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     {
         const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
-        var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
-            .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
-            .RespondWith(httpRequestMessage =>
-            {
-                return new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StringContent("null"),
-                    RequestMessage = httpRequestMessage,
-                };
-            })
-            .Build();
-        using var testHandler = new TestHttpMessageHandler();
-        testHandler.MockHttpResponse(listArtifactsHttpMock);
-        using var outgoingHttpCallsHandler = new RecordingHandler
+        using var testHttpMessageHandler = new TestHttpMessageHandler();
+        testHttpMessageHandler.MockListArtifactsFromDifferentWorkflowRun(builder =>
         {
-            InnerHandler = testHandler,
-        };
-        using var httpClient = new HttpClient(outgoingHttpCallsHandler);
-        var githubEnvironment = Substitute.For<IGitHubEnvironment>();
-        githubEnvironment.GitHubRepository.Returns("source-repo");
+            builder
+                .FromWorkflowRun(repoName, runId)
+                .WithResponseStatusCode(HttpStatusCode.OK)
+                .WithResponseContent("null");
+        });
+        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        var githubEnvironment = new TestsGitHubEnvironment();
+
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
             AuthToken = "auth-token",
@@ -128,8 +107,8 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
         using var console = new FakeInMemoryConsole();
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 
-        await Verify(exception.Message).UseMethodName($"{nameof(FailedHttpToListWorkflowRunArtifacts3)}.console-output");
-        await Verify(outgoingHttpCallsHandler.Sends).UseMethodName($"{nameof(FailedHttpToListWorkflowRunArtifacts3)}.outbound-http");
+        await Verify(exception.Message).AppendToMethodName("console-output");
+        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -145,28 +124,17 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     {
         const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
-        var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
-            .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
-            .RespondWith(httpRequestMessage =>
-            {
-                var listArtifactsResponseFilepath = TestFiles.GetFilepath($"{listArtifactsResponseScenario}.http-response.json");
-                var responseContent = File.ReadAllText(listArtifactsResponseFilepath);
-                return new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StringContent(responseContent),
-                    RequestMessage = httpRequestMessage,
-                };
-            })
-            .Build();
-        using var testHandler = new TestHttpMessageHandler();
-        testHandler.MockHttpResponse(listArtifactsHttpMock);
-        using var outgoingHttpCallsHandler = new RecordingHandler
+        using var testHttpMessageHandler = new TestHttpMessageHandler();
+        testHttpMessageHandler.MockListArtifactsFromDifferentWorkflowRun(builder =>
         {
-            InnerHandler = testHandler,
-        };
-        using var httpClient = new HttpClient(outgoingHttpCallsHandler);
-        var githubEnvironment = Substitute.For<IGitHubEnvironment>();
-        githubEnvironment.GitHubRepository.Returns("source-repo");
+            builder
+                .FromWorkflowRun(repoName, runId)
+                .WithResponseStatusCode(HttpStatusCode.OK)
+                .WithResponseContentFromFilepath(TestFiles.GetFilepath($"{listArtifactsResponseScenario}.http-response.json"));
+        });
+        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        var githubEnvironment = new TestsGitHubEnvironment();
+
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
             AuthToken = "auth-token",
@@ -177,10 +145,10 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 
         await Verify(exception.Message)
-            .UseMethodName($"{nameof(FailedHttpToListWorkflowRunArtifacts4)}.console-output")
+            .AppendToMethodName("console-output")
             .UseParameters(scenario);
-        await Verify(outgoingHttpCallsHandler.Sends)
-            .UseMethodName($"{nameof(FailedHttpToListWorkflowRunArtifacts4)}.outbound-http")
+        await Verify(outboundHttpRequests)
+            .AppendToMethodName("outbound-http")
             .UseParameters(scenario);
     }
 
@@ -194,32 +162,23 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     {
         const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
-        var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
-            .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
-            .RespondWith(_ =>
-            {
-                var listArtifactsResponseFilepath = TestFiles.GetFilepath("list-artifacts.http-response.json");
-                var responseContent = File.ReadAllText(listArtifactsResponseFilepath);
-                return new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StringContent(responseContent),
-                };
-            })
-            .Build();
-        var downloadArtifactHttpCallMock = new HttpResponseMessageMockBuilder()
-            .Where(httpRequestMessage => httpRequestMessage.RequestUri!.PathAndQuery.Equals("/repos/edumserrano/share-jobs-data/actions/artifacts/351670722/zip", StringComparison.OrdinalIgnoreCase))
-            .RespondWith(httpRequestMessage => new HttpResponseMessage(HttpStatusCode.InternalServerError) { RequestMessage = httpRequestMessage })
-            .Build();
-        using var testHandler = new TestHttpMessageHandler();
-        testHandler.MockHttpResponse(listArtifactsHttpMock);
-        testHandler.MockHttpResponse(downloadArtifactHttpCallMock);
-        using var outgoingHttpCallsHandler = new RecordingHandler
+        using var testHttpMessageHandler = new TestHttpMessageHandler();
+        testHttpMessageHandler.MockListArtifactsFromDifferentWorkflowRun(builder =>
         {
-            InnerHandler = testHandler,
-        };
-        using var httpClient = new HttpClient(outgoingHttpCallsHandler);
-        var githubEnvironment = Substitute.For<IGitHubEnvironment>();
-        githubEnvironment.GitHubRepository.Returns("source-repo");
+            builder
+                .FromWorkflowRun(repoName, runId)
+                .WithResponseStatusCode(HttpStatusCode.OK)
+                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+        });
+        testHttpMessageHandler.MockDownloadArtifactFromDifferentWorkflowRun(builder =>
+        {
+            builder
+                .FromWorkflowArtifactId(repoName, artifactId: "351670722")
+                .WithResponseStatusCode(HttpStatusCode.InternalServerError);
+        });
+        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        var githubEnvironment = new TestsGitHubEnvironment();
+
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
             AuthToken = "auth-token",
@@ -230,7 +189,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
         using var console = new FakeInMemoryConsole();
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 
-        await Verify(exception.Message).UseMethodName($"{nameof(FailedHttpToDownloadArtifact)}.console-output");
-        await Verify(outgoingHttpCallsHandler.Sends).UseMethodName($"{nameof(FailedHttpToDownloadArtifact)}.outbound-http");
+        await Verify(exception.Message).AppendToMethodName("console-output");
+        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 }
