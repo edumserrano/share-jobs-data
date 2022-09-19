@@ -39,6 +39,7 @@ internal class ListArtifactsFromDifferentWorkflowRunResponseMockBuilder : BaseRe
                 {
                     httpResponseMessage.Content = ResponseContentFilepath.ReadFileAsStringContent();
                 }
+
                 if (_responseContentAsString is not null)
                 {
                     httpResponseMessage.Content = new StringContent(_responseContentAsString);

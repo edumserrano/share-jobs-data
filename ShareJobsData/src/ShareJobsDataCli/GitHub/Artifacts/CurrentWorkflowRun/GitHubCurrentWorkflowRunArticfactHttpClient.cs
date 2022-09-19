@@ -104,12 +104,11 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         string fileContainerResourceUrl,
         GitHubArtifactFileUploadRequest fileUploadRequest)
     {
-        var contentBytes = Encoding.UTF8.GetBytes(fileUploadRequest.FilePayload);
-        using var stream = new MemoryStream(contentBytes);
         var uploadFileUrl = fileContainerResourceUrl.SetQueryParam("itemPath", fileUploadRequest.FilePath);
         using var httpRequest = new HttpRequestMessage(HttpMethod.Put, uploadFileUrl);
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
-        httpRequest.Content = new StreamContent(stream);
+        var contentBytes = Encoding.UTF8.GetBytes(fileUploadRequest.FilePayload);
+        httpRequest.Content = new ByteArrayContent(contentBytes);
         httpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Octet);
         httpRequest.Content.Headers.ContentRange = new ContentRangeHeaderValue(from: 0, to: contentBytes.Length - 1, length: contentBytes.Length);
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
@@ -154,7 +153,7 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
     private async Task<DownloadContainerItemResult> DownloadContainerItemAsync(string contentLocation)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, contentLocation);
-        httpRequest.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip"); // not really needed since I'm not uploading gzip compressed stream ?
+        httpRequest.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip"); // TODO: not really needed since I'm not uploading gzip compressed stream on the set-data command ?
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/octet-stream;api-version={GitHubApiVersion.Latest}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         var ensureSuccessStatusCodeResult = await httpResponse.EnsureSuccessStatusCodeAsync();
@@ -164,6 +163,7 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         }
 
         var containerItemContent = await httpResponse.Content.ReadAsStringAsync();
+        Console.WriteLine(containerItemContent);
         return new GitHubArtifactItemContent(containerItemContent);
     }
 }

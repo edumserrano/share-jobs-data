@@ -25,6 +25,9 @@ internal static class HttpResponseMessageExtensions
             return FailedStatusCode<TModel>(failedStatusCodeHttpResponse);
         }
 
+        var responseDebug = await httpResponse.Content.ReadAsStringAsync();
+        Console.WriteLine(responseDebug);
+
         var responseModel = await httpResponse.Content.ReadFromJsonAsync<TModel>();
         if (responseModel is null)
         {
