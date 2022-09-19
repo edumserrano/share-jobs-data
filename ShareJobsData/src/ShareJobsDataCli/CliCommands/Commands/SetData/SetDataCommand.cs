@@ -44,8 +44,9 @@ public sealed class SetDataCommand : ICommand
 
     [CommandOption(
         "set-step-output",
+        IsRequired = false,
         Description = "Whether or not the job data should also be set as a step output.")]
-    public bool SetStepOutput { get; init; }
+    public bool SetStepOutput { get; init; } = true;
 
     public async ValueTask ExecuteAsync(IConsole console)
     {

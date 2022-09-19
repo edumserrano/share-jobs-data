@@ -1,7 +1,7 @@
 namespace ShareJobsDataCli.Tests.CliIntegration.ReadDataDifferentWorkflow;
 
 /// <summary>
-/// These tests make sure that the CLI interface is as expected.
+/// These tests make sure that the CLI interface for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> command is as expected.
 /// IE: if the command name changes or the options change then these tests would pick that up.
 /// These tests also test the <see cref="IBindingValidator"/> validators of the command options.
 /// </summary>
