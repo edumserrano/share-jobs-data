@@ -8,7 +8,8 @@ public record CommandExceptionMessage(string ErrorMessage, string Cause, string 
         return new CommandException(message);
     }
 
-    // sealed keyword is required to stop the compiler from auto-generating the ToString
+    // sealed keyword is required to enforce this ToString to be used by the derived classes
+    // otherwise the compiler auto-generates a ToString for the derived types which bypasses this ToString implementation.
     // see https://stackoverflow.com/questions/64094373/c-sharp-9-0-records-tostring-not-inherited
     public sealed override string ToString()
     {

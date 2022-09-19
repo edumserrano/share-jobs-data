@@ -149,7 +149,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
             .RespondWith(httpRequestMessage =>
             {
-                var listArtifactsResponseFilepath = TestFiles.GetAbsoluteFilepath($"{listArtifactsResponseScenario}.http-response.json");
+                var listArtifactsResponseFilepath = TestFiles.GetFilepath($"{listArtifactsResponseScenario}.http-response.json");
                 var responseContent = File.ReadAllText(listArtifactsResponseFilepath);
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {
@@ -198,7 +198,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
             .RespondWith(_ =>
             {
-                var listArtifactsResponseFilepath = TestFiles.GetAbsoluteFilepath("list-artifacts.http-response.json");
+                var listArtifactsResponseFilepath = TestFiles.GetFilepath("list-artifacts.http-response.json");
                 var responseContent = File.ReadAllText(listArtifactsResponseFilepath);
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {

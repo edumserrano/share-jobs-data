@@ -21,7 +21,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
             .RespondWith(_ =>
             {
-                var listArtifactsResponseFilepath = TestFiles.GetAbsoluteFilepath("list-artifacts.http-response.json");
+                var listArtifactsResponseFilepath = TestFiles.GetFilepath("list-artifacts.http-response.json");
                 var responseContent = File.ReadAllText(listArtifactsResponseFilepath);
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {
@@ -66,7 +66,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
             .RespondWith(_ =>
             {
-                var listArtifactsResponseFilepath = TestFiles.GetAbsoluteFilepath("list-artifacts.http-response.json");
+                var listArtifactsResponseFilepath = TestFiles.GetFilepath("list-artifacts.http-response.json");
                 var responseContent = File.ReadAllText(listArtifactsResponseFilepath);
                 return new HttpResponseMessage(HttpStatusCode.OK)
                 {
@@ -78,7 +78,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.PathAndQuery.Equals("/repos/edumserrano/share-jobs-data/actions/artifacts/351670722/zip", StringComparison.OrdinalIgnoreCase))
             .RespondWith(_ =>
             {
-                var downloadArtifactResponseFilepath = TestFiles.GetAbsoluteFilepath("download-artifact.http-response.zip");
+                var downloadArtifactResponseFilepath = TestFiles.GetFilepath("download-artifact.http-response.zip");
                 var fileStream = File.Open(downloadArtifactResponseFilepath, FileMode.Open);
                 var response = new HttpResponseMessage(HttpStatusCode.OK)
                 {

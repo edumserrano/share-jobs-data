@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.Tests.Auxiliary;
+namespace ShareJobsDataCli.Tests.Auxiliary.Verify;
 
 public static class ModuleInitializer
 {

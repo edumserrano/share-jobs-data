@@ -1,13 +1,14 @@
-namespace ShareJobsDataCli.Tests.Auxiliary;
+namespace ShareJobsDataCli.Tests.Auxiliary.Http.ResponseContentFromFiles;
 
 internal static class TestFiles
 {
-    public static string GetAbsoluteFilepath(
+    public static TestFilepath GetFilepath(
         string endFilepathSegment,
         [CallerFilePath] string sourceFile = "",
         [CallerMemberName] string methodName = "")
     {
         sourceFile = sourceFile.Replace(".cs", string.Empty, StringComparison.OrdinalIgnoreCase);
-        return $"{sourceFile}.{methodName}.{endFilepathSegment}";
+        var testFilepath = $"{sourceFile}.{methodName}.{endFilepathSegment}";
+        return new TestFilepath(testFilepath);
     }
 }

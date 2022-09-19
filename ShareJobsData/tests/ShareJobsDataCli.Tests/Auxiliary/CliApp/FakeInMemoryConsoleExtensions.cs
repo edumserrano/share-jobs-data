@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.Tests.Auxiliary;
+namespace ShareJobsDataCli.Tests.Auxiliary.CliApp;
 
 internal static class FakeInMemoryConsoleExtensions
 {

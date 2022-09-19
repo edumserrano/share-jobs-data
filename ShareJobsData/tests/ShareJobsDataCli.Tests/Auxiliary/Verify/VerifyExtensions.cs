@@ -1,7 +1,15 @@
-namespace ShareJobsDataCli.Tests.Auxiliary;
+namespace ShareJobsDataCli.Tests.Auxiliary.Verify;
 
-internal static class ScrubExtensions
+internal static class VerifyExtensions
 {
+    public static SettingsTask AppendToMethodName(
+        this SettingsTask settingsTask,
+        string appendValue,
+        [CallerMemberName] string methodName = "")
+    {
+        return settingsTask.UseMethodName($"{methodName}.{appendValue}");
+    }
+
     public static void ScrubAppName(this VerifySettings settings)
     {
         settings.ScrubLinesWithReplace(line =>

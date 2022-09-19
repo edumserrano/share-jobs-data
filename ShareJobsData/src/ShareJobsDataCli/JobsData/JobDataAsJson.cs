@@ -9,11 +9,6 @@ internal sealed record JobDataAsJson
         _value = json.NotNullOrWhiteSpace();
     }
 
-    public static implicit operator string(JobDataAsJson json)
-    {
-        return json._value;
-    }
-
     public JobDataAsKeysAndValues ToKeyValues()
     {
         var obj = JObject.Parse(_value);
@@ -23,6 +18,11 @@ internal sealed record JobDataAsJson
             .Select(jp => new JobDataKeyAndValue(jp.Path, jp.Value.ToString()))
             .ToList();
         return new JobDataAsKeysAndValues(kvp);
+    }
+
+    public static implicit operator string(JobDataAsJson json)
+    {
+        return json._value;
     }
 
     public override string ToString() => (string)this;

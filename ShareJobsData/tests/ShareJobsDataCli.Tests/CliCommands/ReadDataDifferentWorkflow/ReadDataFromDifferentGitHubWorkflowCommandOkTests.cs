@@ -1,3 +1,5 @@
+using ShareJobsDataCli.Tests.Auxiliary.Http.GitHubHttpClient;
+
 namespace ShareJobsDataCli.Tests.CliCommands.ReadDataDifferentWorkflow;
 
 /// <summary>
@@ -15,44 +17,26 @@ public class ReadDataFromDifferentGitHubWorkflowCommandOkTests
     [Fact]
     public async Task Success()
     {
-        const string repoName = "test-repo-name";
+        // fix repoName in other tests
+        const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
-        var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
-            .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
-            .RespondWith(_ =>
-            {
-                var listArtifactsResponseFilepath = TestFiles.GetAbsoluteFilepath("list-artifacts.http-response.json");
-                var responseContent = File.ReadAllText(listArtifactsResponseFilepath);
-                return new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StringContent(responseContent),
-                };
-            })
-            .Build();
-        var downloadArtifactHttpCallMock = new HttpResponseMessageMockBuilder()
-            .Where(httpRequestMessage => httpRequestMessage.RequestUri!.PathAndQuery.Equals("/repos/edumserrano/share-jobs-data/actions/artifacts/351670722/zip", StringComparison.OrdinalIgnoreCase))
-            .RespondWith(_ =>
-            {
-                var downloadArtifactResponseFilepath = TestFiles.GetAbsoluteFilepath("download-artifact.http-response.zip");
-                var fileStream = File.Open(downloadArtifactResponseFilepath, FileMode.Open);
-                var response = new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StreamContent(fileStream),
-                };
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Zip);
-                return response;
-            })
-            .Build();
-        using var testHandler = new TestHttpMessageHandler();
-        testHandler.MockHttpResponse(listArtifactsHttpMock);
-        testHandler.MockHttpResponse(downloadArtifactHttpCallMock);
-        using var outgoingHttpCallsHandler = new RecordingHandler
+        using var testHttpMessageHandler = new TestHttpMessageHandler();
+        testHttpMessageHandler.MockListArtifactsFromDifferentWorkflowRun(builder =>
         {
-            InnerHandler = testHandler,
-        };
-        using var httpClient = new HttpClient(outgoingHttpCallsHandler);
-        var githubEnvironment = Substitute.For<IGitHubEnvironment>();
-        githubEnvironment.GitHubRepository.Returns("source-repo");
+            builder
+                .FromWorkflowRun(repoName, runId)
+                .WithResponseStatusCode(HttpStatusCode.OK)
+                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+        });
+        testHttpMessageHandler.MockDownloadArtifactFromDifferentWorkflowRun(builder =>
+        {
+            builder
+                .FromWorkflowArtifactId(repoName, artifactId: "351670722")
+                .WithResponseStatusCode(HttpStatusCode.OK)
+                .WithResponseContentFromFilepath(TestFiles.GetFilepath("download-artifact.http-response.zip"));
+        });
+        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        var githubEnvironment = new TestsGitHubEnvironment();
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
             AuthToken = "auth-token",
@@ -65,7 +49,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandOkTests
         await command.ExecuteAsync(console);
         var output = console.ReadOutputString();
 
-        await Verify(output).UseMethodName($"{nameof(Success)}.console-output");
-        await Verify(outgoingHttpCallsHandler.Sends).UseMethodName($"{nameof(Success)}.outbound-http");
+        await Verify(output).AppendToMethodName("console-output");
+        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 }
