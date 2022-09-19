@@ -1,5 +1,3 @@
-using ShareJobsDataCli.Tests.Auxiliary.Http.GitHubHttpClient;
-
 namespace ShareJobsDataCli.Tests.CliCommands.ReadDataDifferentWorkflow;
 
 /// <summary>
@@ -17,7 +15,6 @@ public class ReadDataFromDifferentGitHubWorkflowCommandOkTests
     [Fact]
     public async Task Success()
     {
-        // fix repoName in other tests
         const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
         using var testHttpMessageHandler = new TestHttpMessageHandler();
@@ -37,6 +34,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandOkTests
         });
         (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
         var githubEnvironment = new TestsGitHubEnvironment();
+
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
             AuthToken = "auth-token",
@@ -47,8 +45,8 @@ public class ReadDataFromDifferentGitHubWorkflowCommandOkTests
         };
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
-        var output = console.ReadOutputString();
 
+        var output = console.ReadOutputString();
         await Verify(output).AppendToMethodName("console-output");
         await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }

@@ -4,6 +4,6 @@ Failed to download GitHub artifact.
 Details:
 HTTP response from 'listing GitHub workflow artifacts' returned error status code.
 HTTP Method: GET
-Request URL: https://api.github.com/repos/test-repo-name/actions/runs/test-run-id/artifacts
+Request URL: https://api.github.com/repos/edumserrano/share-jobs-data/actions/runs/test-run-id/artifacts
 Response status code: InternalServerError
 Response body: <empty>

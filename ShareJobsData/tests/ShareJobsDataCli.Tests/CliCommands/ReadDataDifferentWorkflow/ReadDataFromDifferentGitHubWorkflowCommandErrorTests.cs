@@ -15,7 +15,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
     [Fact]
     public async Task ArtifactNotFound()
     {
-        const string repoName = "test-repo-name";
+        const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
         var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
@@ -60,7 +60,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
     [Fact]
     public async Task ArtifactFileNotFound()
     {
-        const string repoName = "test-repo-name";
+        const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
         var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))

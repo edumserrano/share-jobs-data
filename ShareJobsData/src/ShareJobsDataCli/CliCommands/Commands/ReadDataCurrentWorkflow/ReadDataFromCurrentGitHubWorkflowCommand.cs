@@ -3,18 +3,22 @@ namespace ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow;
 [Command("read-data-current-workflow")]
 public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
 {
-    private readonly HttpClient? _httpClient;
-    private readonly IGitHubEnvironment? _gitHubEnvironment;
+    private readonly HttpClient _httpClient;
+    private readonly IGitHubEnvironment _gitHubEnvironment;
 
+    // Default type activator is only capable of instantiating a type if it has a public parameterless constructor.
+    // This ctor is used to avoid having to register the command in a more specific way as shown in:
+    // https://github.com/Tyrrrz/CliFx#type-activation
     public ReadDataFromCurrentGitHubWorkflowCommand()
+        : this(httpClient: null, gitHubEnvironment: null)
     {
     }
 
-    // used for test purposes to be able to mock external dependencies
-    public ReadDataFromCurrentGitHubWorkflowCommand(HttpClient httpClient, IGitHubEnvironment gitHubEnvironment)
+    // Input parameters are available for test purposes as they allow mocking external dependencies.
+    public ReadDataFromCurrentGitHubWorkflowCommand(HttpClient? httpClient = default, IGitHubEnvironment? gitHubEnvironment = default)
     {
-        _httpClient = httpClient.NotNull();
-        _gitHubEnvironment = gitHubEnvironment;
+        _httpClient = httpClient ?? new HttpClient();
+        _gitHubEnvironment = gitHubEnvironment ?? new GitHubEnvironment();
     }
 
     [CommandOption(
@@ -35,14 +39,13 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
     {
         console.NotNull();
 
-        var githubEnvironment = _gitHubEnvironment ?? new GitHubEnvironment();
-        var actionRuntimeToken = new GitHubActionRuntimeToken(githubEnvironment.GitHubActionRuntimeToken);
-        var repository = new GitHubRepositoryName(githubEnvironment.GitHubRepository);
-        var containerUrl = new GitHubArtifactContainerUrl(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId);
+        var actionRuntimeToken = new GitHubActionRuntimeToken(_gitHubEnvironment.GitHubActionRuntimeToken);
+        var repository = new GitHubRepositoryName(_gitHubEnvironment.GitHubRepository);
+        var containerUrl = new GitHubArtifactContainerUrl(_gitHubEnvironment.GitHubActionRuntimeUrl, _gitHubEnvironment.GitHubActionRunId);
         var artifactContainerName = new GitHubArtifactContainerName(ArtifactName);
         var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, ArtifactFilename);
 
-        using var httpClient = _httpClient ?? GitHubCurrentWorkflowRunArticfactHttpClient.CreateHttpClient(actionRuntimeToken, repository);
+        using var httpClient = _httpClient.ConfigureGitHubCurrentWorkflowRunArticfactHttpClient(actionRuntimeToken, repository);
         var githubHttpClient = new GitHubCurrentWorkflowRunArticfactHttpClient(httpClient);
         var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(containerUrl, artifactContainerName, artifactFilePath);
         if (!downloadResult.IsOk(out var gitHubArtifactItemContent, out var downloadError))

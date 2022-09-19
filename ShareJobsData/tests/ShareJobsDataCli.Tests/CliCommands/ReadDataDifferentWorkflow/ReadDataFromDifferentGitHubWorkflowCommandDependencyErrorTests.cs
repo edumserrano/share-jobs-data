@@ -16,7 +16,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     [Fact]
     public async Task FailedHttpToListWorkflowRunArtifacts1()
     {
-        const string repoName = "test-repo-name";
+        const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
         var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
@@ -53,7 +53,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     [Fact]
     public async Task FailedHttpToListWorkflowRunArtifacts2()
     {
-        const string repoName = "test-repo-name";
+        const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
         var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
@@ -97,7 +97,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     [Fact]
     public async Task FailedHttpToListWorkflowRunArtifacts3()
     {
-        const string repoName = "test-repo-name";
+        const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
         var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
@@ -143,7 +143,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     [InlineData("artifact-model-validation", "list-artifacts-2")]
     public async Task FailedHttpToListWorkflowRunArtifacts4(string scenario, string listArtifactsResponseScenario)
     {
-        const string repoName = "test-repo-name";
+        const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
         var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))
@@ -192,7 +192,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     [Fact]
     public async Task FailedHttpToDownloadArtifact()
     {
-        const string repoName = "test-repo-name";
+        const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
         var listArtifactsHttpMock = new HttpResponseMessageMockBuilder()
             .Where(httpRequestMessage => httpRequestMessage.RequestUri!.AbsolutePath.Equals($"/repos/{repoName}/actions/runs/{runId}/artifacts", StringComparison.OrdinalIgnoreCase))

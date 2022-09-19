@@ -2,4 +2,4 @@
 Error:
 Failed to download GitHub artifact.
 Details:
-Couldn't find artifact 'not-gonna-find-it' in workflow run id 'test-run-id' at repo 'test-repo-name'.
+Couldn't find artifact 'not-gonna-find-it' in workflow run id 'test-run-id' at repo 'edumserrano/share-jobs-data'.
