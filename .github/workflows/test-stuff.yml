@@ -66,6 +66,12 @@ jobs:
       env:
         STEP_OUTPUT: ${{ toJSON(steps.read.outputs) }}
       run: $env:STEP_OUTPUT
+    - name: read output
+      shell: pwsh
+      run: |
+        Write-Output ${{ steps.read.outputs.name }}
+        Write-Output ${{ steps.read.outputs.age }}
+        Write-Output ${{ steps.read.outputs.addresses.home.list[1] }}
     # - name: ls download
     #   run: |
     #     ls -R

@@ -6,9 +6,9 @@ internal sealed record GitHubArtifactItemFilePath
 
     public GitHubArtifactItemFilePath(
         GitHubArtifactContainerName containerName,
-        string path)
+        string artifactFilename)
     {
-        _value = $"{containerName.NotNull()}/{path.NotNullOrWhiteSpace()}";
+        _value = $"{containerName.NotNull()}/{artifactFilename.NotNullOrWhiteSpace()}";
     }
 
     public static implicit operator string(GitHubArtifactItemFilePath filePath)

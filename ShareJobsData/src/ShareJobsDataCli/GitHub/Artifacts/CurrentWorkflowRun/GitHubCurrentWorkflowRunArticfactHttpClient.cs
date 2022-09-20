@@ -163,7 +163,6 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         }
 
         var containerItemContent = await httpResponse.Content.ReadAsStringAsync();
-        Console.WriteLine(containerItemContent);
         return new GitHubArtifactItemContent(containerItemContent);
     }
 }

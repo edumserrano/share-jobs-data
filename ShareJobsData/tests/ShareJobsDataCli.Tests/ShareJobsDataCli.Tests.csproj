@@ -49,7 +49,4 @@
       <DependentUpon>%(ParentFile).cs</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CliCommands\ReadDataCurrentWorkflow\" />
-  </ItemGroup>
 </Project>

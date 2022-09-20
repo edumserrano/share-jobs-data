@@ -5,12 +5,13 @@ internal class JobDataAsYml
     private JobDataAsJson? _jobDataJson;
     private readonly object _dataAsYml;
 
-    public JobDataAsYml(string yml)
+    public JobDataAsYml(string dataAsYmlStr)
     {
+        dataAsYmlStr.NotNullOrWhiteSpace();
         var deserializer = new DeserializerBuilder()
             .IgnoreUnmatchedProperties()
             .Build();
-        _dataAsYml = deserializer.Deserialize<object>(yml);
+        _dataAsYml = deserializer.Deserialize<object>(dataAsYmlStr);
     }
 
     public JobDataAsJson ToJson()
