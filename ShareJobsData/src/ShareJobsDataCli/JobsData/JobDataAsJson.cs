@@ -13,11 +13,9 @@ internal sealed record JobDataAsJson
     {
         var obj = JObject.Parse(_value);
         var kvp = obj.DescendantsAndSelf()
-            .OfType<JValue>()
-            .Select(jValue => new { jValue.Path, Value = jValue.Value?.ToString() })
-            .Where(kvp => kvp.Value is not null)
-            .Select(kvp => new { kvp.Path, Value = kvp.Value! })
-            .Select(kvp => new JobDataKeyAndValue(kvp.Path, kvp.Value))
+            .OfType<JProperty>()
+            .Where(jp => jp.Value is JValue)
+            .Select(jp => new JobDataKeyAndValue(jp.Path, jp.Value.ToString()))
             .ToList();
         return new JobDataAsKeysAndValues(kvp);
     }
