@@ -9,17 +9,23 @@ internal abstract record DownloadContainerItemResult
     public record Ok(GitHubArtifactItemContent ArtifactItemContent)
         : DownloadContainerItemResult;
 
-    public record FailedToDownloadContainerItem(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
+    public record Error()
         : DownloadContainerItemResult;
+
+    public record ArtifactItemContentNotJson(string ArtifactItemContent)
+        : Error;
+
+    public record FailedToDownloadContainerItem(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
+        : Error;
 
     public static implicit operator DownloadContainerItemResult(GitHubArtifactItemContent artifactItemContent) => new Ok(artifactItemContent);
 
     public bool IsOk(
         [NotNullWhen(returnValue: true)] out GitHubArtifactItemContent? artifactItemContent,
-        [NotNullWhen(returnValue: false)] out FailedStatusCodeHttpResponse? failedStatusCodeHttpResponse)
+        [NotNullWhen(returnValue: false)] out Error? error)
     {
         artifactItemContent = null;
-        failedStatusCodeHttpResponse = null;
+        error = null;
 
         if (this is Ok ok)
         {
@@ -27,8 +33,7 @@ internal abstract record DownloadContainerItemResult
             return true;
         }
 
-        var failedToDownloadArtifact = (FailedToDownloadContainerItem)this;
-        failedStatusCodeHttpResponse = failedToDownloadArtifact.FailedStatusCodeHttpResponse;
+        error = (Error)this;
         return false;
     }
 }

@@ -22,4 +22,3 @@ global using ShareJobsDataCli.Tests.Auxiliary.Http.ResponseContentFromFiles;
 global using ShareJobsDataCli.Tests.Auxiliary.Verify;
 global using Shouldly;
 global using VerifyTests.Http;
-global using Xunit;

@@ -2,7 +2,7 @@ namespace ShareJobsDataCli.CliCommands.Errors;
 
 internal static class ErrorDetailsExtensions
 {
-    public static string GetErrorDetails<T>(this JsonHttpResult<T>.Error jsonHttpResult, string operationName)
+    public static string ToErrorDetails<T>(this JsonHttpResult<T>.Error jsonHttpResult, string operationName)
         where T : class
     {
         return jsonHttpResult switch
@@ -14,7 +14,7 @@ internal static class ErrorDetailsExtensions
         };
     }
 
-    public static string GetErrorDetails(this FailedStatusCodeHttpResponse failedStatusCodeHttpResponse, string operationName)
+    public static string ToErrorDetails(this FailedStatusCodeHttpResponse failedStatusCodeHttpResponse, string operationName)
     {
         return $"HTTP response from {operationName} returned error status code.{Environment.NewLine}{failedStatusCodeHttpResponse.FormatFailedHttpResponseMessage()}";
     }

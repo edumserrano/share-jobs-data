@@ -1,0 +1,6 @@
+﻿An error occurred trying to execute the command to read job data from the current workflow run.
+Error:
+Failed to download GitHub artifact.
+Details:
+HTTP response from 'retrieving GitHub workflow artifact container items' validation.
+'value' is missing from JSON response.

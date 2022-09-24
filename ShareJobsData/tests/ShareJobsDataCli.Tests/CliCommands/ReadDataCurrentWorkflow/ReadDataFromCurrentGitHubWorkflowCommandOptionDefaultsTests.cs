@@ -3,7 +3,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.ReadDataCurrentWorkflow;
 /// <summary>
 /// These tests check the default values for the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/>.
 /// </summary>
-[Trait("Category", XUnitCategories.Validation)]
+[Trait("Category", XUnitCategories.Defaults)]
 [Trait("Category", XUnitCategories.ReadDataFromCurrentGitHubWorkflowCommand)]
 public class ReadDataFromCurrentGitHubWorkflowCommandOptionDefaultsTests
 {

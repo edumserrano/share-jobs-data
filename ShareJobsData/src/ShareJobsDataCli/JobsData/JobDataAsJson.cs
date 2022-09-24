@@ -24,7 +24,7 @@ internal sealed record JobDataAsJson
         // If I do the replacement then I should actually have an output mode, either strict json or github json
         // this would allow ppl to use strict json and consumer the output using ${{ toJSON(steps.read.outputs) }}
         // and converting the the output to a json object
-        //var kvp = obj.DescendantsAndSelf()
+        // var kvp = obj.DescendantsAndSelf()
         //    .OfType<JValue>()
         //    .Select(jValue => new { jValue.Path, Value = jValue.Value?.ToString() })
         //    .Where(kvp => kvp.Value is not null)

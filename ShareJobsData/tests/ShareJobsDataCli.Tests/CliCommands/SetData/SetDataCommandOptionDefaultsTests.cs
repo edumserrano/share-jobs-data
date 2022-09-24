@@ -3,7 +3,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.SetData;
 /// <summary>
 /// These tests check the default values for the <see cref="SetDataCommand"/>.
 /// </summary>
-[Trait("Category", XUnitCategories.Validation)]
+[Trait("Category", XUnitCategories.Defaults)]
 [Trait("Category", XUnitCategories.SetDataCommand)]
 public class SetDataCommandOptionDefaultsTests
 {

@@ -1,0 +1,9 @@
+﻿An error occurred trying to execute the command to read job data from the current workflow run.
+Error:
+Failed to download GitHub artifact.
+Details:
+HTTP response from 'retrieving GitHub workflow artifact container items' returned error status code.
+HTTP Method: GET
+Request URL: https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982?itemPath=job-data
+Response status code: InternalServerError
+Response body: <empty>

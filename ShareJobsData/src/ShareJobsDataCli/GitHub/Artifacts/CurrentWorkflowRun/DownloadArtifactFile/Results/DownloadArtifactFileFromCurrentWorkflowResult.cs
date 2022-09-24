@@ -24,7 +24,7 @@ internal abstract record DownloadArtifactFileFromCurrentWorkflowResult
     public record FailedToGetContainerItems(JsonHttpResult<GitHubArtifactContainerItems>.Error ErrorResult)
         : Error;
 
-    public record FailedToDownloadArtifact(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
+    public record FailedToDownloadArtifact(DownloadContainerItemResult.Error DownloadContainerItemError)
         : Error;
 
     public static implicit operator DownloadArtifactFileFromCurrentWorkflowResult(GitHubArtifactItemContent gitHubArtifactItemContent) => new Ok(gitHubArtifactItemContent);
