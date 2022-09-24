@@ -12,7 +12,7 @@ internal sealed class GitHubArtifactContainerItemsValidator : AbstractValidator<
     {
         RuleFor(x => x.ContainerItems)
             .Must(x => x is not null)
-            .WithMessage(x => $"{nameof(x.ContainerItems)} is missing from JSON response. {nameof(GitHubArtifactContainerItems)}.{nameof(x.ContainerItems)} cannot be null.");
+            .WithMessage(x => $"'value' is missing from JSON response. {nameof(GitHubArtifactContainerItems)}.{nameof(x.ContainerItems)} cannot be null.");
         RuleForEach(x => x.ContainerItems)
             .SetValidator(new GitHubArtifactContainerItemValidator($"{nameof(GitHubArtifactContainerItems)}.{nameof(GitHubArtifactContainerItems.ContainerItems)}"));
     }

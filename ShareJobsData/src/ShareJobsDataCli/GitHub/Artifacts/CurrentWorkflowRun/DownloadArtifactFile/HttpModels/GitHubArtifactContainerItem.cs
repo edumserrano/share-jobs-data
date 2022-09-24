@@ -26,12 +26,12 @@ internal sealed class GitHubArtifactContainerItemValidator : AbstractValidator<G
     {
         RuleFor(x => x.ContentLocation)
             .Must(contentLocation => Uri.TryCreate(contentLocation, default(UriCreationOptions), out var _))
-            .WithMessage(x => $"{collectionPath}[{{CollectionIndex}}].{nameof(x.ContentLocation)} is not a valid URL. Actual value: '{x.ContentLocation}'.");
+            .WithMessage(x => $"'{collectionPath}[{{CollectionIndex}}].{nameof(x.ContentLocation)}' is not a valid URL. Actual value: '{x.ContentLocation}'.");
         RuleFor(x => x.ItemType)
             .NotEmpty()
-            .WithMessage(x => $"{collectionPath}[{{CollectionIndex}}].{nameof(x.ItemType)} must have a value.");
+            .WithMessage(x => $"'{collectionPath}[{{CollectionIndex}}].{nameof(x.ItemType)}' must have a value.");
         RuleFor(x => x.Path)
             .NotEmpty()
-            .WithMessage(x => $"{collectionPath}[{{CollectionIndex}}].{nameof(x.Path)} must have a value.");
+            .WithMessage(x => $"'{collectionPath}[{{CollectionIndex}}].{nameof(x.Path)}' must have a value.");
     }
 }

@@ -3,5 +3,5 @@ Error:
 Failed to download GitHub artifact.
 Details:
 HTTP response from 'listing GitHub workflow artifacts' validation.
-GitHubWorkflowRunArtifactsHttpResponse.Artifacts[0].Name must have a value.
-GitHubWorkflowRunArtifactsHttpResponse.Artifacts[0].ArchiveDownloadUrl is not a valid URL. Actual value: ''.
+'GitHubWorkflowRunArtifactsHttpResponse.Artifacts[0].name' must have a value.
+'GitHubWorkflowRunArtifactsHttpResponse.Artifacts[0].archive_download_url' is not a valid URL. Actual value: ''.

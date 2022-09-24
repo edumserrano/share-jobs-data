@@ -18,19 +18,19 @@ internal sealed class GitHubArtifactContainerValidator : AbstractValidator<GitHu
     {
         RuleFor(x => x.FileContainerResourceUrl)
             .Must(fileContainerResourceUrl => Uri.TryCreate(fileContainerResourceUrl, default(UriCreationOptions), out var _))
-            .WithMessage(x => $"{nameof(x.FileContainerResourceUrl)} is not a valid URL. Actual value: '{x.FileContainerResourceUrl}'.");
+            .WithMessage(x => $"'fileContainerResourceUrl' is not a valid URL. Actual value: '{x.FileContainerResourceUrl}'.");
         RuleFor(x => x.Name)
             .NotEmpty()
-            .WithMessage(x => $"{nameof(x.Name)} must have a value.");
+            .WithMessage(_ => "'name' must have a value.");
     }
 
     public GitHubArtifactContainerValidator(string collectionPath)
     {
         RuleFor(x => x.FileContainerResourceUrl)
             .Must(fileContainerResourceUrl => Uri.TryCreate(fileContainerResourceUrl, default(UriCreationOptions), out var _))
-            .WithMessage(x => $"{collectionPath}[{{CollectionIndex}}].{nameof(x.FileContainerResourceUrl)} is not a valid URL. Actual value: '{x.FileContainerResourceUrl}'.");
+            .WithMessage(x => $"'{collectionPath}[{{CollectionIndex}}].fileContainerResourceUrl' is not a valid URL. Actual value: '{x.FileContainerResourceUrl}'.");
         RuleFor(x => x.Name)
             .NotEmpty()
-            .WithMessage(x => $"{collectionPath}[{{CollectionIndex}}].{nameof(x.Name)} must have a value.");
+            .WithMessage(_ => $"'{collectionPath}[{{CollectionIndex}}].name' must have a value.");
     }
 }

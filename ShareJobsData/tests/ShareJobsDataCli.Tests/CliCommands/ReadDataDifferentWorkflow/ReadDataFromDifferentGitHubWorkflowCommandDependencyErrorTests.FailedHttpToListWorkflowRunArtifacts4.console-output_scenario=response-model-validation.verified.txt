@@ -3,4 +3,4 @@ Error:
 Failed to download GitHub artifact.
 Details:
 HTTP response from 'listing GitHub workflow artifacts' validation.
-Artifacts is missing from JSON response. GitHubWorkflowRunArtifactsHttpResponse.Artifacts cannot be null.
+'artifacts' is missing from JSON response.

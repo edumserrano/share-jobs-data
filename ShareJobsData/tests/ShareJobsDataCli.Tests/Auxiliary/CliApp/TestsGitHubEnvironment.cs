@@ -2,11 +2,11 @@ namespace ShareJobsDataCli.Tests.Auxiliary.CliApp;
 
 internal class TestsGitHubEnvironment : IGitHubEnvironment
 {
-    public string GitHubActionRuntimeToken => "test-gh-action-runtime-token";
+    public string GitHubActionRuntimeToken => "____xbk9w02Bwt7WD29DzY3xRQVhdqLcGT1eS4lc";
 
-    public string GitHubActionRuntimeUrl => "test-gh-action-runtime-url";
+    public string GitHubActionRuntimeUrl => "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/";
 
-    public string GitHubActionRunId => "test-gh-action-run-id";
+    public string GitHubActionRunId => "3085101792";
 
     public string GitHubRepository => "source-repo";
 }

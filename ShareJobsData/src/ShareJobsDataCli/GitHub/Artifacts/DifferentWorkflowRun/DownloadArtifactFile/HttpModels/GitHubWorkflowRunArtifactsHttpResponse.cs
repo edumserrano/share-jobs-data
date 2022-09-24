@@ -32,7 +32,7 @@ internal sealed class GitHubWorkflowRunArtifactsHttpResponseValidator : Abstract
     {
         RuleFor(x => x.Artifacts)
             .Must(x => x is not null)
-            .WithMessage(x => $"{nameof(x.Artifacts)} is missing from JSON response. {nameof(GitHubWorkflowRunArtifactsHttpResponse)}.{nameof(x.Artifacts)} cannot be null.");
+            .WithMessage(x => "'artifacts' is missing from JSON response.");
         RuleForEach(x => x.Artifacts)
             .SetValidator(new GitHubWorkflowRunArtifactValidator($"{nameof(GitHubWorkflowRunArtifactsHttpResponse)}.{nameof(GitHubWorkflowRunArtifactsHttpResponse.Artifacts)}"));
     }
@@ -44,9 +44,9 @@ internal sealed class GitHubWorkflowRunArtifactValidator : AbstractValidator<Git
     {
         RuleFor(x => x.Name)
             .NotEmpty()
-            .WithMessage(x => $"{collectionPath}[{{CollectionIndex}}].{nameof(x.Name)} must have a value.");
+            .WithMessage(x => $"'{collectionPath}[{{CollectionIndex}}].name' must have a value.");
         RuleFor(x => x.ArchiveDownloadUrl)
             .Must(contentLocation => Uri.TryCreate(contentLocation, default(UriCreationOptions), out var _))
-            .WithMessage(x => $"{collectionPath}[{{CollectionIndex}}].{nameof(x.ArchiveDownloadUrl)} is not a valid URL. Actual value: '{x.ArchiveDownloadUrl}'.");
+            .WithMessage(x => $"'{collectionPath}[{{CollectionIndex}}].archive_download_url' is not a valid URL. Actual value: '{x.ArchiveDownloadUrl}'.");
     }
 }

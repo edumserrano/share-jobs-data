@@ -12,28 +12,12 @@ internal class DownloadArtifactFromDifferentWorkflowRunResponseMockBuilder : Bas
         return this;
     }
 
-    public override void Build(HttpResponseMessageMockBuilder httpResponseMessageMockBuilder)
+    protected override string OperationName { get; } = "download artifact from different workflow run";
+
+    protected override string? GetRequestUrl() => $"https://api.github.com/repos/{_repoName}/actions/artifacts/{_artifactId}/zip";
+
+    protected override HttpContent? GetResponseContent()
     {
-        if (string.IsNullOrEmpty(_repoName) || string.IsNullOrEmpty(_artifactId))
-        {
-            throw new InvalidOperationException("Invalid response mock configuration for list artifacts from different workflow run");
-        }
-
-        httpResponseMessageMockBuilder
-            .WhereRequestPathEquals($"/repos/{_repoName}/actions/artifacts/{_artifactId}/zip")
-            .RespondWith(httpRequestMessage =>
-            {
-                var httpResponseMessage = new HttpResponseMessage(ResponseHttpStatusCode)
-                {
-                    // this is required when testing failure status codes because the app returns information from the http request made
-                    RequestMessage = httpRequestMessage,
-                };
-                if (ResponseContentFilepath is not null)
-                {
-                    httpResponseMessage.Content = ResponseContentFilepath.ReadFileAsAzipContent();
-                }
-
-                return httpResponseMessage;
-            });
+        return ResponseContentFilepath?.ReadFileAsAzipContent();
     }
 }
