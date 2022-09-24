@@ -18,7 +18,7 @@ internal abstract record DownloadArtifactFileFromDifferentWorkflowResult
     public record ArtifactFileNotFound(GitHubRepositoryName RepoName, GitHubRunId WorkflowRunId, GitHubArtifactContainerName ArtifactContainerName, GitHubArtifactItemFilename ArtifactItemFilename)
         : Error;
 
-    public record FailedToListWorkflowRunArtifacts(JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.Error ErrorResult)
+    public record FailedToListWorkflowRunArtifacts(JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>.Error JsonHttpError)
         : Error;
 
     public record FailedToDownloadArtifact(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)

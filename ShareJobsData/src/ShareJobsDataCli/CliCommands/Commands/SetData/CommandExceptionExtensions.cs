@@ -10,9 +10,9 @@ internal static class CommandExceptionExtensions
 
         var details = error switch
         {
-            FailedToCreateArtifactContainer failedToCreateArtifactContainer => failedToCreateArtifactContainer.ErrorResult.ToErrorDetails("creating an artifact container"),
-            FailedToUploadArtifact failedToUploadArtifact => failedToUploadArtifact.ErrorResult.ToErrorDetails("uploading an artifact"),
-            FailedToFinalizeArtifactContainer failedToFinalizeArtifactContainer => failedToFinalizeArtifactContainer.ErrorResult.ToErrorDetails("finalizing artifact container"),
+            FailedToCreateArtifactContainer failedToCreateArtifactContainer => failedToCreateArtifactContainer.JsonHttpError.ToErrorDetails("creating an artifact container"),
+            FailedToUploadArtifact failedToUploadArtifact => failedToUploadArtifact.JsonHttpError.ToErrorDetails("uploading an artifact"),
+            FailedToFinalizeArtifactContainer failedToFinalizeArtifactContainer => failedToFinalizeArtifactContainer.JsonHttpError.ToErrorDetails("finalizing artifact container"),
             _ => throw UnexpectedTypeException.Create(error),
         };
         var exceptionMessage = new SetDataCommandExceptionMessage(details);

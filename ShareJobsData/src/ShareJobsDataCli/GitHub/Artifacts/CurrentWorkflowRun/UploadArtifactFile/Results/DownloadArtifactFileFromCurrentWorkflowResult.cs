@@ -12,13 +12,13 @@ internal abstract record UploadArtifactFileResult
     public record Error()
         : UploadArtifactFileResult;
 
-    public record FailedToCreateArtifactContainer(JsonHttpResult<GitHubArtifactContainer>.Error ErrorResult)
+    public record FailedToCreateArtifactContainer(JsonHttpResult<GitHubArtifactContainer>.Error JsonHttpError)
         : Error;
 
-    public record FailedToUploadArtifact(JsonHttpResult<GitHubArtifactItem>.Error ErrorResult)
+    public record FailedToUploadArtifact(JsonHttpResult<GitHubArtifactItem>.Error JsonHttpError)
         : Error;
 
-    public record FailedToFinalizeArtifactContainer(JsonHttpResult<GitHubArtifactContainer>.Error ErrorResult)
+    public record FailedToFinalizeArtifactContainer(JsonHttpResult<GitHubArtifactContainer>.Error JsonHttpError)
         : Error;
 
     public static implicit operator UploadArtifactFileResult(GitHubArtifactContainer gitHubArtifactContainer) => new Ok(gitHubArtifactContainer);

@@ -18,13 +18,13 @@ internal abstract record DownloadArtifactFileFromCurrentWorkflowResult
     public record ArtifactContainerItemNotFound(GitHubArtifactItemFilePath ArtifactItemFilePath)
         : Error;
 
-    public record FailedToListWorkflowRunArtifacts(JsonHttpResult<GitHubArtifactContainers>.Error ErrorResult)
+    public record FailedToListWorkflowRunArtifacts(JsonHttpResult<GitHubArtifactContainers>.Error JsonHttpError)
         : Error;
 
-    public record FailedToGetContainerItems(JsonHttpResult<GitHubArtifactContainerItems>.Error ErrorResult)
+    public record FailedToGetContainerItems(JsonHttpResult<GitHubArtifactContainerItems>.Error JsonHttpError)
         : Error;
 
-    public record FailedToDownloadArtifact(DownloadContainerItemResult.Error DownloadContainerItemError)
+    public record FailedToDownloadArtifact(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
         : Error;
 
     public static implicit operator DownloadArtifactFileFromCurrentWorkflowResult(GitHubArtifactItemContent gitHubArtifactItemContent) => new Ok(gitHubArtifactItemContent);
