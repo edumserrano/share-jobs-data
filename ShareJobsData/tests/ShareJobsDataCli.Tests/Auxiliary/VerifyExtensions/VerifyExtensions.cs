@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.Tests.Auxiliary.Verify;
+namespace ShareJobsDataCli.Tests.Auxiliary.VerifyExtensions;
 
 internal static class VerifyExtensions
 {

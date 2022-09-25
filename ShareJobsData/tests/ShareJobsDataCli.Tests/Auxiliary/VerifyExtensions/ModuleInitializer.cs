@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.Tests.Auxiliary.Verify;
+namespace ShareJobsDataCli.Tests.Auxiliary.VerifyExtensions;
 
 public static class ModuleInitializer
 {
@@ -8,5 +8,6 @@ public static class ModuleInitializer
     public static void Initialize()
     {
         VerifyDiffPlex.Initialize();
+        VerifierSettings.DisableRequireUniquePrefix(); // allows me to have Theory tests that map to the same verified file
     }
 }

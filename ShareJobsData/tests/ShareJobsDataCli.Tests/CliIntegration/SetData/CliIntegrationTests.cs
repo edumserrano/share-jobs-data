@@ -25,7 +25,10 @@ public class CliIntegrationTests
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings);
+        var errorString = console.ReadErrorString();
+        await Verify(errorString, settings).AppendToMethodName("console-error");
+        var outputString = console.ReadOutputString();
+        await Verify(outputString, settings).AppendToMethodName("console-output");
     }
 
     /// <summary>
@@ -45,16 +48,19 @@ public class CliIntegrationTests
         var output = console.ReadAllAsString();
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings);
+        var errorString = console.ReadErrorString();
+        await Verify(errorString, settings).AppendToMethodName("console-error");
+        var outputString = console.ReadOutputString();
+        await Verify(outputString, settings).AppendToMethodName("console-output");
     }
 
     /// <summary>
     /// Tests the validation of the --artifact-name option for the <see cref="SetDataCommand"/> command.
     /// </summary>
     [Theory]
-    [InlineData("empty-string", "")]
-    [InlineData("white-space", "   ")]
-    public async Task ArtifactNameValidation(string scenario, string artifactName)
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task ArtifactNameValidation(string artifactName)
     {
         using var console = new FakeInMemoryConsole();
         var app = new ShareDataBetweenJobsCli();
@@ -70,16 +76,19 @@ public class CliIntegrationTests
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings).UseParameters(scenario);
+        var errorString = console.ReadErrorString();
+        await Verify(errorString, settings).AppendToMethodName("console-error");
+        var outputString = console.ReadOutputString();
+        await Verify(outputString, settings).AppendToMethodName("console-output");
     }
 
     /// <summary>
     /// Tests the validation of the --data-filename option for the <see cref="SetDataCommand"/> command.
     /// </summary>
     [Theory]
-    [InlineData("empty-string", "")]
-    [InlineData("white-space", "   ")]
-    public async Task ArtifactFilenameValidation(string scenario, string artifactFilename)
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task ArtifactFilenameValidation( string artifactFilename)
     {
         using var console = new FakeInMemoryConsole();
         var app = new ShareDataBetweenJobsCli();
@@ -95,6 +104,9 @@ public class CliIntegrationTests
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings).UseParameters(scenario);
+        var errorString = console.ReadErrorString();
+        await Verify(errorString, settings).AppendToMethodName("console-error");
+        var outputString = console.ReadOutputString();
+        await Verify(outputString, settings).AppendToMethodName("console-output");
     }
 }

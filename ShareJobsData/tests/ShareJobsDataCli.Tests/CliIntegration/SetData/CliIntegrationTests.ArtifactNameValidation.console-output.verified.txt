@@ -1,7 +1,4 @@
-﻿Option --data-filename has been provided with an invalid value.
-Error(s):
-- Cannot be null or whitespace.
-
+﻿
 {scrubbed app name} v15.0.0
 
 USAGE

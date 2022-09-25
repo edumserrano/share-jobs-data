@@ -1,0 +1,3 @@
+﻿Option --artifact-name has been provided with an invalid value.
+Error(s):
+- Cannot be null or whitespace.

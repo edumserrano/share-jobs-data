@@ -1,6 +1,4 @@
-﻿Missing required option(s):
---data
-
+﻿
 {scrubbed app name} v15.0.0
 
 USAGE
