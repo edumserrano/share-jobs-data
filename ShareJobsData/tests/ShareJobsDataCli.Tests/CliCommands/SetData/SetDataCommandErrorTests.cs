@@ -23,9 +23,9 @@ public class SetDataCommandErrorTests
         await command.ExecuteAsync(console);
 
         console.ReadOutputString().ShouldBeEmpty();
+        outboundHttpRequests.ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     [Fact]
@@ -43,8 +43,8 @@ public class SetDataCommandErrorTests
         await command.ExecuteAsync(console);
 
         console.ReadOutputString().ShouldBeEmpty();
+        outboundHttpRequests.ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 }

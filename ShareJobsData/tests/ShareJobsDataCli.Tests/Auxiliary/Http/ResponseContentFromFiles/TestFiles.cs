@@ -17,7 +17,7 @@ internal static class TestFiles
         [CallerFilePath] string sourceFile = "")
     {
         sourceFile = sourceFile.Replace(".cs", string.Empty, StringComparison.OrdinalIgnoreCase);
-        var testFilepath = $"{sourceFile}._shared-data.{endFilepathSegment}";
+        var testFilepath = $"{sourceFile}._shared.{endFilepathSegment}";
         return new TestFilepath(testFilepath);
     }
 }

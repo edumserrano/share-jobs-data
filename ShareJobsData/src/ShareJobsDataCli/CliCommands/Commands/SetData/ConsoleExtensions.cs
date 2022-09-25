@@ -28,7 +28,7 @@ internal static class ConsoleExtensions
         var details = error switch
         {
             CreateJobDataAsJsonResult.InvalidYml invalidYml => FormatYmlError(invalidYml),
-            CreateJobDataAsJsonResult.CannotConvertYmlToJson cannotConvertYmlToJson => GetDataOptionErrorMessage($"Cannot convert YAML input to JSON: {cannotConvertYmlToJson.ErrorMessage}."),
+            CreateJobDataAsJsonResult.CannotConvertYmlToJson cannotConvertYmlToJson => GetDataOptionErrorMessage($"Cannot convert YAML input to JSON: {cannotConvertYmlToJson.ErrorMessage}"),
             _ => throw UnexpectedTypeException.Create(error),
         };
         var exceptionMessage = new SetDataCommandErrorMessage(details);
