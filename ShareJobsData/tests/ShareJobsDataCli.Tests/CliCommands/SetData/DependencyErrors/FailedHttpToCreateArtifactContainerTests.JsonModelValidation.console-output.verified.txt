@@ -2,6 +2,6 @@
 Error:
 Failed to upload GitHub artifact.
 Details:
-HTTP response from 'creating an artifact container' validation.
+HTTP response from 'creating an artifact container' failed model validation.
 'fileContainerResourceUrl' is not a valid URL. Actual value: ''.
 'name' must have a value.

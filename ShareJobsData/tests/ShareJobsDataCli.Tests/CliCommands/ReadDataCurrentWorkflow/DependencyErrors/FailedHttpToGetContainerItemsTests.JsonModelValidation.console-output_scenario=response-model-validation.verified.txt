@@ -2,5 +2,5 @@
 Error:
 Failed to download GitHub artifact.
 Details:
-HTTP response from 'retrieving GitHub workflow artifact container items' validation.
+HTTP response from 'retrieving GitHub workflow artifact container items' failed model validation.
 'value' is missing from JSON response.

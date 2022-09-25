@@ -8,7 +8,7 @@ internal static class ErrorDetailsExtensions
         return jsonHttpResult switch
         {
             JsonHttpResult<T>.JsonDeserializedToNull => $"HTTP response from '{operationName}' deserialized to null.",
-            JsonHttpResult<T>.JsonModelValidationFailed failedValidation => $"HTTP response from '{operationName}' validation.{Environment.NewLine}{failedValidation.ValidationResult}",
+            JsonHttpResult<T>.JsonModelValidationFailed failedValidation => $"HTTP response from '{operationName}' failed model validation.{Environment.NewLine}{failedValidation.ValidationResult}",
             JsonHttpResult<T>.FailedStatusCode failedStatusCode => $"HTTP response from '{operationName}' returned error status code.{Environment.NewLine}{failedStatusCode.FailedStatusCodeHttpResponse.FormatFailedHttpResponseMessage()}",
             _ => throw UnexpectedTypeException.Create(jsonHttpResult),
         };

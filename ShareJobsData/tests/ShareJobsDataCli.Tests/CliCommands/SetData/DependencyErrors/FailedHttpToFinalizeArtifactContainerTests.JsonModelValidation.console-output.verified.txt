@@ -2,5 +2,6 @@
 Error:
 Failed to upload GitHub artifact.
 Details:
-HTTP response from 'uploading an artifact' validation.
-'fileLength' must be a positive value. Actual value: '0'.
+HTTP response from 'finalizing artifact container' failed model validation.
+'fileContainerResourceUrl' is not a valid URL. Actual value: ''.
+'name' must have a value.

@@ -27,6 +27,30 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.NullDeserialization.outbound-http.verified.txt">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.NullDeserialization.console-output.verified.txt">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.JsonModelValidation.outbound-http.verified.txt">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.JsonModelValidation.console-output.verified.txt">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.ErrorHttpStatusCodeWithBody.outbound-http.verified.txt">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.ErrorHttpStatusCodeWithBody.console-output.verified.txt">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.ErrorHttpStatusCode.outbound-http.verified.txt">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.ErrorHttpStatusCode.console-output.verified.txt">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -42,6 +66,35 @@
     <None Update="**\*.input.*" Condition="$(Language) == 'C#'">
       <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
       <DependentUpon>%(ParentFile).cs</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.NullDeserialization.job-data.input.yml">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.NullDeserialization.create-artifact-container.http-response.json">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.JsonModelValidation.upload-artifact-file.http-response.json">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.JsonModelValidation.job-data.input.yml">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.JsonModelValidation.create-artifact-container.http-response.json">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.ErrorHttpStatusCodeWithBody.job-data.input.yml">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.ErrorHttpStatusCodeWithBody.create-artifact-container.http-response.json">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.ErrorHttpStatusCode.job-data.input.yml">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\SetData\DependencyErrors\FailedHttpToUploadArtifactFileTests.ErrorHttpStatusCode.create-artifact-container.http-response.json">
+      <DependentUpon>FailedHttpToUploadArtifactFileTests.cs</DependentUpon>
     </None>
   </ItemGroup>
 </Project>

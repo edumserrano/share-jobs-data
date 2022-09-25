@@ -1,0 +1,12 @@
+﻿An error occurred trying to execute the command to set job data.
+Error:
+Failed to upload GitHub artifact.
+Details:
+HTTP response from 'uploading an artifact' returned error status code.
+HTTP Method: PUT
+Request URL: https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982?itemPath=job-data%2Fjob-data.json
+Response status code: InternalServerError
+Response body: 
+---START---
+Oops, something went wrong.
+---END---

@@ -2,4 +2,4 @@
 Error:
 Failed to upload GitHub artifact.
 Details:
-HTTP response from 'finalizing artifact container' deserialized to null.
+HTTP response from 'uploading an artifact' deserialized to null.
