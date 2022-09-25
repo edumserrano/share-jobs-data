@@ -11,4 +11,13 @@ internal static class TestFiles
         var testFilepath = $"{sourceFile}.{methodName}.{endFilepathSegment}";
         return new TestFilepath(testFilepath);
     }
+
+    public static TestFilepath GetSharedFilepath(
+        string endFilepathSegment,
+        [CallerFilePath] string sourceFile = "")
+    {
+        sourceFile = sourceFile.Replace(".cs", string.Empty, StringComparison.OrdinalIgnoreCase);
+        var testFilepath = $"{sourceFile}._shared-data.{endFilepathSegment}";
+        return new TestFilepath(testFilepath);
+    }
 }

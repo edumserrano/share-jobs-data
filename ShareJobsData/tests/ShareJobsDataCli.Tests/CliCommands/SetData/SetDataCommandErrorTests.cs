@@ -22,6 +22,7 @@ public class SetDataCommandErrorTests
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
         await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
@@ -41,6 +42,7 @@ public class SetDataCommandErrorTests
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
         await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
