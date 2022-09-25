@@ -1,0 +1,6 @@
+﻿An error occurred trying to execute the command to set job data.
+Error:
+Failed to upload GitHub artifact.
+Details:
+HTTP response from 'uploading an artifact' validation.
+'fileLength' must be a positive value. Actual value: '0'.

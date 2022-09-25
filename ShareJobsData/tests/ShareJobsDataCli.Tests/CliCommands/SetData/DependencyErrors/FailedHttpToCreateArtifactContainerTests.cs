@@ -37,7 +37,6 @@ public class FailedHttpToCreateArtifactContainerTests
         await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
-
     /// <summary>
     /// Tests that the <see cref="SetDataCommand"/> shows expected error when the HTTP request to
     /// create the artifact container fails.

@@ -1,0 +1,11 @@
+{
+  "containerId": 2535982,
+  "size": -1,
+  "signedContent": null,
+  "fileContainerResourceUrl": "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982",
+  "type": "actions_storage",
+  "name": "job-data",
+  "url": "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/pipelines/1/runs/72/artifacts?artifactName=job-data",
+  "expiresOn": "2022-12-18T19:33:01.4183544Z",
+  "items": null
+}
