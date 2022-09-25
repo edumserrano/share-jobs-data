@@ -1,9 +1,10 @@
 namespace ShareJobsDataCli.CliCommands.Commands.SetData;
 
-internal static class CommandExceptionExtensions
+internal static class ConsoleExtensions
 {
-    public static CommandException ToCommandException(this UploadArtifactFileResult.Error error)
+    public static async Task WriteErrorAsync(this IConsole console, UploadArtifactFileResult.Error error)
     {
+        console.NotNull();
         error.NotNull();
 
         var details = error switch
@@ -13,12 +14,15 @@ internal static class CommandExceptionExtensions
             UploadArtifactFileResult.FailedToFinalizeArtifactContainer failedToFinalizeArtifactContainer => failedToFinalizeArtifactContainer.JsonHttpError.ToErrorDetails("finalizing artifact container"),
             _ => throw UnexpectedTypeException.Create(error),
         };
-        var exceptionMessage = new SetDataCommandExceptionMessage(details);
-        return exceptionMessage.ToCommandException();
+        var errorMessage = new SetDataCommandErrorMessage(details);
+        var msg = errorMessage.ToString();
+        using var _ = console.WithForegroundColor(ConsoleColor.Red);
+        await console.Error.WriteAsync(msg);
     }
 
-    public static CommandException ToCommandException(this CreateJobDataAsJsonResult.Error error)
+    public static async Task WriteErrorAsync(this IConsole console, CreateJobDataAsJsonResult.Error error)
     {
+        console.NotNull();
         error.NotNull();
 
         var details = error switch
@@ -27,8 +31,10 @@ internal static class CommandExceptionExtensions
             CreateJobDataAsJsonResult.CannotConvertYmlToJson cannotConvertYmlToJson => GetDataOptionErrorMessage($"Cannot convert YAML input to JSON: {cannotConvertYmlToJson.ErrorMessage}."),
             _ => throw UnexpectedTypeException.Create(error),
         };
-        var exceptionMessage = new SetDataCommandExceptionMessage(details);
-        return exceptionMessage.ToCommandException();
+        var exceptionMessage = new SetDataCommandErrorMessage(details);
+        var msg = exceptionMessage.ToString();
+        using var _ = console.WithForegroundColor(ConsoleColor.Red);
+        await console.Error.WriteAsync(msg);
 
         string GetDataOptionErrorMessage(string error)
         {

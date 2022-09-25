@@ -2,11 +2,13 @@ using static ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.DownloadArtifa
 
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow;
 
-internal static class CommandExceptionExtensions
+internal static class ConsoleExtensions
 {
-    public static CommandException ToCommandException(this Error error)
+    public static async Task WriteErrorAsync(this IConsole console, Error error)
     {
+        console.NotNull();
         error.NotNull();
+
         var details = error switch
         {
             ArtifactNotFound artifactNotFound => $"Couldn't find artifact '{artifactNotFound.ArtifactContainerName}'.",
@@ -16,8 +18,10 @@ internal static class CommandExceptionExtensions
             FailedToDownloadArtifact failedToDownloadArtifact => GetErrorDetails(failedToDownloadArtifact),
             _ => throw UnexpectedTypeException.Create(error),
         };
-        var exceptionMessage = new ReadDataFromCurrentWorkflowCommandExceptionMessage(details);
-        return exceptionMessage.ToCommandException();
+        var errorMessage = new ReadDataFromCurrentWorkflowCommandErrorMessage(details);
+        var msg = errorMessage.ToString();
+        using var _ = console.WithForegroundColor(ConsoleColor.Red);
+        await console.Error.WriteAsync(msg);
     }
 
     private static string GetErrorDetails(FailedToDownloadArtifact failedToDownloadArtifact)

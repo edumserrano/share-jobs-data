@@ -31,9 +31,10 @@ public class FailedHttpToCreateArtifactContainerTests
             DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
-        var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
+        await command.ExecuteAsync(console);
 
-        await Verify(exception.Message).AppendToMethodName("console-output");
+        var output = console.ReadAllAsString();
+        await Verify(output).AppendToMethodName("console-output");
         await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
@@ -62,9 +63,10 @@ public class FailedHttpToCreateArtifactContainerTests
             DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
-        var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
+        await command.ExecuteAsync(console);
 
-        await Verify(exception.Message).AppendToMethodName("console-output");
+        var output = console.ReadAllAsString();
+        await Verify(output).AppendToMethodName("console-output");
         await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
@@ -93,9 +95,10 @@ public class FailedHttpToCreateArtifactContainerTests
             DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
-        var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
+        await command.ExecuteAsync(console);
 
-        await Verify(exception.Message).AppendToMethodName("console-output");
+        var output = console.ReadAllAsString();
+        await Verify(output).AppendToMethodName("console-output");
         await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
@@ -124,9 +127,10 @@ public class FailedHttpToCreateArtifactContainerTests
             DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
-        var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
+        await command.ExecuteAsync(console);
 
-        await Verify(exception.Message).AppendToMethodName("console-output");
+        var output = console.ReadAllAsString();
+        await Verify(output).AppendToMethodName("console-output");
         await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 }

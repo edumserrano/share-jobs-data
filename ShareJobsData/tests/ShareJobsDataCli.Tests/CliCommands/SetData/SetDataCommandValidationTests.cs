@@ -24,6 +24,7 @@ public class SetDataCommandValidationTests
         {
             ArtifactName = artifactName,
         };
+
         var exception = await Should.ThrowAsync<ArgumentException>(() => command.ExecuteAsync(console).AsTask());
         exception.Message.ShouldBe("artifactName cannot be null or whitespace.");
     }

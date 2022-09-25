@@ -50,7 +50,8 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
         var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(containerUrl, artifactContainerName, artifactFilePath);
         if (!downloadResult.IsOk(out var gitHubArtifactItemJsonContent, out var downloadError))
         {
-            throw downloadError.ToCommandException();
+            await console.WriteErrorAsync(downloadError);
+            return;
         }
 
         var stepOutput = new JobDataGitHubActionStepOutput(console);

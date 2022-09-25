@@ -72,7 +72,8 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
         var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(jobDataArtifactRepositoryName, runId, artifactContainerName, artifactItemFilename);
         if (!downloadResult.IsOk(out var gitHubArtifactItemJsonContent, out var downloadError))
         {
-            throw downloadError.ToCommandException();
+            await console.WriteErrorAsync(downloadError);
+            return;
         }
 
         var stepOutput = new JobDataGitHubActionStepOutput(console);

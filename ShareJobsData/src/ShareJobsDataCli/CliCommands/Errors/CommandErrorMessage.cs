@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.CliCommands.Errors;
 
-public record CommandExceptionMessage(string ErrorMessage, string Cause, string Details)
+public record CommandErrorMessage(string ErrorMessage, string Cause, string Details)
 {
     public CommandException ToCommandException()
     {

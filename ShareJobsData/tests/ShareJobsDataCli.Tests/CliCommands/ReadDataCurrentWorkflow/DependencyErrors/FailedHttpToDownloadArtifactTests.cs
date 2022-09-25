@@ -48,9 +48,10 @@ public class FailedHttpToDownloadArtifactTests
             ArtifactName = artifactName,
         };
         using var console = new FakeInMemoryConsole();
-        var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
+        await command.ExecuteAsync(console);
 
-        await Verify(exception.Message).AppendToMethodName("console-output");
+        var output = console.ReadAllAsString();
+        await Verify(output).AppendToMethodName("console-output");
         await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
@@ -96,9 +97,10 @@ public class FailedHttpToDownloadArtifactTests
             ArtifactName = artifactName,
         };
         using var console = new FakeInMemoryConsole();
-        var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
+        await command.ExecuteAsync(console);
 
-        await Verify(exception.Message).AppendToMethodName("console-output");
+        var output = console.ReadAllAsString();
+        await Verify(output).AppendToMethodName("console-output");
         await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
@@ -146,9 +148,10 @@ public class FailedHttpToDownloadArtifactTests
             ArtifactName = artifactName,
         };
         using var console = new FakeInMemoryConsole();
-        var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
+        await command.ExecuteAsync(console);
 
-        await Verify(exception.Message)
+        var output = console.ReadAllAsString();
+        await Verify(output)
             .AppendToMethodName("console-output")
             .UseParameters(scenario);
         await Verify(outboundHttpRequests)

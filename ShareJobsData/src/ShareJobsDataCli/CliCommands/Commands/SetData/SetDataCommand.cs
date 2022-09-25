@@ -60,7 +60,8 @@ public sealed class SetDataCommand : ICommand
         var createJobDataAsJsonResult = JobDataAsJson.FromYml(DataAsYmlStr);
         if (!createJobDataAsJsonResult.IsOk(out var jobDataAsJson, out var createJobDataAsJsonError))
         {
-            throw createJobDataAsJsonError.ToCommandException();
+            await console.WriteErrorAsync(createJobDataAsJsonError);
+            return;
         }
 
         var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, fileUploadContent: jobDataAsJson.AsJson());
@@ -69,7 +70,8 @@ public sealed class SetDataCommand : ICommand
         var uploadArtifact = await githubHttpClient.UploadArtifactFileAsync(artifactContainerUrl, artifactContainerName, artifactFileUploadRequest);
         if (!uploadArtifact.IsOk(out var _, out var uploadError))
         {
-            throw uploadError.ToCommandException();
+            await console.WriteErrorAsync(uploadError);
+            return;
         }
 
         if (SetStepOutput)

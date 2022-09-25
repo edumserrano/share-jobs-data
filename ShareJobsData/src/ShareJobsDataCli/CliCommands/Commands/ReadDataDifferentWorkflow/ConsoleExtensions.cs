@@ -2,10 +2,11 @@ using static ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArti
 
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow;
 
-internal static class CommandExceptionExtensions
+internal static class ConsoleExtensions
 {
-    public static CommandException ToCommandException(this Error error)
+    public static async Task WriteErrorAsync(this IConsole console, Error error)
     {
+        console.NotNull();
         error.NotNull();
 
         var details = error switch
@@ -17,7 +18,9 @@ internal static class CommandExceptionExtensions
             ArtifactItemContentNotJson artifactItemContentNotJson => artifactItemContentNotJson.NotJsonContent.ToErrorDetails(),
             _ => throw UnexpectedTypeException.Create(error),
         };
-        var exceptionMessage = new ReadDataFromDifferentWorkflowCommandExceptionMessage(details);
-        return exceptionMessage.ToCommandException();
+        var errorMessage = new ReadDataFromDifferentWorkflowCommandErrorMessage(details);
+        var msg = errorMessage.ToString();
+        using var _ = console.WithForegroundColor(ConsoleColor.Red);
+        await console.Error.WriteAsync(msg);
     }
 }
