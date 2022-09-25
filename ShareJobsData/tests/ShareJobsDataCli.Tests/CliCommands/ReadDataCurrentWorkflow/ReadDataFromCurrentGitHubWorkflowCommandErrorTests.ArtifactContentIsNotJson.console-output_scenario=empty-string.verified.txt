@@ -1,5 +1,0 @@
-﻿An error occurred trying to execute the command to read job data from the current workflow run.
-Error:
-Failed to download GitHub artifact.
-Details:
-Artifact file content was not valid JSON. Got: ''.

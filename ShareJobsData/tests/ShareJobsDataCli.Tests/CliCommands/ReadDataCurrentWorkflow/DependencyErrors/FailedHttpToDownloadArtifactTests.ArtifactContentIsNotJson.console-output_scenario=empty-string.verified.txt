@@ -1,0 +1,8 @@
+﻿An error occurred trying to execute the command to read job data from the current workflow run.
+Error:
+Failed to download GitHub artifact.
+Details:
+Content from downloaded artifact item must be JSON.
+Artifact item content: <empty>
+JSON error:
+Error reading JObject from JsonReader. Path '', line 0, position 0.

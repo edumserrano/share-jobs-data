@@ -25,8 +25,7 @@ internal static class ErrorDetailsExtensions
             ? "<empty>"
             : $"{Environment.NewLine}---START---{Environment.NewLine}{notJsonContent.ItemContent}{Environment.NewLine}---END---";
         return @$"Content from downloaded artifact item must be JSON.
-Artifact item content:
-{artifactItemContent}
+Artifact item content: {artifactItemContent}
 JSON error:
 {notJsonContent.JsonReaderErrorMessage}";
     }
