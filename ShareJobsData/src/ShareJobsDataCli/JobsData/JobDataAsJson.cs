@@ -9,8 +9,24 @@ internal sealed record JobDataAsJson
         _jObject = jObject.NotNull();
     }
 
+    public static CreateJobDataAsJsonResult FromYml(string dataAsYmlStr)
+    {
+        // TODO test to see if I need try catches to return error states
+        dataAsYmlStr.NotNullOrWhiteSpace();
+        var deserializer = new DeserializerBuilder()
+            .IgnoreUnmatchedProperties()
+            .Build();
+        var ymlObject = deserializer.Deserialize<object>(dataAsYmlStr);
+        var jObject = JObject.FromObject(ymlObject);
+        return new JobDataAsJson(jObject);
+    }
 
-    public JobDataAsKeysAndValues ToKeyValues()
+    public string AsJson()
+    {
+        return _jObject.ToString(Formatting.Indented);
+    }
+
+    public JobDataAsKeysAndValues AsKeyValues()
     {
         var kvp = _jObject.DescendantsAndSelf()
             .OfType<JProperty>()
@@ -32,5 +48,41 @@ internal sealed record JobDataAsJson
         //    .Select(kvp => new JobDataKeyAndValue(kvp.Path, kvp.Value))
         //    .ToList();
         return new JobDataAsKeysAndValues(kvp);
+    }
+}
+
+internal abstract record CreateJobDataAsJsonResult
+{
+    private CreateJobDataAsJsonResult()
+    {
+    }
+
+    public record Ok(JobDataAsJson JobDataAsJson)
+        : CreateJobDataAsJsonResult;
+
+    public abstract record Error()
+        : CreateJobDataAsJsonResult;
+
+    // TODO need a test to see if I need this
+    public record InvalidYml()
+        : Error;
+
+    public static implicit operator CreateJobDataAsJsonResult(JobDataAsJson jobDataAsJson) => new Ok(jobDataAsJson);
+
+    public bool IsOk(
+       [NotNullWhen(returnValue: true)] out JobDataAsJson? jobDataAsJson,
+       [NotNullWhen(returnValue: false)] out Error? error)
+    {
+        jobDataAsJson = null;
+        error = null;
+
+        if (this is Ok ok)
+        {
+            jobDataAsJson = ok.JobDataAsJson;
+            return true;
+        }
+
+        error = (Error)this;
+        return false;
     }
 }

@@ -57,10 +57,13 @@ public sealed class SetDataCommand : ICommand
         var artifactContainerUrl = new GitHubArtifactContainerUrl(_gitHubEnvironment.GitHubActionRuntimeUrl, _gitHubEnvironment.GitHubActionRunId);
         var artifactContainerName = new GitHubArtifactContainerName(ArtifactName);
         var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, ArtifactFilename);
-        var jobDataAsYml = new JobDataAsYml(DataAsYmlStr);
-        var jobDataAsJson = jobDataAsYml.ToJson();
-        var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, fileUploadContent: jobDataAsJson);
+        var createJobDataAsJsonResult = JobDataAsJson.FromYml(DataAsYmlStr);
+        if (!createJobDataAsJsonResult.IsOk(out var jobDataAsJson, out var createJobDataAsJsonError))
+        {
+            throw new Exception("TODO");
+        }
 
+        var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, fileUploadContent: jobDataAsJson.AsJson());
         using var httpClient = _httpClient.ConfigureGitHubCurrentWorkflowRunArticfactHttpClient(actionRuntimeToken, repository);
         var githubHttpClient = new GitHubCurrentWorkflowRunArticfactHttpClient(httpClient);
         var uploadArtifact = await githubHttpClient.UploadArtifactFileAsync(artifactContainerUrl, artifactContainerName, artifactFileUploadRequest);

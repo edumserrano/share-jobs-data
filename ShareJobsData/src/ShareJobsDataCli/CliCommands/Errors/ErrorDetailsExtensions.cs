@@ -41,6 +41,4 @@ Request URL: {httpResponse.RequestUrl}
 Response status code: {httpResponse.StatusCode}
 Response body: {responseBody}";
     }
-
-
 }

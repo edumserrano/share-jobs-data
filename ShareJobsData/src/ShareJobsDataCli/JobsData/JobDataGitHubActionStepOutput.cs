@@ -17,7 +17,7 @@ internal class JobDataGitHubActionStepOutput
 
     public Task WriteAsync(JobDataAsJson jobDataAsJson)
     {
-        var jobDataAsKeysAndValues = jobDataAsJson.ToKeyValues();
+        var jobDataAsKeysAndValues = jobDataAsJson.AsKeyValues();
         return WriteAsync(jobDataAsKeysAndValues);
     }
 
