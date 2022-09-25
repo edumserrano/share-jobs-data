@@ -35,7 +35,7 @@ internal abstract record JsonHttpResult<T>
     public record Ok(T Response)
         : JsonHttpResult<T>;
 
-    public record Error()
+    public abstract record Error()
         : JsonHttpResult<T>;
 
     public record JsonDeserializedToNull()

@@ -48,12 +48,12 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
         using var httpClient = _httpClient.ConfigureGitHubCurrentWorkflowRunArticfactHttpClient(actionRuntimeToken, repository);
         var githubHttpClient = new GitHubCurrentWorkflowRunArticfactHttpClient(httpClient);
         var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(containerUrl, artifactContainerName, artifactFilePath);
-        if (!downloadResult.IsOk(out var gitHubArtifactItemContent, out var downloadError))
+        if (!downloadResult.IsOk(out var gitHubArtifactItemJsonContent, out var downloadError))
         {
             throw downloadError.ToCommandException();
         }
 
         var stepOutput = new JobDataGitHubActionStepOutput(console);
-        await stepOutput.WriteAsync(gitHubArtifactItemContent);
+        await stepOutput.WriteAsync(gitHubArtifactItemJsonContent);
     }
 }

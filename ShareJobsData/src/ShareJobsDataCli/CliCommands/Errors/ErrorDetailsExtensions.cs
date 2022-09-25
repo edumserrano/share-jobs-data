@@ -19,6 +19,18 @@ internal static class ErrorDetailsExtensions
         return $"HTTP response from {operationName} returned error status code.{Environment.NewLine}{failedStatusCodeHttpResponse.FormatFailedHttpResponseMessage()}";
     }
 
+    public static string ToErrorDetails(this GitHubArtifactItemNotJsonContent notJsonContent)
+    {
+        var artifactItemContent = string.IsNullOrEmpty(notJsonContent.ItemContent)
+            ? "<empty>"
+            : $"{Environment.NewLine}---START---{Environment.NewLine}{notJsonContent.ItemContent}{Environment.NewLine}---END---";
+        return @$"Content from downloaded artifact item must be JSON.
+Artifact item content:
+{artifactItemContent}
+JSON error:
+{notJsonContent.JsonReaderErrorMessage}";
+    }
+
     private static string FormatFailedHttpResponseMessage(this FailedStatusCodeHttpResponse httpResponse)
     {
         var responseBody = string.IsNullOrEmpty(httpResponse.ResponseBody)
@@ -29,4 +41,6 @@ Request URL: {httpResponse.RequestUrl}
 Response status code: {httpResponse.StatusCode}
 Response body: {responseBody}";
     }
+
+
 }

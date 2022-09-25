@@ -14,6 +14,7 @@ internal static class CommandExceptionExtensions
             ArtifactFileNotFound artifactFileNotFound => $"Couldn't find artifact file '{artifactFileNotFound.ArtifactContainerName}/{artifactFileNotFound.ArtifactItemFilename}' in workflow run id '{artifactFileNotFound.WorkflowRunId}' at repo '{artifactFileNotFound.RepoName}'.",
             FailedToListWorkflowRunArtifacts failedToListWorkflowRunArtifacts => failedToListWorkflowRunArtifacts.JsonHttpError.ToErrorDetails("listing GitHub workflow artifacts"),
             FailedToDownloadArtifact failedToDownloadArtifact => failedToDownloadArtifact.FailedStatusCodeHttpResponse.ToErrorDetails("downloading GitHub artifact"),
+            ArtifactItemContentNotJson artifactItemContentNotJson => artifactItemContentNotJson.NotJsonContent.ToErrorDetails(),
             _ => throw UnexpectedTypeException.Create(error),
         };
         var exceptionMessage = new ReadDataFromDifferentWorkflowCommandExceptionMessage(details);

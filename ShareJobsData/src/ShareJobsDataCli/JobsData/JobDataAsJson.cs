@@ -2,17 +2,17 @@ namespace ShareJobsDataCli.JobsData;
 
 internal sealed record JobDataAsJson
 {
-    private readonly string _value;
+    private readonly JObject _jObject;
 
-    public JobDataAsJson(string json)
+    public JobDataAsJson(JObject jObject)
     {
-        _value = json.NotNullOrWhiteSpace();
+        _jObject = jObject.NotNull();
     }
+
 
     public JobDataAsKeysAndValues ToKeyValues()
     {
-        var obj = JObject.Parse(_value);
-        var kvp = obj.DescendantsAndSelf()
+        var kvp = _jObject.DescendantsAndSelf()
             .OfType<JProperty>()
             .Where(jp => jp.Value is JValue)
             .Select(jp => new JobDataKeyAndValue(jp.Path, jp.Value.ToString()))
@@ -33,11 +33,4 @@ internal sealed record JobDataAsJson
         //    .ToList();
         return new JobDataAsKeysAndValues(kvp);
     }
-
-    public static implicit operator string(JobDataAsJson json)
-    {
-        return json._value;
-    }
-
-    public override string ToString() => (string)this;
 }

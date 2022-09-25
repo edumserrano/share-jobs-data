@@ -6,10 +6,10 @@ internal abstract record DownloadArtifactFileFromCurrentWorkflowResult
     {
     }
 
-    public record Ok(GitHubArtifactItemContent GitHubArtifactItem)
+    public record Ok(GitHubArtifactItemJsonContent GitHubArtifactItem)
         : DownloadArtifactFileFromCurrentWorkflowResult;
 
-    public record Error()
+    public abstract record Error()
         : DownloadArtifactFileFromCurrentWorkflowResult;
 
     public record ArtifactNotFound(GitHubArtifactContainerName ArtifactContainerName)
@@ -24,13 +24,13 @@ internal abstract record DownloadArtifactFileFromCurrentWorkflowResult
     public record FailedToGetContainerItems(JsonHttpResult<GitHubArtifactContainerItems>.Error JsonHttpError)
         : Error;
 
-    public record FailedToDownloadArtifact(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
+    public record FailedToDownloadArtifact(DownloadContainerItemResult.Error DownloadContainerItemError)
         : Error;
 
-    public static implicit operator DownloadArtifactFileFromCurrentWorkflowResult(GitHubArtifactItemContent gitHubArtifactItemContent) => new Ok(gitHubArtifactItemContent);
+    public static implicit operator DownloadArtifactFileFromCurrentWorkflowResult(GitHubArtifactItemJsonContent gitHubArtifactItemContent) => new Ok(gitHubArtifactItemContent);
 
     public bool IsOk(
-       [NotNullWhen(returnValue: true)] out GitHubArtifactItemContent? gitHubArtifactItem,
+       [NotNullWhen(returnValue: true)] out GitHubArtifactItemJsonContent? gitHubArtifactItem,
        [NotNullWhen(returnValue: false)] out Error? error)
     {
         gitHubArtifactItem = null;

@@ -52,7 +52,13 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
             using var artifactAsStream = artifactFileAsZip.Open();
             using var streamReader = new StreamReader(artifactAsStream, Encoding.UTF8);
             var artifactFileContent = await streamReader.ReadToEndAsync();
-            return new GitHubArtifactItemContent(artifactFileContent);
+            var createArtifactItemJsonContentResult = GitHubArtifactItemJsonContent.Create(artifactFileContent);
+            if (!createArtifactItemJsonContentResult.IsOk(out var gitHubArtifactItemJsonContent, out var notJsonContent))
+            {
+                return notJsonContent;
+            }
+
+            return gitHubArtifactItemJsonContent;
         }
     }
 

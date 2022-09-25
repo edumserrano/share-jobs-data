@@ -9,7 +9,7 @@ internal abstract record UploadArtifactFileResult
     public record Ok(GitHubArtifactContainer GitHubArtifactContainer)
         : UploadArtifactFileResult;
 
-    public record Error()
+    public abstract record Error()
         : UploadArtifactFileResult;
 
     public record FailedToCreateArtifactContainer(JsonHttpResult<GitHubArtifactContainer>.Error JsonHttpError)

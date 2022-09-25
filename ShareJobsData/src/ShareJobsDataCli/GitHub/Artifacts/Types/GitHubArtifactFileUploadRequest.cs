@@ -2,13 +2,13 @@ namespace ShareJobsDataCli.GitHub.Artifacts.Types;
 
 internal sealed record GitHubArtifactFileUploadRequest
 {
-    public GitHubArtifactFileUploadRequest(GitHubArtifactItemFilePath filePath, string filePayload)
+    public GitHubArtifactFileUploadRequest(GitHubArtifactItemFilePath filePath, string fileUploadContent)
     {
         FilePath = filePath.NotNull();
-        FilePayload = filePayload.NotNullOrWhiteSpace();
+        FileUploadContent = fileUploadContent.NotNullOrWhiteSpace();
     }
 
     public GitHubArtifactItemFilePath FilePath { get; }
 
-    public string FilePayload { get; }
+    public string FileUploadContent { get; }
 }

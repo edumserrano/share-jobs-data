@@ -107,7 +107,7 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         var uploadFileUrl = fileContainerResourceUrl.SetQueryParam("itemPath", fileUploadRequest.FilePath);
         using var httpRequest = new HttpRequestMessage(HttpMethod.Put, uploadFileUrl);
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
-        var contentBytes = Encoding.UTF8.GetBytes(fileUploadRequest.FilePayload);
+        var contentBytes = Encoding.UTF8.GetBytes(fileUploadRequest.FileUploadContent);
         httpRequest.Content = new ByteArrayContent(contentBytes);
         httpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Octet);
         httpRequest.Content.Headers.ContentRange = new ContentRangeHeaderValue(from: 0, to: contentBytes.Length - 1, length: contentBytes.Length);
@@ -163,6 +163,12 @@ internal class GitHubCurrentWorkflowRunArticfactHttpClient
         }
 
         var containerItemContent = await httpResponse.Content.ReadAsStringAsync();
-        return new GitHubArtifactItemContent(containerItemContent);
+        var createArtifactItemJsonContentResult = GitHubArtifactItemJsonContent.Create(containerItemContent);
+        if (!createArtifactItemJsonContentResult.IsOk(out var gitHubArtifactItemJsonContent, out var notJsonContent))
+        {
+            return notJsonContent;
+        }
+
+        return gitHubArtifactItemJsonContent;
     }
 }

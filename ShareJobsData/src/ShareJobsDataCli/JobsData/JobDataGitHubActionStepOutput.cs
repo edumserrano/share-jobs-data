@@ -9,9 +9,9 @@ internal class JobDataGitHubActionStepOutput
         _console = console.NotNull();
     }
 
-    public Task WriteAsync(GitHubArtifactItemContent artifactItemContent)
+    public Task WriteAsync(GitHubArtifactItemJsonContent gitHubArtifactItemJsonContent)
     {
-        var jobDataAsJson = new JobDataAsJson(artifactItemContent);
+        var jobDataAsJson = new JobDataAsJson(gitHubArtifactItemJsonContent.AsJObject());
         return WriteAsync(jobDataAsJson);
     }
 
