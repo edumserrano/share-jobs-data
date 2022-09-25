@@ -27,6 +27,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="CliCommands\ReadDataDifferentWorkflow\DependencyErrors\FailedHttpToListWorkflowRunArtifactsTests.FailedHttpToDownloadArtifact.console-output.verified.txt">
+      <DependentUpon>FailedHttpToListWorkflowRunArtifactsTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\ReadDataDifferentWorkflow\DependencyErrors\FailedHttpToListWorkflowRunArtifactsTests.FailedHttpToDownloadArtifact.outbound-http.verified.txt">
+      <DependentUpon>FailedHttpToListWorkflowRunArtifactsTests.cs</DependentUpon>
+    </None>
+    <None Update="CliCommands\ReadDataDifferentWorkflow\DependencyErrors\ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests.FailedHttpToListWorkflowRunArtifacts1.console-output.verified.txt">
+      <DependentUpon>FailedHttpToListWorkflowRunArtifactsTests.cs</DependentUpon>
+    </None>
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -38,6 +47,11 @@
     <None Update="**\*.http-response.*" Condition="$(Language) == 'C#'">
       <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
       <DependentUpon>%(ParentFile).cs</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="CliCommands\ReadDataDifferentWorkflow\DependencyErrors\FailedHttpToListWorkflowRunArtifactsTests.FailedHttpToDownloadArtifact.list-artifacts.http-response.json">
+      <DependentUpon>FailedHttpToListWorkflowRunArtifactsTests.cs</DependentUpon>
     </None>
   </ItemGroup>
 

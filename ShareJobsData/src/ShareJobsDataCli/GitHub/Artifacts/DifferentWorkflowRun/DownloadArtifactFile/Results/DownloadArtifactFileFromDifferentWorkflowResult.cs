@@ -29,8 +29,6 @@ internal abstract record DownloadArtifactFileFromDifferentWorkflowResult
 
     public static implicit operator DownloadArtifactFileFromDifferentWorkflowResult(GitHubArtifactItemJsonContent gitHubArtifactItemContent) => new Ok(gitHubArtifactItemContent);
 
-    public static implicit operator DownloadArtifactFileFromDifferentWorkflowResult(GitHubArtifactItemNotJsonContent notJsonContent) => new ArtifactItemContentNotJson(notJsonContent);
-
     public bool IsOk(
        [NotNullWhen(returnValue: true)] out GitHubArtifactItemJsonContent? gitHubArtifactItem,
        [NotNullWhen(returnValue: false)] out Error? error)

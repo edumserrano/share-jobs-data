@@ -20,8 +20,6 @@ internal abstract record DownloadContainerItemResult
 
     public static implicit operator DownloadContainerItemResult(GitHubArtifactItemJsonContent artifactItemContent) => new Ok(artifactItemContent);
 
-    public static implicit operator DownloadContainerItemResult(GitHubArtifactItemNotJsonContent notJsonContent) => new ContainerItemContentNotJson(notJsonContent);
-
     public bool IsOk(
         [NotNullWhen(returnValue: true)] out GitHubArtifactItemJsonContent? artifactItemContent,
         [NotNullWhen(returnValue: false)] out Error? error)

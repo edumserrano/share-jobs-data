@@ -1,12 +1,12 @@
-namespace ShareJobsDataCli.Tests.CliCommands.ReadDataDifferentWorkflow;
+namespace ShareJobsDataCli.Tests.CliCommands.ReadDataDifferentWorkflow.DependencyErrors;
 
 /// <summary>
-/// These tests check what happens when a dependency of the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> fails.
+/// These tests check what happens when the download artifact item HTTP dependency of the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> fails.
 /// </summary>
 [Trait("Category", XUnitCategories.DependencyFailure)]
 [Trait("Category", XUnitCategories.ReadDataFromDifferentGitHubWorkflowCommand)]
 [UsesVerify]
-public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
+public class FailedHttpToListWorkflowRunArtifactsTests
 {
     /// <summary>
     /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> shows expected error message when it
@@ -14,7 +14,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     /// Simulating an HttpStatusCode.InternalServerError from the list workflow run artifact response.
     /// </summary>
     [Fact]
-    public async Task FailedHttpToListWorkflowRunArtifacts1()
+    public async Task ErrorHttpStatusCode()
     {
         const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
@@ -48,7 +48,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     /// This allows testing the formatting of the error message on the output when the response body contains some data vs when it's empty.
     /// </summary>
     [Fact]
-    public async Task FailedHttpToListWorkflowRunArtifacts2()
+    public async Task ErrorHttpStatusCodeWithBody()
     {
         const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
@@ -83,7 +83,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     /// This allows testing the formatting of the error message on the output when the JSON deserialization results in a null value.
     /// </summary>
     [Fact]
-    public async Task FailedHttpToListWorkflowRunArtifacts3()
+    public async Task NullDeserialization()
     {
         const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
@@ -120,7 +120,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
     [Theory]
     [InlineData("response-model-validation", "list-artifacts")]
     [InlineData("artifact-model-validation", "list-artifacts-2")]
-    public async Task FailedHttpToListWorkflowRunArtifacts4(string scenario, string listArtifactsResponseScenario)
+    public async Task JsonModelValidation(string scenario, string listArtifactsResponseScenario)
     {
         const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
@@ -150,46 +150,5 @@ public class ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests
         await Verify(outboundHttpRequests)
             .AppendToMethodName("outbound-http")
             .UseParameters(scenario);
-    }
-
-    /// <summary>
-    /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> shows expected error message when it
-    /// the HTTP request to download the artifact fails.
-    /// Simulating an HttpStatusCode.InternalServerError from the download artifact response.
-    /// </summary>
-    [Fact]
-    public async Task FailedHttpToDownloadArtifact()
-    {
-        const string repoName = "edumserrano/share-jobs-data";
-        const string runId = "test-run-id";
-        using var testHttpMessageHandler = new TestHttpMessageHandler();
-        testHttpMessageHandler.MockListArtifactsFromDifferentWorkflowRun(builder =>
-        {
-            builder
-                .FromWorkflowRun(repoName, runId)
-                .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
-        });
-        testHttpMessageHandler.MockDownloadArtifactFromDifferentWorkflowRun(builder =>
-        {
-            builder
-                .FromWorkflowArtifactId(repoName, artifactId: "351670722")
-                .WithResponseStatusCode(HttpStatusCode.InternalServerError);
-        });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
-        var githubEnvironment = new TestsGitHubEnvironment();
-
-        var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
-        {
-            AuthToken = "auth-token",
-            Repo = repoName,
-            RunId = runId,
-            ArtifactName = "job-data",
-        };
-        using var console = new FakeInMemoryConsole();
-        var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
-
-        await Verify(exception.Message).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 }

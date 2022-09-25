@@ -55,7 +55,7 @@ internal class GitHubDifferentWorkflowRunArticfactHttpClient
             var createArtifactItemJsonContentResult = GitHubArtifactItemJsonContent.Create(artifactFileContent);
             if (!createArtifactItemJsonContentResult.IsOk(out var gitHubArtifactItemJsonContent, out var notJsonContent))
             {
-                return notJsonContent;
+                return new ArtifactItemContentNotJson(notJsonContent);
             }
 
             return gitHubArtifactItemJsonContent;
