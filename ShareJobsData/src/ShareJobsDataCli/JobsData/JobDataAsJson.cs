@@ -1,3 +1,5 @@
+using static ShareJobsDataCli.JobsData.CreateJobDataAsJsonResult;
+
 namespace ShareJobsDataCli.JobsData;
 
 internal sealed record JobDataAsJson
@@ -11,13 +13,41 @@ internal sealed record JobDataAsJson
 
     public static CreateJobDataAsJsonResult FromYml(string dataAsYmlStr)
     {
-        // TODO test to see if I need try catches to return error states
         dataAsYmlStr.NotNullOrWhiteSpace();
         var deserializer = new DeserializerBuilder()
             .IgnoreUnmatchedProperties()
             .Build();
-        var ymlObject = deserializer.Deserialize<object>(dataAsYmlStr);
-        var jObject = JObject.FromObject(ymlObject);
+
+#pragma warning disable CA1031 // Do not catch general exception types. Don't know what possible exceptions the yml parsing can throw.
+        object ymlObject;
+        try
+        {
+            ymlObject = deserializer.Deserialize<object>(dataAsYmlStr);
+        }
+        catch (Exception anyYamlException)
+        {
+            if (anyYamlException is YamlException yamlException)
+            {
+                return new InvalidYml(yamlException.Message, yamlException.Start.ToString(), yamlException.End.ToString());
+            }
+
+            return new InvalidYml(anyYamlException.Message);
+        }
+#pragma warning restore CA1031 // Do not catch general exception types
+
+#pragma warning disable CA1031 // Do not catch general exception types. Don't know what possible exceptions the yml parsing can throw
+        JObject jObject;
+        try
+        {
+            jObject = JObject.FromObject(ymlObject);
+
+        }
+        catch (Exception jsonException)
+        {
+            return new CannotConvertYmlToJson(jsonException.Message);
+        }
+#pragma warning restore CA1031 // Do not catch general exception types
+
         return new JobDataAsJson(jObject);
     }
 
@@ -63,8 +93,10 @@ internal abstract record CreateJobDataAsJsonResult
     public abstract record Error()
         : CreateJobDataAsJsonResult;
 
-    // TODO need a test to see if I need this
-    public record InvalidYml()
+    public record InvalidYml(string ErrorMessage, string Start = "", string End = "")
+        : Error;
+
+    public record CannotConvertYmlToJson(string ErrorMessage)
         : Error;
 
     public static implicit operator CreateJobDataAsJsonResult(JobDataAsJson jobDataAsJson) => new Ok(jobDataAsJson);

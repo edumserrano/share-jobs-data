@@ -60,7 +60,7 @@ public sealed class SetDataCommand : ICommand
         var createJobDataAsJsonResult = JobDataAsJson.FromYml(DataAsYmlStr);
         if (!createJobDataAsJsonResult.IsOk(out var jobDataAsJson, out var createJobDataAsJsonError))
         {
-            throw new Exception("TODO");
+            throw createJobDataAsJsonError.ToCommandException();
         }
 
         var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, fileUploadContent: jobDataAsJson.AsJson());

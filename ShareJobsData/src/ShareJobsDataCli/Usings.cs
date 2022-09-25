@@ -30,4 +30,5 @@ global using ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArti
 global using ShareJobsDataCli.GitHub.Artifacts.DifferentWorkflowRun.DownloadArtifactFile.Results;
 global using ShareJobsDataCli.GitHub.Artifacts.Types;
 global using ShareJobsDataCli.JobsData;
+global using YamlDotNet.Core;
 global using YamlDotNet.Serialization;
