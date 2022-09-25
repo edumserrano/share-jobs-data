@@ -15,6 +15,7 @@ public class ReadDataFromCurrentGitHubWorkflowCommandOkTests
     [Fact]
     public async Task Success()
     {
+        const string artifactName = "job-data";
         var githubEnvironment = new TestsGitHubEnvironment();
         using var testHttpMessageHandler = new TestHttpMessageHandler();
         testHttpMessageHandler.MockListArtifactsFromCurrentWorkflowRun(builder =>
@@ -29,7 +30,7 @@ public class ReadDataFromCurrentGitHubWorkflowCommandOkTests
             builder
                 .FromFileContainerResourceUrl(
                     fileContainerResourceUrl: "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982",
-                    artifactName: "job-data")
+                    artifactName: artifactName)
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetFilepath("get-container-items.http-response.json"));
         });
@@ -43,11 +44,14 @@ public class ReadDataFromCurrentGitHubWorkflowCommandOkTests
         (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
         httpClient.BaseAddress = new Uri("https://test-base-address.com");
 
-        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
+        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
+        {
+            ArtifactName = artifactName,
+        };
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
-        var output = console.ReadOutputString();
+        var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
         await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }

@@ -46,7 +46,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandOkTests
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
-        var output = console.ReadOutputString();
+        var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
         await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }

@@ -16,6 +16,7 @@ public class FailedHttpToGetContainerItemsTests
     [Fact]
     public async Task ErrorHttpStatusCode()
     {
+        const string artifactName = "job-data";
         var githubEnvironment = new TestsGitHubEnvironment();
         using var testHttpMessageHandler = new TestHttpMessageHandler();
         testHttpMessageHandler.MockListArtifactsFromCurrentWorkflowRun(builder =>
@@ -30,12 +31,15 @@ public class FailedHttpToGetContainerItemsTests
             builder
                 .FromFileContainerResourceUrl(
                     fileContainerResourceUrl: "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982",
-                    artifactName: "job-data")
+                    artifactName: artifactName)
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError);
         });
         (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
 
-        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
+        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
+        {
+            ArtifactName = artifactName,
+        };
         using var console = new FakeInMemoryConsole();
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 
@@ -52,6 +56,7 @@ public class FailedHttpToGetContainerItemsTests
     [Fact]
     public async Task ErrorHttpStatusCodeWithBody()
     {
+        const string artifactName = "job-data";
         var githubEnvironment = new TestsGitHubEnvironment();
         using var testHttpMessageHandler = new TestHttpMessageHandler();
         testHttpMessageHandler.MockListArtifactsFromCurrentWorkflowRun(builder =>
@@ -66,13 +71,16 @@ public class FailedHttpToGetContainerItemsTests
             builder
                 .FromFileContainerResourceUrl(
                     fileContainerResourceUrl: "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982",
-                    artifactName: "job-data")
+                    artifactName: artifactName)
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError)
                 .WithResponseContent("Oops, something went wrong.");
         });
         (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
 
-        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
+        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
+        {
+            ArtifactName = artifactName,
+        };
         using var console = new FakeInMemoryConsole();
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 
@@ -89,6 +97,7 @@ public class FailedHttpToGetContainerItemsTests
     [Fact]
     public async Task NullDeserialization()
     {
+        const string artifactName = "job-data";
         var githubEnvironment = new TestsGitHubEnvironment();
         using var testHttpMessageHandler = new TestHttpMessageHandler();
         testHttpMessageHandler.MockListArtifactsFromCurrentWorkflowRun(builder =>
@@ -103,13 +112,16 @@ public class FailedHttpToGetContainerItemsTests
             builder
                 .FromFileContainerResourceUrl(
                     fileContainerResourceUrl: "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982",
-                    artifactName: "job-data")
+                    artifactName: artifactName)
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContent("null");
         });
         (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
 
-        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
+        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
+        {
+            ArtifactName = artifactName,
+        };
         using var console = new FakeInMemoryConsole();
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 
@@ -128,6 +140,7 @@ public class FailedHttpToGetContainerItemsTests
     [InlineData("artifact-model-validation", "get-container-items-2")]
     public async Task JsonModelValidation(string scenario, string getContainerItemsResponseScenario)
     {
+        const string artifactName = "job-data";
         var githubEnvironment = new TestsGitHubEnvironment();
         using var testHttpMessageHandler = new TestHttpMessageHandler();
         testHttpMessageHandler.MockListArtifactsFromCurrentWorkflowRun(builder =>
@@ -142,13 +155,16 @@ public class FailedHttpToGetContainerItemsTests
             builder
                 .FromFileContainerResourceUrl(
                     fileContainerResourceUrl: "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982",
-                    artifactName: "job-data")
+                    artifactName: artifactName)
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetFilepath($"{getContainerItemsResponseScenario}.http-response.json"));
         });
         (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
 
-        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
+        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
+        {
+            ArtifactName = artifactName,
+        };
         using var console = new FakeInMemoryConsole();
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 

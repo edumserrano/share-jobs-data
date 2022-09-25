@@ -87,7 +87,7 @@ public class FailedHttpToDownloadArtifactTests
         using var console = new FakeInMemoryConsole();
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 
-        var output = console.ReadOutputString();
+        var output = console.ReadAllAsString();
         await Verify(exception.Message).AppendToMethodName("console-output");
         await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }

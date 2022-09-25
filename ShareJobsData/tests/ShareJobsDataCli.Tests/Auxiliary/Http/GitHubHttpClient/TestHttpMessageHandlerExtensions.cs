@@ -57,4 +57,25 @@ internal static class TestHttpMessageHandlerExtensions
     {
         return testHttpMessageHandler.MockHttpResponseWithCustomBuilder(configure);
     }
+
+    public static TestHttpMessageHandler MockCreateArtifactContainerFromCurrentWorkflowRun(
+        this TestHttpMessageHandler testHttpMessageHandler,
+        Action<CreateArtifactContainerFromCurrentWorkflowRunResponseMockBuilder> configure)
+    {
+        return testHttpMessageHandler.MockHttpResponseWithCustomBuilder(configure);
+    }
+
+    public static TestHttpMessageHandler MockUploadArtifactFileFromCurrentWorkflowRun(
+        this TestHttpMessageHandler testHttpMessageHandler,
+        Action<UploadArtifactFileFromCurrentWorkflowRunResponseMockBuilder> configure)
+    {
+        return testHttpMessageHandler.MockHttpResponseWithCustomBuilder(configure);
+    }
+
+    public static TestHttpMessageHandler MockFinalizeArtifactContainerFromCurrentWorkflowRun(
+        this TestHttpMessageHandler testHttpMessageHandler,
+        Action<FinalizeArtifactContainerFromCurrentWorkflowRunResponseMockBuilder> configure)
+    {
+        return testHttpMessageHandler.MockHttpResponseWithCustomBuilder(configure);
+    }
 }

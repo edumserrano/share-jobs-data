@@ -2,6 +2,11 @@ namespace ShareJobsDataCli.Tests.Auxiliary.Http.ResponseContentFromFiles;
 
 internal static class TestFilepathExtensions
 {
+    public static string ReadFile(this TestFilepath testFilepath)
+    {
+        return File.ReadAllText(testFilepath);
+    }
+
     public static StringContent ReadFileAsStringContent(this TestFilepath testFilepath)
     {
         var responseContentAsString = File.ReadAllText(testFilepath);

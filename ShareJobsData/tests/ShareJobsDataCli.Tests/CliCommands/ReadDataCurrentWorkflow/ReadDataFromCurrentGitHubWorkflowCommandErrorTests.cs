@@ -45,6 +45,7 @@ public class ReadDataFromCurrentGitHubWorkflowCommandErrorTests
     [Fact]
     public async Task ArtifactFileNotFound()
     {
+        const string artifactName = "job-data";
         var githubEnvironment = new TestsGitHubEnvironment();
         using var testHttpMessageHandler = new TestHttpMessageHandler();
         testHttpMessageHandler.MockListArtifactsFromCurrentWorkflowRun(builder =>
@@ -59,7 +60,7 @@ public class ReadDataFromCurrentGitHubWorkflowCommandErrorTests
             builder
                 .FromFileContainerResourceUrl(
                     fileContainerResourceUrl: "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982",
-                    artifactName: "job-data")
+                    artifactName: artifactName)
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetFilepath("get-container-items.http-response.json"));
         });
@@ -67,7 +68,7 @@ public class ReadDataFromCurrentGitHubWorkflowCommandErrorTests
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
-            ArtifactName = "job-data",
+            ArtifactName = artifactName,
             ArtifactFilename = "not-gonna-find-me.json",
         };
         using var console = new FakeInMemoryConsole();
