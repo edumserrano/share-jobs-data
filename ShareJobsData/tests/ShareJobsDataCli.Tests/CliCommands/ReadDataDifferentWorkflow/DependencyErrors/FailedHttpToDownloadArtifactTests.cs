@@ -32,7 +32,7 @@ public class FailedHttpToDownloadArtifactTests
                 .FromWorkflowArtifactId(repoName, artifactId: "351670722")
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError);
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
         var githubEnvironment = new TestsGitHubEnvironment();
 
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
@@ -74,7 +74,7 @@ public class FailedHttpToDownloadArtifactTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetFilepath("download-artifact.http-response.zip"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
         var githubEnvironment = new TestsGitHubEnvironment();
 
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)

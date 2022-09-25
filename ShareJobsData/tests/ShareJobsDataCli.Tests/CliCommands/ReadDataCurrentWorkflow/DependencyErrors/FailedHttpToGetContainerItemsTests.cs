@@ -34,7 +34,7 @@ public class FailedHttpToGetContainerItemsTests
                     artifactName: artifactName)
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError);
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
@@ -76,7 +76,7 @@ public class FailedHttpToGetContainerItemsTests
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError)
                 .WithResponseContent("Oops, something went wrong.");
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
@@ -118,7 +118,7 @@ public class FailedHttpToGetContainerItemsTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContent("null");
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
@@ -162,7 +162,7 @@ public class FailedHttpToGetContainerItemsTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetFilepath($"{getContainerItemsResponseScenario}.http-response.json"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {

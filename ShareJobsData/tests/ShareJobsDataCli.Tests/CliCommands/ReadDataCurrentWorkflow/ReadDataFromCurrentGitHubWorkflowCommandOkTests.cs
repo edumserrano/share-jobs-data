@@ -41,7 +41,7 @@ public class ReadDataFromCurrentGitHubWorkflowCommandOkTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetFilepath("download-artifact.http-response.json"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
         httpClient.BaseAddress = new Uri("https://test-base-address.com");
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)

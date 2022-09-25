@@ -24,7 +24,7 @@ public class FailedHttpToListWorkflowRunArtifactsTests
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError);
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
         using var console = new FakeInMemoryConsole();
@@ -53,7 +53,7 @@ public class FailedHttpToListWorkflowRunArtifactsTests
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError)
                 .WithResponseContent("Oops, something went wrong.");
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
         using var console = new FakeInMemoryConsole();
@@ -82,7 +82,7 @@ public class FailedHttpToListWorkflowRunArtifactsTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContent("null");
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
         using var console = new FakeInMemoryConsole();
@@ -113,7 +113,7 @@ public class FailedHttpToListWorkflowRunArtifactsTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetFilepath($"{listArtifactsResponseScenario}.http-response.json"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
         using var console = new FakeInMemoryConsole();

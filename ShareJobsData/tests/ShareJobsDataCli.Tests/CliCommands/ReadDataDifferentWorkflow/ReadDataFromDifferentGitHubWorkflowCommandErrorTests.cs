@@ -25,7 +25,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
         var githubEnvironment = new TestsGitHubEnvironment();
 
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
@@ -68,7 +68,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetFilepath("download-artifact.http-response.zip"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
         var githubEnvironment = new TestsGitHubEnvironment();
 
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)

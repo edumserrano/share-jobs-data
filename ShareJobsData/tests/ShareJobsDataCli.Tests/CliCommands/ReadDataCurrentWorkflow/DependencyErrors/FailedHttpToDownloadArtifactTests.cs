@@ -41,7 +41,7 @@ public class FailedHttpToDownloadArtifactTests
                 .FromContainerItemLocation("https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982?itemPath=job-data%2Fjob-data.json")
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError);
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
@@ -90,7 +90,7 @@ public class FailedHttpToDownloadArtifactTests
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError)
                 .WithResponseContent("Oops, something went wrong.");
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
@@ -141,7 +141,7 @@ public class FailedHttpToDownloadArtifactTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContent(nonJsonArtifactContent);
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
