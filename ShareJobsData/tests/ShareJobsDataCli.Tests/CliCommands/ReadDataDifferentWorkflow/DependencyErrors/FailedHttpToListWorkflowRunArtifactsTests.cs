@@ -9,7 +9,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.ReadDataDifferentWorkflow.Dependenc
 public class FailedHttpToListWorkflowRunArtifactsTests
 {
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> shows expected error message when it
+    /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> shows expected error message when
     /// the HTTP request to list workflow run artifacts fails.
     /// Simulating an HttpStatusCode.InternalServerError from the list workflow run artifact response.
     /// </summary>
@@ -42,7 +42,7 @@ public class FailedHttpToListWorkflowRunArtifactsTests
     }
 
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> shows expected error message when it
+    /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> shows expected error message when
     /// the HTTP request to list workflow run artifacts fails.
     /// Simulating an HttpStatusCode.InternalServerError with some error body from the list workflow run artifact response.
     /// This allows testing the formatting of the error message on the output when the response body contains some data vs when it's empty.
@@ -77,7 +77,7 @@ public class FailedHttpToListWorkflowRunArtifactsTests
     }
 
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> shows expected error message when it
+    /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> shows expected error message when
     /// the HTTP request to list workflow run artifacts fails.
     /// Simulating an HttpStatusCode.OK and a JSON deserialization that results in null from the list workflow run artifact response.
     /// This allows testing the formatting of the error message on the output when the JSON deserialization results in a null value.
@@ -112,7 +112,7 @@ public class FailedHttpToListWorkflowRunArtifactsTests
     }
 
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> shows expected error message when it
+    /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> shows expected error message when
     /// the HTTP request to list workflow run artifacts fails.
     /// Simulating an HttpStatusCode.OK and a JSON deserialization that fails validation from the list workflow run artifact response.
     /// This allows testing the formatting of the error message on the output when the validation on the deserialized JSON model fails.

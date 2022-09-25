@@ -1,0 +1,5 @@
+﻿An error occurred trying to execute the command to set job data.
+Error:
+Failed to upload GitHub artifact.
+Details:
+HTTP response from 'creating an artifact container' deserialized to null.

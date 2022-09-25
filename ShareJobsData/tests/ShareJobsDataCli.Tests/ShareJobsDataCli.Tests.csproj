@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -27,32 +27,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="CliCommands\ReadDataDifferentWorkflow\DependencyErrors\FailedHttpToListWorkflowRunArtifactsTests.FailedHttpToDownloadArtifact.console-output.verified.txt">
-      <DependentUpon>FailedHttpToListWorkflowRunArtifactsTests.cs</DependentUpon>
-    </None>
-    <None Update="CliCommands\ReadDataDifferentWorkflow\DependencyErrors\FailedHttpToListWorkflowRunArtifactsTests.FailedHttpToDownloadArtifact.outbound-http.verified.txt">
-      <DependentUpon>FailedHttpToListWorkflowRunArtifactsTests.cs</DependentUpon>
-    </None>
-    <None Update="CliCommands\ReadDataDifferentWorkflow\DependencyErrors\ReadDataFromDifferentGitHubWorkflowCommandDependencyErrorTests.FailedHttpToListWorkflowRunArtifacts1.console-output.verified.txt">
-      <DependentUpon>FailedHttpToListWorkflowRunArtifactsTests.cs</DependentUpon>
-    </None>
     <None Update="xunit.runner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
-  <!--Adds file nesting for *.httpresponse.* files-->
+  <!--Adds file nesting for *.httpresponse.* and *.input.* files-->
   <!--Copied from https://github.com/VerifyTests/Verify/blob/c7fe88c4b1f6ff3b15f0788bf8d8742eb1874a93/src/Verify/buildTransitive/Verify.targets-->
   <ItemGroup>
     <None Update="**\*.http-response.*" Condition="$(Language) == 'C#'">
       <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
       <DependentUpon>%(ParentFile).cs</DependentUpon>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Update="CliCommands\ReadDataDifferentWorkflow\DependencyErrors\FailedHttpToListWorkflowRunArtifactsTests.FailedHttpToDownloadArtifact.list-artifacts.http-response.json">
-      <DependentUpon>FailedHttpToListWorkflowRunArtifactsTests.cs</DependentUpon>
+    <None Update="**\*.input.*" Condition="$(Language) == 'C#'">
+      <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
+      <DependentUpon>%(ParentFile).cs</DependentUpon>
     </None>
   </ItemGroup>
-
 </Project>

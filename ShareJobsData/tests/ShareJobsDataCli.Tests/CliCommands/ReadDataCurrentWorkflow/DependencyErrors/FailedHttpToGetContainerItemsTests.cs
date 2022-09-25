@@ -9,7 +9,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.ReadDataCurrentWorkflow.DependencyE
 public class FailedHttpToGetContainerItemsTests
 {
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when it
+    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when
     /// the HTTP request to get container items fails.
     /// Simulating an HttpStatusCode.InternalServerError from the get container items response.
     /// </summary>
@@ -48,7 +48,7 @@ public class FailedHttpToGetContainerItemsTests
     }
 
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when it
+    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when
     /// the HTTP request to get container items fails.
     /// Simulating an HttpStatusCode.InternalServerError with some error body from the get container items response.
     /// This allows testing the formatting of the error message on the output when the response body contains some data vs when it's empty.
@@ -89,7 +89,7 @@ public class FailedHttpToGetContainerItemsTests
     }
 
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when it
+    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when
     /// the HTTP request to get container items fails.
     /// Simulating an HttpStatusCode.OK and a JSON deserialization that results in null from the get container items response.
     /// This allows testing the formatting of the error message on the output when the JSON deserialization results in a null value.
@@ -130,7 +130,7 @@ public class FailedHttpToGetContainerItemsTests
     }
 
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when it
+    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when
     /// the HTTP request to get container items fails.
     /// Simulating an HttpStatusCode.OK and a JSON deserialization that fails validation from the get container items response.
     /// This allows testing the formatting of the error message on the output when the validation on the deserialized JSON model fails.

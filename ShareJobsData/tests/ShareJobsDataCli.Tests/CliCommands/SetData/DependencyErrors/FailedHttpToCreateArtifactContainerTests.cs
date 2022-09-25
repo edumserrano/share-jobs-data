@@ -1,24 +1,24 @@
-namespace ShareJobsDataCli.Tests.CliCommands.ReadDataCurrentWorkflow.DependencyErrors;
+namespace ShareJobsDataCli.Tests.CliCommands.SetData.DependencyErrors;
 
 /// <summary>
-/// These tests check what happens when the list artifacts HTTP dependency of the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> fails.
+/// These tests check what happens when the create artifact container HTTP dependency of the <see cref="SetDataCommand"/> fails.
 /// </summary>
 [Trait("Category", XUnitCategories.DependencyFailure)]
-[Trait("Category", XUnitCategories.ReadDataFromCurrentGitHubWorkflowCommand)]
+[Trait("Category", XUnitCategories.SetDataCommand)]
 [UsesVerify]
-public class FailedHttpToListWorkflowRunArtifactsTests
+public class FailedHttpToCreateArtifactContainerTests
 {
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when
-    /// the HTTP request to list the current workflow run artifacts fails.
-    /// Simulating an HttpStatusCode.InternalServerError from the list workflow run artifact response.
+    /// Tests that the <see cref="SetDataCommand"/> shows expected error message when the HTTP request to
+    /// create the artifact container fails.
+    /// Simulating an HttpStatusCode.InternalServerError from the create artifact container response.
     /// </summary>
     [Fact]
     public async Task ErrorHttpStatusCode()
     {
         var githubEnvironment = new TestsGitHubEnvironment();
         using var testHttpMessageHandler = new TestHttpMessageHandler();
-        testHttpMessageHandler.MockListArtifactsFromCurrentWorkflowRun(builder =>
+        testHttpMessageHandler.MockCreateArtifactContainerFromCurrentWorkflowRun(builder =>
         {
             builder
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
@@ -26,7 +26,10 @@ public class FailedHttpToListWorkflowRunArtifactsTests
         });
         (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
 
-        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
+        var command = new SetDataCommand(httpClient, githubEnvironment)
+        {
+            DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+        };
         using var console = new FakeInMemoryConsole();
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 
@@ -34,10 +37,11 @@ public class FailedHttpToListWorkflowRunArtifactsTests
         await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
+
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when
-    /// the HTTP request to list workflow run artifacts fails.
-    /// Simulating an HttpStatusCode.InternalServerError with some error body from the list workflow run artifact response.
+    /// Tests that the <see cref="SetDataCommand"/> shows expected error when the HTTP request to
+    /// create the artifact container fails.
+    /// Simulating an HttpStatusCode.InternalServerError with some error body from the create artifact container response.
     /// This allows testing the formatting of the error message on the output when the response body contains some data vs when it's empty.
     /// </summary>
     [Fact]
@@ -45,7 +49,7 @@ public class FailedHttpToListWorkflowRunArtifactsTests
     {
         var githubEnvironment = new TestsGitHubEnvironment();
         using var testHttpMessageHandler = new TestHttpMessageHandler();
-        testHttpMessageHandler.MockListArtifactsFromCurrentWorkflowRun(builder =>
+        testHttpMessageHandler.MockCreateArtifactContainerFromCurrentWorkflowRun(builder =>
         {
             builder
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
@@ -54,7 +58,10 @@ public class FailedHttpToListWorkflowRunArtifactsTests
         });
         (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
 
-        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
+        var command = new SetDataCommand(httpClient, githubEnvironment)
+        {
+            DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+        };
         using var console = new FakeInMemoryConsole();
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 
@@ -63,9 +70,9 @@ public class FailedHttpToListWorkflowRunArtifactsTests
     }
 
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when
-    /// the HTTP request to list workflow run artifacts fails.
-    /// Simulating an HttpStatusCode.OK and a JSON deserialization that results in null from the list workflow run artifact response.
+    /// Tests that the <see cref="SetDataCommand"/> shows expected error when the HTTP request to
+    /// create the artifact container fails.
+    /// Simulating an HttpStatusCode.OK and a JSON deserialization that results in null from the create artifact container response.
     /// This allows testing the formatting of the error message on the output when the JSON deserialization results in a null value.
     /// </summary>
     [Fact]
@@ -73,7 +80,7 @@ public class FailedHttpToListWorkflowRunArtifactsTests
     {
         var githubEnvironment = new TestsGitHubEnvironment();
         using var testHttpMessageHandler = new TestHttpMessageHandler();
-        testHttpMessageHandler.MockListArtifactsFromCurrentWorkflowRun(builder =>
+        testHttpMessageHandler.MockCreateArtifactContainerFromCurrentWorkflowRun(builder =>
         {
             builder
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
@@ -82,7 +89,10 @@ public class FailedHttpToListWorkflowRunArtifactsTests
         });
         (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
 
-        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
+        var command = new SetDataCommand(httpClient, githubEnvironment)
+        {
+            DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+        };
         using var console = new FakeInMemoryConsole();
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 
@@ -91,36 +101,33 @@ public class FailedHttpToListWorkflowRunArtifactsTests
     }
 
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when
-    /// the HTTP request to list workflow run artifacts fails.
-    /// Simulating an HttpStatusCode.OK and a JSON deserialization that fails validation from the list workflow run artifact response.
+    /// Tests that the <see cref="SetDataCommand"/> hows expected error when the HTTP request to
+    /// create the artifact container fails.
+    /// Simulating an HttpStatusCode.OK and a JSON deserialization that fails validation from the create artifact container response.
     /// This allows testing the formatting of the error message on the output when the validation on the deserialized JSON model fails.
     /// </summary>
-    [Theory]
-    [InlineData("response-model-validation", "list-artifacts")]
-    [InlineData("artifact-model-validation", "list-artifacts-2")]
-    public async Task JsonModelValidation(string scenario, string listArtifactsResponseScenario)
+    [Fact]
+    public async Task JsonModelValidation()
     {
         var githubEnvironment = new TestsGitHubEnvironment();
         using var testHttpMessageHandler = new TestHttpMessageHandler();
-        testHttpMessageHandler.MockListArtifactsFromCurrentWorkflowRun(builder =>
+        testHttpMessageHandler.MockCreateArtifactContainerFromCurrentWorkflowRun(builder =>
         {
             builder
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath($"{listArtifactsResponseScenario}.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetFilepath("create-artifact-container.http-response.json"));
         });
         (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
 
-        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
+        var command = new SetDataCommand(httpClient, githubEnvironment)
+        {
+            DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+        };
         using var console = new FakeInMemoryConsole();
         var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
 
-        await Verify(exception.Message)
-            .AppendToMethodName("console-output")
-            .UseParameters(scenario);
-        await Verify(outboundHttpRequests)
-            .AppendToMethodName("outbound-http")
-            .UseParameters(scenario);
+        await Verify(exception.Message).AppendToMethodName("console-output");
+        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 }
