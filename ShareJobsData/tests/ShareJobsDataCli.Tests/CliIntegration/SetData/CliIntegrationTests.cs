@@ -21,14 +21,13 @@ public class CliIntegrationTests
         var app = new ShareDataBetweenJobsCli();
         app.CliApplicationBuilder.UseConsole(console);
         await app.RunAsync("set-data");
-        var output = console.ReadAllAsString();
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        var errorString = console.ReadErrorString();
-        await Verify(errorString, settings).AppendToMethodName("console-error");
-        var outputString = console.ReadOutputString();
-        await Verify(outputString, settings).AppendToMethodName("console-output");
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
     }
 
     /// <summary>
@@ -45,13 +44,13 @@ public class CliIntegrationTests
             "set-data",
         };
         await app.RunAsync(args);
-        var output = console.ReadAllAsString();
+
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        var errorString = console.ReadErrorString();
-        await Verify(errorString, settings).AppendToMethodName("console-error");
-        var outputString = console.ReadOutputString();
-        await Verify(outputString, settings).AppendToMethodName("console-output");
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
     }
 
     /// <summary>
@@ -72,14 +71,13 @@ public class CliIntegrationTests
             "--artifact-name", artifactName,
         };
         await app.RunAsync(args);
-        var output = console.ReadAllAsString();
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        var errorString = console.ReadErrorString();
-        await Verify(errorString, settings).AppendToMethodName("console-error");
-        var outputString = console.ReadOutputString();
-        await Verify(outputString, settings).AppendToMethodName("console-output");
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
     }
 
     /// <summary>
@@ -100,13 +98,12 @@ public class CliIntegrationTests
             "--data-filename", artifactFilename,
         };
         await app.RunAsync(args);
-        var output = console.ReadAllAsString();
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        var errorString = console.ReadErrorString();
-        await Verify(errorString, settings).AppendToMethodName("console-error");
-        var outputString = console.ReadOutputString();
-        await Verify(outputString, settings).AppendToMethodName("console-output");
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
     }
 }

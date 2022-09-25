@@ -14,9 +14,9 @@ public class CliIntegrationTests
     /// Tests the validation of the --artifact-name option for the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> command.
     /// </summary>
     [Theory]
-    [InlineData("empty-string", "")]
-    [InlineData("white-space", "   ")]
-    public async Task AuthTokenValidation(string scenario, string artifactName)
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task AuthTokenValidation(string artifactName)
     {
         using var console = new FakeInMemoryConsole();
         var app = new ShareDataBetweenJobsCli();
@@ -28,20 +28,22 @@ public class CliIntegrationTests
             "--data-filename", "some filename",
         };
         await app.RunAsync(args);
-        var output = console.ReadAllAsString();
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings).UseParameters(scenario);
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
     }
 
     /// <summary>
     /// Tests the validation of the --repo option for the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> command.
     /// </summary>
     [Theory]
-    [InlineData("empty-string", "")]
-    [InlineData("white-space", "   ")]
-    public async Task RepoValidation(string scenario, string artifactFilename)
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task RepoValidation(string artifactFilename)
     {
         using var console = new FakeInMemoryConsole();
         var app = new ShareDataBetweenJobsCli();
@@ -53,10 +55,12 @@ public class CliIntegrationTests
             "--data-filename", artifactFilename,
         };
         await app.RunAsync(args);
-        var output = console.ReadAllAsString();
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings).UseParameters(scenario);
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
     }
 }
