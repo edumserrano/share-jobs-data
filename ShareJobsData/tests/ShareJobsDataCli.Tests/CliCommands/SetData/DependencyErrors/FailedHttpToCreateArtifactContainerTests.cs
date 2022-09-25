@@ -28,14 +28,14 @@ public class FailedHttpToCreateArtifactContainerTests
 
         var command = new SetDataCommand(httpClient, githubEnvironment)
         {
-            DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+            DataAsYmlStr = TestFiles.GetSharedFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -60,14 +60,14 @@ public class FailedHttpToCreateArtifactContainerTests
 
         var command = new SetDataCommand(httpClient, githubEnvironment)
         {
-            DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+            DataAsYmlStr = TestFiles.GetSharedFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -92,14 +92,14 @@ public class FailedHttpToCreateArtifactContainerTests
 
         var command = new SetDataCommand(httpClient, githubEnvironment)
         {
-            DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+            DataAsYmlStr = TestFiles.GetSharedFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -124,13 +124,13 @@ public class FailedHttpToCreateArtifactContainerTests
 
         var command = new SetDataCommand(httpClient, githubEnvironment)
         {
-            DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+            DataAsYmlStr = TestFiles.GetSharedFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 }
