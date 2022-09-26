@@ -2,11 +2,13 @@ namespace ShareJobsDataCli.CliCommands.Errors;
 
 internal static class FailedStatusCodeHttpResponseErrorExtensions
 {
-    public static string AsHttpErrorMEssage(this FailedStatusCodeHttpResponse httpResponse)
+    public static string AsHttpErrorMessage(this FailedStatusCodeHttpResponse httpResponse)
     {
         var sb = new StringBuilder();
-        sb.Append(httpResponse.Method).Append(' ')
-            .Append(httpResponse.RequestUrl).Append(" returned ")
+        sb.Append(httpResponse.Method)
+            .Append(' ')
+            .Append(httpResponse.RequestUrl)
+            .Append(" returned ")
             .Append(httpResponse.StatusCode);
         if (string.IsNullOrEmpty(httpResponse.ResponseBody))
         {

@@ -1,5 +1,5 @@
 ﻿An error occurred trying to execute the read-data-different-workflow command.
 Error(s):
-- Failed to download artifact because the response from listing workflow artifacts failed validation rules:
+- Failed to download artifact because the response from list workflow artifacts failed validation rules:
 1) $.artifacts[0].name must have a value.
 2) $.artifacts[0].archive_download_url is not a valid URL. Actual value: ''.

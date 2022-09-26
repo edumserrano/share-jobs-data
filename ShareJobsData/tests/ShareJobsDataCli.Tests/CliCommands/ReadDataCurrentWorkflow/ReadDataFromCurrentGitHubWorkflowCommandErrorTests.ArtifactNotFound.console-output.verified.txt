@@ -1,5 +1,3 @@
-﻿An error occurred trying to execute the command to read job data from the current workflow run.
-Error:
-Failed to download GitHub artifact.
-Details:
-Couldn't find artifact 'not-gonna-find-it'.
+﻿An error occurred trying to execute the read-data-current-workflow command.
+Error(s):
+- Couldn't find artifact with name 'not-gonna-find-it' in current workflow run.

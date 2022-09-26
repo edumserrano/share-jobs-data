@@ -1,6 +1,4 @@
-﻿An error occurred trying to execute the command to read job data from the current workflow run.
-Error:
-Failed to download GitHub artifact.
-Details:
-HTTP response from 'retrieving GitHub workflow artifact container items' failed model validation.
-'value' is missing from JSON response.
+﻿An error occurred trying to execute the read-data-current-workflow command.
+Error(s):
+- Failed to download artifact because the response from retrieve workflow artifact container items failed validation rules:
+1) $.value is missing from JSON response.

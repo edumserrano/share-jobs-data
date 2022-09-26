@@ -12,7 +12,7 @@ internal static class DownloadArtifactErrorExtensions
             ArtifactFileNotFound artifactFileNotFound => GetErrorMessage(artifactFileNotFound),
             ArtifactItemContentNotJson artifactItemContentNotJson => artifactItemContentNotJson.NotJsonContent.AsErrorMessage(),
             FailedToDownloadArtifact failedToDownloadArtifact => GetErrorMessage(failedToDownloadArtifact),
-            FailedToListWorkflowRunArtifacts failedToListWorkflowRunArtifacts => failedToListWorkflowRunArtifacts.JsonHttpError.AsErrorMessage("download artifact", "listing workflow artifacts"),
+            FailedToListWorkflowRunArtifacts failedToListWorkflowRunArtifacts => failedToListWorkflowRunArtifacts.JsonHttpError.AsErrorMessage("download artifact", "list workflow artifacts"),
             _ => throw UnexpectedTypeException.Create(downloadArtifactError),
         };
         return console.WriteErrorAsync(command, error);
@@ -30,7 +30,7 @@ internal static class DownloadArtifactErrorExtensions
 
     private static string GetErrorMessage(FailedToDownloadArtifact failedToDownloadArtifact)
     {
-        var httpErrorMessage = failedToDownloadArtifact.FailedStatusCodeHttpResponse.AsHttpErrorMEssage();
+        var httpErrorMessage = failedToDownloadArtifact.FailedStatusCodeHttpResponse.AsHttpErrorMessage();
         return $"Failed to download artifact because the HTTP request returned an error status code. {httpErrorMessage}";
     }
 }
