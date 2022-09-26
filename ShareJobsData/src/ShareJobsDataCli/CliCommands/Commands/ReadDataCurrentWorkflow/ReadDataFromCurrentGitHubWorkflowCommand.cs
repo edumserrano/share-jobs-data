@@ -1,8 +1,11 @@
+using ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow.Errors;
+
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow;
 
-[Command("read-data-current-workflow")]
+[Command(_commandName)]
 public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
 {
+    private const string _commandName = "read-data-current-workflow";
     private readonly HttpClient _httpClient;
     private readonly IGitHubEnvironment _gitHubEnvironment;
 
@@ -50,7 +53,8 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
         var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(containerUrl, artifactContainerName, artifactFilePath);
         if (!downloadResult.IsOk(out var gitHubArtifactItemJsonContent, out var downloadError))
         {
-            throw downloadError.ToCommandException();
+            await downloadError.WriteToConsoleAsync(console, _commandName);
+            return;
         }
 
         var stepOutput = new JobDataGitHubActionStepOutput(console);

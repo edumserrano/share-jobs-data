@@ -21,11 +21,13 @@ public class CliIntegrationTests
         var app = new ShareDataBetweenJobsCli();
         app.CliApplicationBuilder.UseConsole(console);
         await app.RunAsync("read-data-different-workflow");
-        var output = console.ReadAllAsString();
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings);
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
     }
 
     /// <summary>
@@ -44,10 +46,13 @@ public class CliIntegrationTests
             "--run-id", "some run id",
         };
         await app.RunAsync(args);
-        var output = console.ReadAllAsString();
+
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings);
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
     }
 
     /// <summary>
@@ -66,11 +71,13 @@ public class CliIntegrationTests
             "--run-id", "some run id",
         };
         await app.RunAsync(args);
-        var output = console.ReadAllAsString();
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings);
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
     }
 
     /// <summary>
@@ -89,20 +96,22 @@ public class CliIntegrationTests
             "--repo", "some repo",
         };
         await app.RunAsync(args);
-        var output = console.ReadAllAsString();
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings);
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
     }
 
     /// <summary>
     /// Tests the validation of the --auth-token option for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> command.
     /// </summary>
     [Theory]
-    [InlineData("empty-string", "")]
-    [InlineData("white-space", "   ")]
-    public async Task AuthTokenValidation(string scenario, string authToken)
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task AuthTokenValidation(string authToken)
     {
         using var console = new FakeInMemoryConsole();
         var app = new ShareDataBetweenJobsCli();
@@ -115,20 +124,23 @@ public class CliIntegrationTests
             "--run-id", "some run id",
         };
         await app.RunAsync(args);
-        var output = console.ReadAllAsString();
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings).UseParameters(scenario);
+        var errorString = console.ReadErrorString();
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
     }
 
     /// <summary>
     /// Tests the validation of the --repo option for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> command.
     /// </summary>
     [Theory]
-    [InlineData("empty-string", "")]
-    [InlineData("white-space", "   ")]
-    public async Task RepoValidation(string scenario, string repo)
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task RepoValidation(string repo)
     {
         using var console = new FakeInMemoryConsole();
         var app = new ShareDataBetweenJobsCli();
@@ -141,20 +153,22 @@ public class CliIntegrationTests
             "--run-id", "some run id",
         };
         await app.RunAsync(args);
-        var output = console.ReadAllAsString();
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings).UseParameters(scenario);
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
     }
 
     /// <summary>
     /// Tests the validation of the --run-id option for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> command.
     /// </summary>
     [Theory]
-    [InlineData("empty-string", "")]
-    [InlineData("white-space", "   ")]
-    public async Task RunIdValidation(string scenario, string runId)
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task RunIdValidation(string runId)
     {
         using var console = new FakeInMemoryConsole();
         var app = new ShareDataBetweenJobsCli();
@@ -167,20 +181,22 @@ public class CliIntegrationTests
             "--run-id", runId,
         };
         await app.RunAsync(args);
-        var output = console.ReadAllAsString();
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings).UseParameters(scenario);
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
     }
 
     /// <summary>
     /// Tests the validation of the --artifact-name option for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> command.
     /// </summary>
     [Theory]
-    [InlineData("empty-string", "")]
-    [InlineData("white-space", "   ")]
-    public async Task ArtifactNameValidation(string scenario, string artifactName)
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task ArtifactNameValidation(string artifactName)
     {
         using var console = new FakeInMemoryConsole();
         var app = new ShareDataBetweenJobsCli();
@@ -194,20 +210,22 @@ public class CliIntegrationTests
             "--artifact-name", artifactName,
         };
         await app.RunAsync(args);
-        var output = console.ReadAllAsString();
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings).UseParameters(scenario);
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
     }
 
     /// <summary>
     /// Tests the validation of the --data-filename option for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> command.
     /// </summary>
     [Theory]
-    [InlineData("empty-string", "")]
-    [InlineData("white-space", "   ")]
-    public async Task ArtifactFilenameValidation(string scenario, string artifactFilename)
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task ArtifactFilenameValidation(string artifactFilename)
     {
         using var console = new FakeInMemoryConsole();
         var app = new ShareDataBetweenJobsCli();
@@ -222,10 +240,12 @@ public class CliIntegrationTests
             "--data-filename", artifactFilename,
         };
         await app.RunAsync(args);
-        var output = console.ReadAllAsString();
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings).UseParameters(scenario);
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
     }
 }

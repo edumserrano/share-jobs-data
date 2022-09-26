@@ -1,0 +1,6 @@
+﻿An error occurred trying to execute the read-data-current-workflow command.
+Error(s):
+- Failed to download artifact because the response from retrieve workflow artifact container items failed validation rules:
+1) $.value[1].ContentLocation is not a valid URL. Actual value: ''.
+2) $.value[1].ItemType must have a value.
+3) $.value[1].Path must have a value.

@@ -1,8 +1,0 @@
-﻿An error occurred trying to execute the command to read job data from the current workflow run.
-Error:
-Failed to download GitHub artifact.
-Details:
-HTTP response from 'retrieving GitHub workflow artifact container items' failed model validation.
-'GitHubArtifactContainerItems.ContainerItems[1].ContentLocation' is not a valid URL. Actual value: ''.
-'GitHubArtifactContainerItems.ContainerItems[1].ItemType' must have a value.
-'GitHubArtifactContainerItems.ContainerItems[1].Path' must have a value.

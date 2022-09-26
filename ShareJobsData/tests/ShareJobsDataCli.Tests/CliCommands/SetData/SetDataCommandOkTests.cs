@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace ShareJobsDataCli.Tests.CliCommands.SetData;
 
 /// <summary>
@@ -28,7 +26,7 @@ public class SetDataCommandOkTests
             builder
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("create-artifact-container.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("create-artifact-container.http-response.json"));
         });
         testHttpMessageHandler.MockUploadArtifactFileFromCurrentWorkflowRun(builder =>
         {
@@ -38,7 +36,7 @@ public class SetDataCommandOkTests
                     artifactName: artifactName,
                     artifactFilename: artifactFilename)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("upload-artifact.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("upload-artifact.http-response.json"));
         });
         testHttpMessageHandler.MockFinalizeArtifactContainerFromCurrentWorkflowRun(builder =>
         {
@@ -48,26 +46,24 @@ public class SetDataCommandOkTests
                     githubEnvironment.GitHubActionRunId,
                     containerName: artifactName)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("finalize-artifact-container.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("finalize-artifact-container.http-response.json"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new SetDataCommand(httpClient, githubEnvironment)
         {
             SetStepOutput = setStepOutput,
             ArtifactName = artifactName,
             ArtifactFilename = artifactFilename,
-            DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+            DataAsYmlStr = TestFiles.GetSharedFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadErrorString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output)
             .AppendToMethodName("console-output")
-            .UseParameters(scenario);
-        await Verify(outboundHttpRequests)
-            .AppendToMethodName("outbound-http")
             .UseParameters(scenario);
     }
 
@@ -86,7 +82,7 @@ public class SetDataCommandOkTests
             builder
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("create-artifact-container.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("create-artifact-container.http-response.json"));
         });
         // not using the testHttpMessageHandler.MockUploadArtifactFileFromCurrentWorkflowRun auxiliar method because
         // I want to be able to capture the HttpRequest content that is being sent and the auxiliar methods I created on top of the
@@ -95,7 +91,7 @@ public class SetDataCommandOkTests
         testHttpMessageHandler.MockHttpResponse(httpResponseMessageMockBuilder =>
         {
             const string fileContainerResourceUrl = "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982";
-            var responseContent = TestFiles.GetFilepath("upload-artifact.http-response.json").ReadFileAsStringContent();
+            var responseContent = TestFiles.GetSharedFilepath("upload-artifact.http-response.json").ReadFileAsStringContent();
             httpResponseMessageMockBuilder
                 .WhereRequestUriEquals($"{fileContainerResourceUrl}?itemPath={artifactName}%2F{artifactFilename}") // %2F is enconding for /
                 .RespondWith(async (httpRequestMessage, cancellationToken) =>
@@ -117,22 +113,68 @@ public class SetDataCommandOkTests
                     githubEnvironment.GitHubActionRunId,
                     containerName: artifactName)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("finalize-artifact-container.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("finalize-artifact-container.http-response.json"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new SetDataCommand(httpClient, githubEnvironment)
         {
             ArtifactName = artifactName,
             ArtifactFilename = artifactFilename,
-            DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+            DataAsYmlStr = TestFiles.GetSharedFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
-
-        var output = console.ReadAllAsString();
-        await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
         await Verify(artifactUploadContent).AppendToMethodName("uploaded-artifact-content");
+    }
+
+    /// <summary>
+    /// Tests that the <see cref="SetDataCommand"/> makes the expected HTTP requests when uploading a workflow artifact.
+    /// </summary>
+    [Fact]
+    public async Task MakesExpectedHttpRequests()
+    {
+        const string artifactName = "job-data";
+        const string artifactFilename = "job-data.json";
+        var githubEnvironment = new TestsGitHubEnvironment();
+        using var testHttpMessageHandler = new TestHttpMessageHandler();
+        testHttpMessageHandler.MockCreateArtifactContainerFromCurrentWorkflowRun(builder =>
+        {
+            builder
+                .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
+                .WithResponseStatusCode(HttpStatusCode.OK)
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("create-artifact-container.http-response.json"));
+        });
+        testHttpMessageHandler.MockUploadArtifactFileFromCurrentWorkflowRun(builder =>
+        {
+            builder
+                .FromFileContainerResourceUrl(
+                    fileContainerResourceUrl: "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982",
+                    artifactName: artifactName,
+                    artifactFilename: artifactFilename)
+                .WithResponseStatusCode(HttpStatusCode.OK)
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("upload-artifact.http-response.json"));
+        });
+        testHttpMessageHandler.MockFinalizeArtifactContainerFromCurrentWorkflowRun(builder =>
+        {
+            builder
+                .FromCurrentWorkflowRun(
+                    githubEnvironment.GitHubActionRuntimeUrl,
+                    githubEnvironment.GitHubActionRunId,
+                    containerName: artifactName)
+                .WithResponseStatusCode(HttpStatusCode.OK)
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("finalize-artifact-container.http-response.json"));
+        });
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.CreateWithRecorder(testHttpMessageHandler);
+
+        var command = new SetDataCommand(httpClient, githubEnvironment)
+        {
+            ArtifactName = artifactName,
+            ArtifactFilename = artifactFilename,
+            DataAsYmlStr = TestFiles.GetSharedFilepath("job-data.input.yml").ReadFile(),
+        };
+        using var console = new FakeInMemoryConsole();
+        await command.ExecuteAsync(console);
+        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 }

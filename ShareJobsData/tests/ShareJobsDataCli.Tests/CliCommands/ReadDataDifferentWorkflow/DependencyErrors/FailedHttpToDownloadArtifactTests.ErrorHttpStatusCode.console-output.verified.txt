@@ -1,9 +1,3 @@
-﻿An error occurred trying to execute the command to read job data from a different workflow run.
-Error:
-Failed to download GitHub artifact.
-Details:
-HTTP response from downloading GitHub artifact returned error status code.
-HTTP Method: GET
-Request URL: https://api.github.com/repos/edumserrano/share-jobs-data/actions/artifacts/351670722/zip
-Response status code: InternalServerError
-Response body: <empty>
+﻿An error occurred trying to execute the read-data-different-workflow command.
+Error(s):
+- Failed to download artifact because the HTTP request returned an error status code. GET https://api.github.com/repos/edumserrano/share-jobs-data/actions/artifacts/351670722/zip returned InternalServerError without response body.

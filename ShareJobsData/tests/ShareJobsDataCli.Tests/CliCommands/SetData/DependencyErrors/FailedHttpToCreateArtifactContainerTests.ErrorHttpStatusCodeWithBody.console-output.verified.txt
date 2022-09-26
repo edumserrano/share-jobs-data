@@ -1,12 +1,6 @@
-﻿An error occurred trying to execute the command to set job data.
-Error:
-Failed to upload GitHub artifact.
-Details:
-HTTP response from 'creating an artifact container' returned error status code.
-HTTP Method: POST
-Request URL: https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/pipelines/workflows/3085101792/artifacts?api-version=6.0-preview
-Response status code: InternalServerError
-Response body: 
+﻿An error occurred trying to execute the set-data command.
+Error(s):
+- Failed to upload artifact because the response from create an artifact container returned an error status code. POST https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/pipelines/workflows/3085101792/artifacts?api-version=6.0-preview returned InternalServerError with the following response body:
 ---START---
 Oops, something went wrong.
 ---END---

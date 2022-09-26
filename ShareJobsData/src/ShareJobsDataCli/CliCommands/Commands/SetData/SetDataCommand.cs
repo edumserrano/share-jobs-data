@@ -1,8 +1,9 @@
 namespace ShareJobsDataCli.CliCommands.Commands.SetData;
 
-[Command("set-data")]
+[Command(_commandName)]
 public sealed class SetDataCommand : ICommand
 {
+    private const string _commandName = "set-data";
     private readonly HttpClient _httpClient;
     private readonly IGitHubEnvironment _gitHubEnvironment;
 
@@ -60,7 +61,8 @@ public sealed class SetDataCommand : ICommand
         var createJobDataAsJsonResult = JobDataAsJson.FromYml(DataAsYmlStr);
         if (!createJobDataAsJsonResult.IsOk(out var jobDataAsJson, out var createJobDataAsJsonError))
         {
-            throw createJobDataAsJsonError.ToCommandException();
+            await createJobDataAsJsonError.WriteToConsoleAsync(console, _commandName);
+            return;
         }
 
         var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, fileUploadContent: jobDataAsJson.AsJson());
@@ -69,7 +71,8 @@ public sealed class SetDataCommand : ICommand
         var uploadArtifact = await githubHttpClient.UploadArtifactFileAsync(artifactContainerUrl, artifactContainerName, artifactFileUploadRequest);
         if (!uploadArtifact.IsOk(out var _, out var uploadError))
         {
-            throw uploadError.ToCommandException();
+            await uploadError.WriteToConsoleAsync(console, _commandName);
+            return;
         }
 
         if (SetStepOutput)

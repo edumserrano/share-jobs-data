@@ -23,16 +23,16 @@ public class ReadDataFromDifferentGitHubWorkflowCommandOkTests
             builder
                 .FromWorkflowRun(repoName, runId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
         testHttpMessageHandler.MockDownloadArtifactFromDifferentWorkflowRun(builder =>
         {
             builder
                 .FromWorkflowArtifactId(repoName, artifactId: "351670722")
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("download-artifact.http-response.zip"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("download-artifact.http-response.zip"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
         var githubEnvironment = new TestsGitHubEnvironment();
 
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
@@ -46,8 +46,47 @@ public class ReadDataFromDifferentGitHubWorkflowCommandOkTests
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadErrorString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
+    }
+
+    /// <summary>
+    /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> makes the expected HTTP requests when downloading a workflow artifact.
+    /// </summary>
+    [Fact]
+    public async Task MakesExpectedHttpRequests()
+    {
+        const string repoName = "edumserrano/share-jobs-data";
+        const string runId = "test-run-id";
+        using var testHttpMessageHandler = new TestHttpMessageHandler();
+        testHttpMessageHandler.MockListArtifactsFromDifferentWorkflowRun(builder =>
+        {
+            builder
+                .FromWorkflowRun(repoName, runId)
+                .WithResponseStatusCode(HttpStatusCode.OK)
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
+        });
+        testHttpMessageHandler.MockDownloadArtifactFromDifferentWorkflowRun(builder =>
+        {
+            builder
+                .FromWorkflowArtifactId(repoName, artifactId: "351670722")
+                .WithResponseStatusCode(HttpStatusCode.OK)
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("download-artifact.http-response.zip"));
+        });
+        (var httpClient, var outboundHttpRequests) = TestHttpClient.CreateWithRecorder(testHttpMessageHandler);
+        var githubEnvironment = new TestsGitHubEnvironment();
+
+        var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
+        {
+            AuthToken = "auth-token",
+            Repo = repoName,
+            RunId = runId,
+            ArtifactName = "job-data",
+            ArtifactFilename = "job-data.json",
+        };
+        using var console = new FakeInMemoryConsole();
+        await command.ExecuteAsync(console);
         await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 }

@@ -24,7 +24,7 @@ public class FailedHttpToDownloadArtifactTests
             builder
                 .FromWorkflowRun(repoName, runId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
         testHttpMessageHandler.MockDownloadArtifactFromDifferentWorkflowRun(builder =>
         {
@@ -32,7 +32,7 @@ public class FailedHttpToDownloadArtifactTests
                 .FromWorkflowArtifactId(repoName, artifactId: "351670722")
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError);
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
         var githubEnvironment = new TestsGitHubEnvironment();
 
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
@@ -43,10 +43,11 @@ public class FailedHttpToDownloadArtifactTests
             ArtifactName = "job-data",
         };
         using var console = new FakeInMemoryConsole();
-        var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
+        await command.ExecuteAsync(console);
 
-        await Verify(exception.Message).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
+        console.ReadOutputString().ShouldBeEmpty();
+        var output = console.ReadAllAsString();
+        await Verify(output).AppendToMethodName("console-output");
     }
 
     /// <summary>
@@ -64,7 +65,7 @@ public class FailedHttpToDownloadArtifactTests
             builder
                 .FromWorkflowRun(repoName, runId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
         testHttpMessageHandler.MockDownloadArtifactFromDifferentWorkflowRun(builder =>
         {
@@ -73,7 +74,7 @@ public class FailedHttpToDownloadArtifactTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetFilepath("download-artifact.http-response.zip"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
         var githubEnvironment = new TestsGitHubEnvironment();
 
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
@@ -85,10 +86,10 @@ public class FailedHttpToDownloadArtifactTests
             ArtifactFilename = "job-data.json",
         };
         using var console = new FakeInMemoryConsole();
-        var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
+        await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
-        await Verify(exception.Message).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
+        await Verify(output).AppendToMethodName("console-output");
     }
 }

@@ -24,17 +24,18 @@ public class FailedHttpToCreateArtifactContainerTests
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError);
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new SetDataCommand(httpClient, githubEnvironment)
         {
-            DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+            DataAsYmlStr = TestFiles.GetSharedFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
-        var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
+        await command.ExecuteAsync(console);
 
-        await Verify(exception.Message).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
+        console.ReadOutputString().ShouldBeEmpty();
+        var output = console.ReadAllAsString();
+        await Verify(output).AppendToMethodName("console-output");
     }
 
     /// <summary>
@@ -55,17 +56,18 @@ public class FailedHttpToCreateArtifactContainerTests
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError)
                 .WithResponseContent("Oops, something went wrong.");
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new SetDataCommand(httpClient, githubEnvironment)
         {
-            DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+            DataAsYmlStr = TestFiles.GetSharedFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
-        var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
+        await command.ExecuteAsync(console);
 
-        await Verify(exception.Message).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
+        console.ReadOutputString().ShouldBeEmpty();
+        var output = console.ReadAllAsString();
+        await Verify(output).AppendToMethodName("console-output");
     }
 
     /// <summary>
@@ -86,17 +88,18 @@ public class FailedHttpToCreateArtifactContainerTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContent("null");
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new SetDataCommand(httpClient, githubEnvironment)
         {
-            DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+            DataAsYmlStr = TestFiles.GetSharedFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
-        var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
+        await command.ExecuteAsync(console);
 
-        await Verify(exception.Message).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
+        console.ReadOutputString().ShouldBeEmpty();
+        var output = console.ReadAllAsString();
+        await Verify(output).AppendToMethodName("console-output");
     }
 
     /// <summary>
@@ -117,16 +120,17 @@ public class FailedHttpToCreateArtifactContainerTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetFilepath("create-artifact-container.http-response.json"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClientFactory.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new SetDataCommand(httpClient, githubEnvironment)
         {
-            DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+            DataAsYmlStr = TestFiles.GetSharedFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
-        var exception = await Should.ThrowAsync<CommandException>(() => command.ExecuteAsync(console).AsTask());
+        await command.ExecuteAsync(console);
 
-        await Verify(exception.Message).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
+        console.ReadOutputString().ShouldBeEmpty();
+        var output = console.ReadAllAsString();
+        await Verify(output).AppendToMethodName("console-output");
     }
 }

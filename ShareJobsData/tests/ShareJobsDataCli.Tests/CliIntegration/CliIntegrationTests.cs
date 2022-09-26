@@ -19,10 +19,11 @@ public class CliIntegrationTests
         var app = new ShareDataBetweenJobsCli();
         app.CliApplicationBuilder.UseConsole(console);
         await app.RunAsync();
-        var output = console.ReadAllAsString();
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        await Verify(output, settings);
+        var output = console.ReadAllAsString();
+        await Verify(output, settings).AppendToMethodName("console-output");
+        console.ReadErrorString().ShouldBeEmpty();
     }
 }

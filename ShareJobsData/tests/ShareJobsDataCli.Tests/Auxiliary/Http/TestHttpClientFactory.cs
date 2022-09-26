@@ -1,8 +1,8 @@
 namespace ShareJobsDataCli.Tests.Auxiliary.Http;
 
-internal static class TestHttpClientFactory
+internal static class TestHttpClient
 {
-    public static (HttpClient httpClient, OutboundHttpRequests outboundHttpRequests) Create(TestHttpMessageHandler testHttpMessageHandler)
+    public static (HttpClient httpClient, OutboundHttpRequests outboundHttpRequests) CreateWithRecorder(TestHttpMessageHandler testHttpMessageHandler)
     {
 #pragma warning disable CA2000 // Dispose objects before losing scope
         var recordingHandler = new RecordingHandler

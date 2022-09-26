@@ -1,6 +1,4 @@
-﻿An error occurred trying to execute the command to read job data from a different workflow run.
-Error:
-Failed to download GitHub artifact.
-Details:
-HTTP response from 'listing GitHub workflow artifacts' failed model validation.
-'artifacts' is missing from JSON response.
+﻿An error occurred trying to execute the read-data-different-workflow command.
+Error(s):
+- Failed to download artifact because the response from list workflow artifacts failed validation rules:
+1) $.artifacts is missing from JSON response.

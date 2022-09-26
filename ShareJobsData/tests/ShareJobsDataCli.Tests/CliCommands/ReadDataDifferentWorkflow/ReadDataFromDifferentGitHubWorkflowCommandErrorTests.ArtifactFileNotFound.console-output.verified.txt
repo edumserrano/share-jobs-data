@@ -1,5 +1,3 @@
-﻿An error occurred trying to execute the command to read job data from a different workflow run.
-Error:
-Failed to download GitHub artifact.
-Details:
-Couldn't find artifact file 'job-data/not-gonna-find-me.json' in workflow run id 'test-run-id' at repo 'edumserrano/share-jobs-data'.
+﻿An error occurred trying to execute the read-data-different-workflow command.
+Error(s):
+- Couldn't find artifact file 'job-data/not-gonna-find-me.json' in workflow run id 'test-run-id' at repo 'edumserrano/share-jobs-data'.
