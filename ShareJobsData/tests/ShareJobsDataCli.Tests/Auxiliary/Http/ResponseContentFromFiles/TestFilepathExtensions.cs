@@ -15,7 +15,7 @@ internal static class TestFilepathExtensions
 
     public static StreamContent ReadFileAsAzipContent(this TestFilepath testFilepath)
     {
-        var zipFileStream = File.Open(testFilepath, FileMode.Open);
+        var zipFileStream = File.OpenRead(testFilepath);
         var streamContent = new StreamContent(zipFileStream);
         streamContent.Headers.ContentType = new MediaTypeHeaderValue(MediaTypeNames.Application.Zip);
         return streamContent;

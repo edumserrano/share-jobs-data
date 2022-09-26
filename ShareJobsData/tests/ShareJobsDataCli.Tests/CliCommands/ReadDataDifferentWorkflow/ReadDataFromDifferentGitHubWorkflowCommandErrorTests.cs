@@ -23,9 +23,9 @@ public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
             builder
                 .FromWorkflowRun(repoName, runId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
         var githubEnvironment = new TestsGitHubEnvironment();
 
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
@@ -39,9 +39,9 @@ public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
             builder
                 .FromWorkflowRun(repoName, runId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
         testHttpMessageHandler.MockDownloadArtifactFromDifferentWorkflowRun(builder =>
         {
@@ -68,7 +68,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetFilepath("download-artifact.http-response.zip"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
         var githubEnvironment = new TestsGitHubEnvironment();
 
         var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
@@ -82,8 +82,8 @@ public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 }
