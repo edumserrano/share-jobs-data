@@ -40,7 +40,6 @@ internal sealed record JobDataAsJson
         try
         {
             jObject = JObject.FromObject(ymlObject);
-
         }
         catch (Exception jsonException)
         {

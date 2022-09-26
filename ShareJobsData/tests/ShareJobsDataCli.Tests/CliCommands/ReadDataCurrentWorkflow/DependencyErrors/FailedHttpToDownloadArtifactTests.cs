@@ -9,7 +9,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.ReadDataCurrentWorkflow.DependencyE
 public class FailedHttpToDownloadArtifactTests
 {
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when 
+    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when
     /// the HTTP request to download artifact item fails.
     /// Simulating an HttpStatusCode.InternalServerError from the download artifact item response.
     /// </summary>

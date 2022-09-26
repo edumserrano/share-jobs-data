@@ -153,7 +153,6 @@ public class FailedHttpToUploadArtifactFileTests
     [Fact]
     public async Task JsonModelValidation()
     {
-
         const string artifactName = "job-data";
         const string artifactFilename = "job-data.json";
         var githubEnvironment = new TestsGitHubEnvironment();

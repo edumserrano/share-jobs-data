@@ -86,7 +86,7 @@ public class CliIntegrationTests
     [Theory]
     [InlineData("")]
     [InlineData("   ")]
-    public async Task ArtifactFilenameValidation( string artifactFilename)
+    public async Task ArtifactFilenameValidation(string artifactFilename)
     {
         using var console = new FakeInMemoryConsole();
         var app = new ShareDataBetweenJobsCli();
