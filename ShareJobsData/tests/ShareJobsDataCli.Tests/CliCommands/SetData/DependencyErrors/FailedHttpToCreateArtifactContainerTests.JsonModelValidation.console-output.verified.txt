@@ -1,7 +1,5 @@
-﻿An error occurred trying to execute the command to set job data.
-Error:
-Failed to upload GitHub artifact.
-Details:
-HTTP response from 'creating an artifact container' failed model validation.
-'fileContainerResourceUrl' is not a valid URL. Actual value: ''.
-'name' must have a value.
+﻿An error occurred trying to execute the set-data command.
+Error(s):
+- Failed to upload artifact because the response from create an artifact container failed validation rules:
+1) $.fileContainerResourceUrl is not a valid URL. Actual value: ''.
+2) $.name must have a value.

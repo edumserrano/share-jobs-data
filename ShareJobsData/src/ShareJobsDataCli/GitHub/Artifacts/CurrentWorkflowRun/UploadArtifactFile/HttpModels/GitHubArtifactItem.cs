@@ -24,6 +24,6 @@ internal sealed class GitHubArtifactItemValidator : AbstractValidator<GitHubArti
     {
         RuleFor(x => x.FileLength)
             .Must(fileLength => fileLength > 0)
-            .WithMessage(x => $"'fileLength' must be a positive value. Actual value: '{x.FileLength}'.");
+            .WithMessage(x => $"$.fileLength must be a positive value. Actual value: '{x.FileLength}'.");
     }
 }

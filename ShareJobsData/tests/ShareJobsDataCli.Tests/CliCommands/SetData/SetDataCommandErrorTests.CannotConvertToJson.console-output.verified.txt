@@ -1,7 +1,3 @@
-﻿An error occurred trying to execute the command to set job data.
-Error:
-Failed to upload GitHub artifact.
-Details:
-Option --data has been provided with an invalid value.
+﻿An error occurred trying to execute the set-data command.
 Error(s):
-- Cannot convert YAML input to JSON: Object serialized to String. JObject instance expected.
+- Option --data has been provided with an invalid value. Cannot convert YAML input to JSON because 'Object serialized to String. JObject instance expected.'.

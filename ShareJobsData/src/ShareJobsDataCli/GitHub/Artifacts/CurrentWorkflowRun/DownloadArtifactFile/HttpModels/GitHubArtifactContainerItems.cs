@@ -12,8 +12,8 @@ internal sealed class GitHubArtifactContainerItemsValidator : AbstractValidator<
     {
         RuleFor(x => x.ContainerItems)
             .Must(x => x is not null)
-            .WithMessage(_ => "'value' is missing from JSON response.");
+            .WithMessage(_ => "$.value is missing from JSON response.");
         RuleForEach(x => x.ContainerItems)
-            .SetValidator(new GitHubArtifactContainerItemValidator($"{nameof(GitHubArtifactContainerItems)}.{nameof(GitHubArtifactContainerItems.ContainerItems)}"));
+            .SetValidator(new GitHubArtifactContainerItemValidator("$.value"));
     }
 }
