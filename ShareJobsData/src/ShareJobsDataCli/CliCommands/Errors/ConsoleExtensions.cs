@@ -11,9 +11,9 @@ internal static class ConsoleExtensions
         return console.WriteErrorAsync(errorMessage);
     }
 
-    public static async Task WriteErrorAsync(this IConsole console, string errorMessage)
+    public static async Task WriteErrorAsync(this IConsole console, string error)
     {
         using var _ = console.WithForegroundColor(ConsoleColor.Red);
-        await console.Error.WriteAsync(errorMessage);
+        await console.Error.WriteAsync(error);
     }
 }

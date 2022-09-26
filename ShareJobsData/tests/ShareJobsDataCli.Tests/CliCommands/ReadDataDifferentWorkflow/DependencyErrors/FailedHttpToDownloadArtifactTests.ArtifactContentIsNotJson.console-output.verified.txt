@@ -1,11 +1,6 @@
-﻿An error occurred trying to execute the command to read job data from a different workflow run.
-Error:
-Failed to download GitHub artifact.
-Details:
-Content from downloaded artifact item must be JSON.
-Artifact item content: 
+﻿An error occurred trying to execute the read-data-different-workflow command.
+Error(s):
+- Content from downloaded artifact item must be JSON. JSON error: 'Unexpected character encountered while parsing value: o. Path '', line 0, position 0.'. JSON response: 
 ---START---
 oops not json
 ---END---
-JSON error:
-Unexpected character encountered while parsing value: o. Path '', line 0, position 0.

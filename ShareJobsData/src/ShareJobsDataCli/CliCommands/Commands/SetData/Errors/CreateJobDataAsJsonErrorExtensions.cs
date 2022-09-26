@@ -8,10 +8,6 @@ internal static class CreateJobDataAsJsonErrorExtensions
 
     public static async Task WriteToConsoleAsync(this Error createJobDataAsJsonError, IConsole console, string command)
     {
-        createJobDataAsJsonError.NotNull();
-        console.NotNull();
-        command.NotNullOrWhiteSpace();
-
         var error = createJobDataAsJsonError switch
         {
             InvalidYml invalidYml => GetErrorMessage(invalidYml),

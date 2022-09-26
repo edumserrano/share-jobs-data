@@ -1,5 +1,6 @@
 namespace ShareJobsDataCli.CliCommands.Errors;
 
+
 internal static class JsonHttpResultErrorExtensions
 {
     public static string AsErrorMessage<T>(
@@ -28,8 +29,8 @@ internal static class JsonHttpResultErrorExtensions
         string httpRequest)
             where T : class
     {
-        var httpErrorDetail = failedStatusCode.FailedStatusCodeHttpResponse.AsHttpErrorMEssage();
-        return $"Failed to {action} because the response from {httpRequest} returned an error status code. {httpErrorDetail}";
+        var httpErrorMessage = failedStatusCode.FailedStatusCodeHttpResponse.AsHttpErrorMEssage();
+        return $"Failed to {action} because the response from {httpRequest} returned an error status code. {httpErrorMessage}";
     }
 
     private static string GetErrorMessage<T>(

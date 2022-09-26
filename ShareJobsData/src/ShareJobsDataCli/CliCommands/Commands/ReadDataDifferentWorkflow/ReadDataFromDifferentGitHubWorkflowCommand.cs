@@ -1,8 +1,11 @@
+using ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow.Errors;
+
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow;
 
-[Command("read-data-different-workflow")]
+[Command(_commandName)]
 public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
 {
+    private const string _commandName = "read-data-different-workflow";
     private readonly HttpClient _httpClient;
     private readonly IGitHubEnvironment _gitHubEnvironment;
 
@@ -72,7 +75,7 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
         var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(jobDataArtifactRepositoryName, runId, artifactContainerName, artifactItemFilename);
         if (!downloadResult.IsOk(out var gitHubArtifactItemJsonContent, out var downloadError))
         {
-            await console.WriteErrorAsync(downloadError);
+            await downloadError.WriteToConsoleAsync(console, _commandName);
             return;
         }
 

@@ -6,10 +6,6 @@ internal static class UploadArtifactFileResultErrorExtensions
 {
     public static Task WriteToConsoleAsync(this Error uploadArtifactError, IConsole console, string command)
     {
-        uploadArtifactError.NotNull();
-        console.NotNull();
-        command.NotNullOrWhiteSpace();
-
         var error = uploadArtifactError switch
         {
             FailedToCreateArtifactContainer failedToCreateArtifactContainer => failedToCreateArtifactContainer.JsonHttpError.AsErrorMessage("upload artifact", "create an artifact container"),
