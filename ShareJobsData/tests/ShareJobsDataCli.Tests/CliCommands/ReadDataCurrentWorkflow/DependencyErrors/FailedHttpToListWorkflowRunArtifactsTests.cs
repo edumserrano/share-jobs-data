@@ -24,15 +24,15 @@ public class FailedHttpToListWorkflowRunArtifactsTests
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError);
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -53,15 +53,15 @@ public class FailedHttpToListWorkflowRunArtifactsTests
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError)
                 .WithResponseContent("Oops, something went wrong.");
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -82,15 +82,15 @@ public class FailedHttpToListWorkflowRunArtifactsTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContent("null");
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public class FailedHttpToListWorkflowRunArtifactsTests
     /// </summary>
     [Theory]
     [InlineData("response-model-validation", "list-artifacts")]
-    [InlineData("artifact-model-validation", "list-artifacts-2")]
+    [InlineData("artifact-container-model-validation", "list-artifacts-2")]
     public async Task JsonModelValidation(string scenario, string listArtifactsResponseScenario)
     {
         var githubEnvironment = new TestsGitHubEnvironment();
@@ -113,18 +113,16 @@ public class FailedHttpToListWorkflowRunArtifactsTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetFilepath($"{listArtifactsResponseScenario}.http-response.json"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment);
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output)
             .AppendToMethodName("console-output")
-            .UseParameters(scenario);
-        await Verify(outboundHttpRequests)
-            .AppendToMethodName("outbound-http")
             .UseParameters(scenario);
     }
 }

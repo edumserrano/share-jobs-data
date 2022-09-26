@@ -22,9 +22,9 @@ public class ReadDataFromCurrentGitHubWorkflowCommandErrorTests
             builder
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
@@ -34,9 +34,9 @@ public class ReadDataFromCurrentGitHubWorkflowCommandErrorTests
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public class ReadDataFromCurrentGitHubWorkflowCommandErrorTests
             builder
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
         testHttpMessageHandler.MockGetContainerItemsFromCurrentWorkflowRun(builder =>
         {
@@ -65,7 +65,7 @@ public class ReadDataFromCurrentGitHubWorkflowCommandErrorTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetFilepath("get-container-items.http-response.json"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
@@ -75,8 +75,8 @@ public class ReadDataFromCurrentGitHubWorkflowCommandErrorTests
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 }

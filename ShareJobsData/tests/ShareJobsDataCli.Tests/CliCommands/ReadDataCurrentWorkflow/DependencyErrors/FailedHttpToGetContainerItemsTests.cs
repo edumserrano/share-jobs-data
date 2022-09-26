@@ -24,7 +24,7 @@ public class FailedHttpToGetContainerItemsTests
             builder
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
         testHttpMessageHandler.MockGetContainerItemsFromCurrentWorkflowRun(builder =>
         {
@@ -34,7 +34,7 @@ public class FailedHttpToGetContainerItemsTests
                     artifactName: artifactName)
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError);
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
@@ -43,9 +43,9 @@ public class FailedHttpToGetContainerItemsTests
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ public class FailedHttpToGetContainerItemsTests
             builder
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
         testHttpMessageHandler.MockGetContainerItemsFromCurrentWorkflowRun(builder =>
         {
@@ -76,7 +76,7 @@ public class FailedHttpToGetContainerItemsTests
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError)
                 .WithResponseContent("Oops, something went wrong.");
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
@@ -85,9 +85,9 @@ public class FailedHttpToGetContainerItemsTests
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -107,7 +107,7 @@ public class FailedHttpToGetContainerItemsTests
             builder
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
         testHttpMessageHandler.MockGetContainerItemsFromCurrentWorkflowRun(builder =>
         {
@@ -118,7 +118,7 @@ public class FailedHttpToGetContainerItemsTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContent("null");
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
@@ -127,9 +127,9 @@ public class FailedHttpToGetContainerItemsTests
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -140,7 +140,7 @@ public class FailedHttpToGetContainerItemsTests
     /// </summary>
     [Theory]
     [InlineData("response-model-validation", "get-container-items")]
-    [InlineData("artifact-model-validation", "get-container-items-2")]
+    [InlineData("artifact-container-item-model-validation", "get-container-items-2")]
     public async Task JsonModelValidation(string scenario, string getContainerItemsResponseScenario)
     {
         const string artifactName = "job-data";
@@ -151,7 +151,7 @@ public class FailedHttpToGetContainerItemsTests
             builder
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
         testHttpMessageHandler.MockGetContainerItemsFromCurrentWorkflowRun(builder =>
         {
@@ -162,7 +162,7 @@ public class FailedHttpToGetContainerItemsTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetFilepath($"{getContainerItemsResponseScenario}.http-response.json"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
@@ -171,12 +171,10 @@ public class FailedHttpToGetContainerItemsTests
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output)
             .AppendToMethodName("console-output")
-            .UseParameters(scenario);
-        await Verify(outboundHttpRequests)
-            .AppendToMethodName("outbound-http")
             .UseParameters(scenario);
     }
 }

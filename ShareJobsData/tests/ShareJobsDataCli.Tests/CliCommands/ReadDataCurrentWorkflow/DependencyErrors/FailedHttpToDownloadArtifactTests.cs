@@ -24,7 +24,7 @@ public class FailedHttpToDownloadArtifactTests
             builder
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
         testHttpMessageHandler.MockGetContainerItemsFromCurrentWorkflowRun(builder =>
         {
@@ -33,7 +33,7 @@ public class FailedHttpToDownloadArtifactTests
                     fileContainerResourceUrl: "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982",
                     artifactName: artifactName)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("get-container-items.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("get-container-items.http-response.json"));
         });
         testHttpMessageHandler.MockDownloadArtifactFromCurrentWorkflowRun(builder =>
         {
@@ -41,7 +41,7 @@ public class FailedHttpToDownloadArtifactTests
                 .FromContainerItemLocation("https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982?itemPath=job-data%2Fjob-data.json")
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError);
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
@@ -50,9 +50,9 @@ public class FailedHttpToDownloadArtifactTests
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -72,7 +72,7 @@ public class FailedHttpToDownloadArtifactTests
             builder
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
         testHttpMessageHandler.MockGetContainerItemsFromCurrentWorkflowRun(builder =>
         {
@@ -81,7 +81,7 @@ public class FailedHttpToDownloadArtifactTests
                     fileContainerResourceUrl: "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982",
                     artifactName: artifactName)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("get-container-items.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("get-container-items.http-response.json"));
         });
         testHttpMessageHandler.MockDownloadArtifactFromCurrentWorkflowRun(builder =>
         {
@@ -90,7 +90,7 @@ public class FailedHttpToDownloadArtifactTests
                 .WithResponseStatusCode(HttpStatusCode.InternalServerError)
                 .WithResponseContent("Oops, something went wrong.");
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
@@ -99,9 +99,9 @@ public class FailedHttpToDownloadArtifactTests
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
-        await Verify(outboundHttpRequests).AppendToMethodName("outbound-http");
     }
 
     /// <summary>
@@ -123,7 +123,7 @@ public class FailedHttpToDownloadArtifactTests
             builder
                 .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("list-artifacts.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
         testHttpMessageHandler.MockGetContainerItemsFromCurrentWorkflowRun(builder =>
         {
@@ -132,7 +132,7 @@ public class FailedHttpToDownloadArtifactTests
                     fileContainerResourceUrl: "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982",
                     artifactName: artifactName)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("get-container-items.http-response.json"));
+                .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("get-container-items.http-response.json"));
         });
         testHttpMessageHandler.MockDownloadArtifactFromCurrentWorkflowRun(builder =>
         {
@@ -141,7 +141,7 @@ public class FailedHttpToDownloadArtifactTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContent(nonJsonArtifactContent);
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.Create(testHttpMessageHandler);
+        using var httpClient = new HttpClient(testHttpMessageHandler);
 
         var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
@@ -150,12 +150,10 @@ public class FailedHttpToDownloadArtifactTests
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
+        console.ReadOutputString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output)
             .AppendToMethodName("console-output")
-            .UseParameters(scenario);
-        await Verify(outboundHttpRequests)
-            .AppendToMethodName("outbound-http")
             .UseParameters(scenario);
     }
 }
