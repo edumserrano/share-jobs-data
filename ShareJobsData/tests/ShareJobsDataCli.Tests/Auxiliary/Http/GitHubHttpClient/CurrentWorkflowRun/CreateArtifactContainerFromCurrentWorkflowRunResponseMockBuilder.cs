@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.Tests.Auxiliary.Http.GitHubHttpClient.CurrentWorkflowRun;
 
-internal class CreateArtifactContainerFromCurrentWorkflowRunResponseMockBuilder : BaseResponseMockBuilder<CreateArtifactContainerFromCurrentWorkflowRunResponseMockBuilder>
+internal sealed class CreateArtifactContainerFromCurrentWorkflowRunResponseMockBuilder : BaseResponseMockBuilder<CreateArtifactContainerFromCurrentWorkflowRunResponseMockBuilder>
 {
     private string? _runtimeUrl;
     private string? _runId;

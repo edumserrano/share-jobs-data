@@ -6,7 +6,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.ReadDataDifferentWorkflow;
 [Trait("Category", XUnitCategories.LogicFailure)]
 [Trait("Category", XUnitCategories.ReadDataFromDifferentGitHubWorkflowCommand)]
 [UsesVerify]
-public class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
+public sealed class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
 {
     /// <summary>
     /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> shows expected error message when it can't download

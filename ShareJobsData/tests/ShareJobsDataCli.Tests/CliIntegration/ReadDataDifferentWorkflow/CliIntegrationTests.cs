@@ -8,7 +8,7 @@ namespace ShareJobsDataCli.Tests.CliIntegration.ReadDataDifferentWorkflow;
 [Trait("Category", XUnitCategories.CliIntegration)]
 [Trait("Category", XUnitCategories.ReadDataFromDifferentGitHubWorkflowCommand)]
 [UsesVerify]
-public class CliIntegrationTests
+public sealed class CliIntegrationTests
 {
     /// <summary>
     /// Tests that if no arguments are passed the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> command,

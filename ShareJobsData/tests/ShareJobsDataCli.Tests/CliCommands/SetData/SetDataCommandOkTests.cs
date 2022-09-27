@@ -6,7 +6,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.SetData;
 [Trait("Category", XUnitCategories.Commands)]
 [Trait("Category", XUnitCategories.SetDataCommand)]
 [UsesVerify]
-public class SetDataCommandOkTests
+public sealed class SetDataCommandOkTests
 {
     /// <summary>
     /// Tests that the <see cref="SetDataCommand"/> uploads the specified YML data as a workflow artifact and sets

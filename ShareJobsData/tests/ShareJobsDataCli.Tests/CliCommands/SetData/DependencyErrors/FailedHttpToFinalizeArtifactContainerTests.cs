@@ -6,7 +6,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.SetData.DependencyErrors;
 [Trait("Category", XUnitCategories.DependencyFailure)]
 [Trait("Category", XUnitCategories.SetDataCommand)]
 [UsesVerify]
-public class FailedHttpToFinalizeArtifactContainerTests
+public sealed class FailedHttpToFinalizeArtifactContainerTests
 {
     /// <summary>
     /// Tests that the <see cref="SetDataCommand"/> shows expected error message when the HTTP request to

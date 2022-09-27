@@ -7,7 +7,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.ReadDataCurrentWorkflow;
 /// </summary>
 [Trait("Category", XUnitCategories.Validation)]
 [Trait("Category", XUnitCategories.ReadDataFromCurrentGitHubWorkflowCommand)]
-public class ReadDataFromCurrentGitHubWorkflowCommandValidationTests
+public sealed class ReadDataFromCurrentGitHubWorkflowCommandValidationTests
 {
     /// <summary>
     /// Validation test for the <see cref="ReadDataFromCurrentGitHubWorkflowCommand.ArtifactName"/> command option.

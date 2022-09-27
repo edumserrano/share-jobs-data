@@ -7,7 +7,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.SetData;
 /// </summary>
 [Trait("Category", XUnitCategories.Validation)]
 [Trait("Category", XUnitCategories.SetDataCommand)]
-public class SetDataCommandValidationTests
+public sealed class SetDataCommandValidationTests
 {
     /// <summary>
     /// Validation test for the <see cref="SetDataCommand.ArtifactName"/> command option.

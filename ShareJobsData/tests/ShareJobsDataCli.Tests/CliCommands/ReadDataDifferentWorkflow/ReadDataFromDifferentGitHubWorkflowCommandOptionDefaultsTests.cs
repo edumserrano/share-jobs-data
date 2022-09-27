@@ -5,7 +5,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.ReadDataDifferentWorkflow;
 /// </summary>
 [Trait("Category", XUnitCategories.Defaults)]
 [Trait("Category", XUnitCategories.ReadDataFromDifferentGitHubWorkflowCommand)]
-public class ReadDataFromDifferentGitHubWorkflowCommandOptionDefaultsTests
+public sealed class ReadDataFromDifferentGitHubWorkflowCommandOptionDefaultsTests
 {
     /// <summary>
     /// Validation test for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand.AuthToken"/> command option default value.

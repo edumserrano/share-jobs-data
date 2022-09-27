@@ -8,7 +8,7 @@ namespace ShareJobsDataCli.Tests.CliIntegration.SetData;
 [Trait("Category", XUnitCategories.CliIntegration)]
 [Trait("Category", XUnitCategories.SetDataCommand)]
 [UsesVerify]
-public class CliIntegrationTests
+public sealed class CliIntegrationTests
 {
     /// <summary>
     /// Tests that if no arguments are passed the <see cref="SetDataCommand"/> command,

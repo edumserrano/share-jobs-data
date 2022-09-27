@@ -6,7 +6,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.SetData;
 [Trait("Category", XUnitCategories.LogicFailure)]
 [Trait("Category", XUnitCategories.SetDataCommand)]
 [UsesVerify]
-public class SetDataCommandErrorTests
+public sealed class SetDataCommandErrorTests
 {
     [Fact]
     public async Task InvalidYml()

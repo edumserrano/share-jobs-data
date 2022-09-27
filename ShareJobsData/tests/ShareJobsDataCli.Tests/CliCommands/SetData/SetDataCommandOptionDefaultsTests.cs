@@ -5,7 +5,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.SetData;
 /// </summary>
 [Trait("Category", XUnitCategories.Defaults)]
 [Trait("Category", XUnitCategories.SetDataCommand)]
-public class SetDataCommandOptionDefaultsTests
+public sealed class SetDataCommandOptionDefaultsTests
 {
     /// <summary>
     /// Validation test for the <see cref="SetDataCommand.ArtifactName"/> command option default value.
