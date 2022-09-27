@@ -1,4 +1,4 @@
-using ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow.Errors;
+using ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow.DownloadArtifact;
 
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow;
 
@@ -48,8 +48,8 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
         var artifactContainerName = new GitHubArtifactContainerName(ArtifactName);
         var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, ArtifactFilename);
 
-        using var httpClient = _httpClient.ConfigureGitHubCurrentWorkflowRunArticfactHttpClient(actionRuntimeToken, repository);
-        var githubHttpClient = new GitHubCurrentWorkflowRunArticfactHttpClient(httpClient);
+        using var httpClient = _httpClient.ConfigureGitHubDownloadArticfactHttpClient(actionRuntimeToken, repository);
+        var githubHttpClient = new GitHubDownloadArticfactHttpClient(httpClient);
         var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(containerUrl, artifactContainerName, artifactFilePath);
         if (!downloadResult.IsOk(out var gitHubArtifactItemJsonContent, out var downloadError))
         {

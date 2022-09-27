@@ -1,7 +1,10 @@
 namespace ShareJobsDataCli.Common;
 
 // Using part of the idea of a ThrowHelper pattern due to the benefits explained here: https://dunnhq.com/posts/2022/throw-helper/
-// See also: https://github.com/dotnet/runtime/blob/953f52482ac2460e4b3faff33e4f73c9b30cd7b4/src/libraries/System.Memory/src/System/ThrowHelper.cs
+// See also:
+// https://github.com/dotnet/runtime/blob/9e81ca53137c587bce0f30bf60f13bb10fbdd204/src/libraries/System.Private.CoreLib/src/System/ArgumentNullException.cs#L63
+// https://github.com/dotnet/runtime/blob/9e81ca53137c587bce0f30bf60f13bb10fbdd204/src/libraries/System.Private.CoreLib/src/System/ArgumentException.cs#L110
+// https://github.com/dotnet/runtime/blob/953f52482ac2460e4b3faff33e4f73c9b30cd7b4/src/libraries/System.Memory/src/System/ThrowHelper.cs
 //
 // In short:
 // "Having a throw new in your methods can be inefficient. The inefficiency comes from the fact that a fair amount of assembly code is
