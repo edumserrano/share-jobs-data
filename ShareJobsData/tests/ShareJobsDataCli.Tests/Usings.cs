@@ -19,6 +19,6 @@ global using ShareJobsDataCli.Tests.Auxiliary.Http.GitHubHttpClient;
 global using ShareJobsDataCli.Tests.Auxiliary.Http.GitHubHttpClient.CurrentWorkflowRun;
 global using ShareJobsDataCli.Tests.Auxiliary.Http.GitHubHttpClient.DifferentWorkflowRun;
 global using ShareJobsDataCli.Tests.Auxiliary.Http.ResponseContentFromFiles;
-global using ShareJobsDataCli.Tests.Auxiliary.VerifyExtensions;
+global using ShareJobsDataCli.Tests.Auxiliary.Verify;
 global using Shouldly;
 global using VerifyTests.Http;
