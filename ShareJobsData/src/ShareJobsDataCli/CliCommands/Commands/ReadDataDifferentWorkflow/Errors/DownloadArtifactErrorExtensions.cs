@@ -1,6 +1,6 @@
 using static ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow.DownloadArtifact.Results.DownloadArtifactFileFromDifferentWorkflowResult;
 
-namespace ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow.CommandErrors;
+namespace ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow.Errors;
 
 internal static class DownloadArtifactErrorExtensions
 {

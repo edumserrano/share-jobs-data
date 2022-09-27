@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.Common;
+namespace ShareJobsDataCli.Guards;
 
 // Using part of the idea of a ThrowHelper pattern due to the benefits explained here: https://dunnhq.com/posts/2022/throw-helper/
 // See also:

@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.JobsData;
+namespace ShareJobsDataCli.JobData;
 
 internal record JobDataAsKeysAndValues
 {

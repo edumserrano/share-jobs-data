@@ -1,6 +1,6 @@
-using static ShareJobsDataCli.JobsData.CreateJobDataAsJsonResult;
+using static ShareJobsDataCli.JobData.CreateJobDataAsJsonResult;
 
-namespace ShareJobsDataCli.JobsData;
+namespace ShareJobsDataCli.JobData;
 
 internal sealed record JobDataAsJson
 {

@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.GitHub.Types;
+namespace ShareJobsDataCli.CliCommands.Commands.SetData.Types;
 
 internal sealed record GitHubArtifactFileUploadRequest
 {

@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.GitHub.Types;
+namespace ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow.Types;
 
 internal sealed record GitHubArtifactItemFilename
 {

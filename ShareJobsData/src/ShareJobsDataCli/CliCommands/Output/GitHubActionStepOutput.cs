@@ -1,24 +1,12 @@
-namespace ShareJobsDataCli.JobsData;
+namespace ShareJobsDataCli.CliCommands.Output;
 
-internal class JobDataGitHubActionStepOutput
+internal class GitHubActionStepOutput
 {
     private readonly IConsole _console;
 
-    public JobDataGitHubActionStepOutput(IConsole console)
+    public GitHubActionStepOutput(IConsole console)
     {
         _console = console.NotNull();
-    }
-
-    public Task WriteAsync(GitHubArtifactItemJsonContent gitHubArtifactItemJsonContent)
-    {
-        var jobDataAsJson = new JobDataAsJson(gitHubArtifactItemJsonContent.AsJObject());
-        return WriteAsync(jobDataAsJson);
-    }
-
-    public Task WriteAsync(JobDataAsJson jobDataAsJson)
-    {
-        var jobDataAsKeysAndValues = jobDataAsJson.AsKeyValues();
-        return WriteAsync(jobDataAsKeysAndValues);
     }
 
     public async Task WriteAsync(JobDataAsKeysAndValues jobDataKeysAndValues)

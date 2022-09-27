@@ -50,14 +50,14 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
         IsRequired = false,
         Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The data to share in YAML format.")]
-    public string ArtifactName { get; init; } = CommandDefaults.ArtifactName;
+    public string ArtifactName { get; init; } = CommandOptionsDefaults.ArtifactName;
 
     [CommandOption(
         "data-filename",
         IsRequired = false,
         Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The data to share in YAML format.")]
-    public string ArtifactFilename { get; init; } = CommandDefaults.ArtifactFilename;
+    public string ArtifactFilename { get; init; } = CommandOptionsDefaults.ArtifactFilename;
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
@@ -79,7 +79,7 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
             return;
         }
 
-        var stepOutput = new JobDataGitHubActionStepOutput(console);
+        var stepOutput = new GitHubActionStepOutput(console);
         await stepOutput.WriteAsync(gitHubArtifactItemJsonContent);
     }
 }

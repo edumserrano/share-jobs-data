@@ -29,14 +29,14 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
         IsRequired = false,
         Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The name of the artifact.")]
-    public string ArtifactName { get; init; } = CommandDefaults.ArtifactName;
+    public string ArtifactName { get; init; } = CommandOptionsDefaults.ArtifactName;
 
     [CommandOption(
         "data-filename",
         IsRequired = false,
         Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The filename that contains the data.")]
-    public string ArtifactFilename { get; init; } = CommandDefaults.ArtifactFilename;
+    public string ArtifactFilename { get; init; } = CommandOptionsDefaults.ArtifactFilename;
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
@@ -57,7 +57,7 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
             return;
         }
 
-        var stepOutput = new JobDataGitHubActionStepOutput(console);
+        var stepOutput = new GitHubActionStepOutput(console);
         await stepOutput.WriteAsync(gitHubArtifactItemJsonContent);
     }
 }

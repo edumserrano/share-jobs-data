@@ -1,6 +1,6 @@
 using static ShareJobsDataCli.CliCommands.Commands.SetData.UploadArtifact.Results.UploadArtifactFileResult;
 
-namespace ShareJobsDataCli.CliCommands.Commands.SetData.CommandErrors;
+namespace ShareJobsDataCli.CliCommands.Commands.SetData.Errors;
 
 internal static class UploadArtifactFileResultErrorExtensions
 {

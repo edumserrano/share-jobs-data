@@ -1,6 +1,6 @@
-using static ShareJobsDataCli.JobsData.CreateJobDataAsJsonResult;
+using static ShareJobsDataCli.JobData.CreateJobDataAsJsonResult;
 
-namespace ShareJobsDataCli.CliCommands.Commands.SetData.CommandErrors;
+namespace ShareJobsDataCli.CliCommands.Commands.SetData.Errors;
 
 internal static class CreateJobDataAsJsonErrorExtensions
 {
