@@ -3,11 +3,11 @@ using static ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow.Dow
 
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow.DownloadArtifact;
 
-internal class GitHubDownloadArticfactHttpClient
+internal class GitHubDownloadArticfactFromDifferentWorkflowHttpClient
 {
     private readonly HttpClient _httpClient;
 
-    public GitHubDownloadArticfactHttpClient(HttpClient httpClient)
+    public GitHubDownloadArticfactFromDifferentWorkflowHttpClient(HttpClient httpClient)
     {
         _httpClient = httpClient.NotNull();
     }
@@ -62,11 +62,11 @@ internal class GitHubDownloadArticfactHttpClient
         }
     }
 
-    private async Task<JsonHttpResult<GitHubWorkflowRunArtifactsHttpResponse>> ListWorkflowRunArtifactsAsync(GitHubRepositoryName repoName, GitHubRunId runId)
+    private async Task<JsonHttpResult<GitHubListWorkflowRunArtifactsHttpResponse>> ListWorkflowRunArtifactsAsync(GitHubRepositoryName repoName, GitHubRunId runId)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"repos/{repoName}/actions/runs/{runId}/artifacts");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var jsonHttpResult = await httpResponse.ReadFromJsonAsync<GitHubWorkflowRunArtifactsHttpResponse, GitHubWorkflowRunArtifactsHttpResponseValidator>();
+        var jsonHttpResult = await httpResponse.ReadFromJsonAsync<GitHubListWorkflowRunArtifactsHttpResponse, GitHubListWorkflowRunArtifactsHttpResponseValidator>();
         return jsonHttpResult;
     }
 

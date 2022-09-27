@@ -1,7 +1,7 @@
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow.DownloadArtifact.HttpModels;
 
 #pragma warning disable CA1812 // Avoid uninstantiated internal classes. Referenced via JSON generic type deserialization.
-internal record GitHubWorkflowRunArtifactsHttpResponse(
+internal record GitHubListWorkflowRunArtifactsHttpResponse(
     [property: JsonPropertyName("total_count")] int TotalCount,
     [property: JsonPropertyName("artifacts")] IReadOnlyList<GitHubWorkflowRunArtifact> Artifacts);
 
@@ -26,9 +26,9 @@ internal record GitHubWorkflowRun(
     [property: JsonPropertyName("head_sha")] string HeadSha);
 #pragma warning disable CA1812 // Avoid uninstantiated internal classes. Referenced via JSON generic type deserialization.
 
-internal sealed class GitHubWorkflowRunArtifactsHttpResponseValidator : AbstractValidator<GitHubWorkflowRunArtifactsHttpResponse>
+internal sealed class GitHubListWorkflowRunArtifactsHttpResponseValidator : AbstractValidator<GitHubListWorkflowRunArtifactsHttpResponse>
 {
-    public GitHubWorkflowRunArtifactsHttpResponseValidator()
+    public GitHubListWorkflowRunArtifactsHttpResponseValidator()
     {
         RuleFor(x => x.Artifacts)
             .Must(x => x is not null)
