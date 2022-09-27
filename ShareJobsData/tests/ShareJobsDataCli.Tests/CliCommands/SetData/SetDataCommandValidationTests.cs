@@ -25,7 +25,7 @@ public sealed class SetDataCommandValidationTests
             ArtifactName = artifactName,
         };
 
-        var exception = await Should.ThrowAsync<ArgumentException>(() => command.ExecuteAsync(console).AsTask());
+        var exception = await Should.ThrowAsync<GuardException>(() => command.ExecuteAsync(console).AsTask());
         exception.Message.ShouldBe("artifactName cannot be null or whitespace.");
     }
 
@@ -44,7 +44,7 @@ public sealed class SetDataCommandValidationTests
         {
             ArtifactFilename = artifactFilename,
         };
-        var exception = await Should.ThrowAsync<ArgumentException>(() => command.ExecuteAsync(console).AsTask());
+        var exception = await Should.ThrowAsync<GuardException>(() => command.ExecuteAsync(console).AsTask());
         exception.Message.ShouldBe("artifactFilename cannot be null or whitespace.");
     }
 
@@ -63,7 +63,7 @@ public sealed class SetDataCommandValidationTests
         {
             DataAsYmlStr = dataAsYmlStr,
         };
-        var exception = await Should.ThrowAsync<ArgumentException>(() => command.ExecuteAsync(console).AsTask());
+        var exception = await Should.ThrowAsync<GuardException>(() => command.ExecuteAsync(console).AsTask());
         exception.Message.ShouldBe("dataAsYmlStr cannot be null or whitespace.");
     }
 }

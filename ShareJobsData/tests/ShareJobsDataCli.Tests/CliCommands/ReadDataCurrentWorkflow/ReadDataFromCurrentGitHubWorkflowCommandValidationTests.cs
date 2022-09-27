@@ -24,7 +24,7 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommandValidationTests
         {
             ArtifactName = artifactName,
         };
-        var exception = await Should.ThrowAsync<ArgumentException>(() => command.ExecuteAsync(console).AsTask());
+        var exception = await Should.ThrowAsync<GuardException>(() => command.ExecuteAsync(console).AsTask());
         exception.Message.ShouldBe("artifactName cannot be null or whitespace.");
     }
 
@@ -43,7 +43,7 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommandValidationTests
         {
             ArtifactFilename = artifactFilename,
         };
-        var exception = await Should.ThrowAsync<ArgumentException>(() => command.ExecuteAsync(console).AsTask());
+        var exception = await Should.ThrowAsync<GuardException>(() => command.ExecuteAsync(console).AsTask());
         exception.Message.ShouldBe("artifactFilename cannot be null or whitespace.");
     }
 }

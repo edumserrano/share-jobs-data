@@ -13,6 +13,7 @@ global using ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow;
 global using ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow;
 global using ShareJobsDataCli.CliCommands.Commands.SetData;
 global using ShareJobsDataCli.GitHub;
+global using ShareJobsDataCli.Guards;
 global using ShareJobsDataCli.Tests.Auxiliary.CliApp;
 global using ShareJobsDataCli.Tests.Auxiliary.Http;
 global using ShareJobsDataCli.Tests.Auxiliary.Http.GitHubHttpClient;

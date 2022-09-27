@@ -42,7 +42,7 @@ internal static class JsonHttpResultErrorExtensions
         for (var i = 0; i < failedValidation.ValidationResult.Errors.Count; i++)
         {
             var validationError = failedValidation.ValidationResult.Errors[i];
-            sb.Append(i + 1).Append(") ").AppendLine(validationError.ToString());
+            sb.Append(i + 1).Append(") ").Append(validationError).AppendLine();
         }
 
         var validationErrors = sb.ToString();

@@ -32,7 +32,7 @@ internal static class HttpResponseMessageExtensions
         }
 
         var validator = new TValidator();
-        var validationResult = validator.Validate(responseModel);
+        var validationResult = await validator.ValidateAsync(responseModel);
         if (!validationResult.IsValid)
         {
             return JsonModelValidationFailed<TModel>(validationResult);
