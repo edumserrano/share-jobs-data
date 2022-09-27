@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.GitHub;
+namespace ShareJobsDataCli.Http;
 
 internal abstract record EnsureSuccessStatusCodeResult
 {

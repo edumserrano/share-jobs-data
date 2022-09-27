@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.GitHub;
+namespace ShareJobsDataCli.Http;
 
 // The purpose of this class is just for syntax usage of the JsonHttpResult<T> class.
 // It allow the following syntax: JsonHttpResult.JsonDeserializedToNull<TModel>() instead of new JsonHttpResult<TModel>.JsonDeserializedToNull();

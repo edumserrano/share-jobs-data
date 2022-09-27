@@ -1,6 +1,6 @@
-using static ShareJobsDataCli.GitHub.JsonHttpResult;
+using static ShareJobsDataCli.Http.JsonHttpResult;
 
-namespace ShareJobsDataCli.GitHub;
+namespace ShareJobsDataCli.Http;
 
 internal static class HttpResponseMessageExtensions
 {

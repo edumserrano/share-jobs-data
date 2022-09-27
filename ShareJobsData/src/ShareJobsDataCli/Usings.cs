@@ -30,6 +30,7 @@ global using ShareJobsDataCli.CliCommands.Validators;
 global using ShareJobsDataCli.Common;
 global using ShareJobsDataCli.GitHub;
 global using ShareJobsDataCli.GitHub.Artifacts.Types;
+global using ShareJobsDataCli.Http;
 global using ShareJobsDataCli.JobsData;
 global using YamlDotNet.Core;
 global using YamlDotNet.Serialization;
