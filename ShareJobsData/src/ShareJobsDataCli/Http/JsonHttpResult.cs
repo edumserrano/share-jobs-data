@@ -32,19 +32,19 @@ internal abstract record JsonHttpResult<T>
     {
     }
 
-    public record Ok(T Response)
+    public sealed record Ok(T Response)
         : JsonHttpResult<T>;
 
     public abstract record Error()
         : JsonHttpResult<T>;
 
-    public record JsonDeserializedToNull()
+    public sealed record JsonDeserializedToNull()
         : Error;
 
-    public record JsonModelValidationFailed(ValidationResult ValidationResult)
+    public sealed record JsonModelValidationFailed(ValidationResult ValidationResult)
         : Error;
 
-    public record FailedStatusCode(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
+    public sealed record FailedStatusCode(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
         : Error;
 
     public static implicit operator JsonHttpResult<T>(T response) => new Ok(response);

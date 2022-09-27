@@ -3,7 +3,7 @@ using static ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow.Dow
 
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow.DownloadArtifact;
 
-internal class GitHubDownloadArticfactFromDifferentWorkflowHttpClient
+internal sealed class GitHubDownloadArticfactFromDifferentWorkflowHttpClient
 {
     private readonly HttpClient _httpClient;
 

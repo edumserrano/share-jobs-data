@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.Tests.Auxiliary.Http.GitHubHttpClient.DifferentWorkflowRun;
 
-internal class ListArtifactsFromDifferentWorkflowRunResponseMockBuilder : BaseResponseMockBuilder<ListArtifactsFromDifferentWorkflowRunResponseMockBuilder>
+internal sealed class ListArtifactsFromDifferentWorkflowRunResponseMockBuilder : BaseResponseMockBuilder<ListArtifactsFromDifferentWorkflowRunResponseMockBuilder>
 {
     private string? _repoName;
     private string? _runId;

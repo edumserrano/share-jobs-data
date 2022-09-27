@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.CliCommands.Errors;
 
-internal class ConsoleErrorMessageBuilder
+internal sealed class ConsoleErrorMessageBuilder
 {
     private string? _command;
     private string? _error;

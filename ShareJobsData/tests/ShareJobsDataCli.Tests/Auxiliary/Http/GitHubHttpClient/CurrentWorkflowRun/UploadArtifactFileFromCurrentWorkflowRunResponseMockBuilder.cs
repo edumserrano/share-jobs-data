@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.Tests.Auxiliary.Http.GitHubHttpClient.CurrentWorkflowRun;
 
-internal class UploadArtifactFileFromCurrentWorkflowRunResponseMockBuilder : BaseResponseMockBuilder<UploadArtifactFileFromCurrentWorkflowRunResponseMockBuilder>
+internal sealed class UploadArtifactFileFromCurrentWorkflowRunResponseMockBuilder : BaseResponseMockBuilder<UploadArtifactFileFromCurrentWorkflowRunResponseMockBuilder>
 {
     private string? _fileContainerResourceUrl;
     private string? _artifactName;

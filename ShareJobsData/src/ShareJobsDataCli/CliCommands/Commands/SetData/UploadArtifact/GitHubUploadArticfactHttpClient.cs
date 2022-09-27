@@ -2,7 +2,7 @@ using static ShareJobsDataCli.CliCommands.Commands.SetData.UploadArtifact.Result
 
 namespace ShareJobsDataCli.CliCommands.Commands.SetData.UploadArtifact;
 
-internal class GitHubUploadArticfactHttpClient
+internal sealed class GitHubUploadArticfactHttpClient
 {
     private readonly HttpClient _httpClient;
 

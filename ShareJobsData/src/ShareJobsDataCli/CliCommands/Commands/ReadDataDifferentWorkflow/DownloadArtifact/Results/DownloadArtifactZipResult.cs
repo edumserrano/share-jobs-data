@@ -6,10 +6,10 @@ internal abstract record DownloadArtifactZipResult
     {
     }
 
-    public record Ok(ZipArchive ZipArchive)
+    public sealed record Ok(ZipArchive ZipArchive)
         : DownloadArtifactZipResult;
 
-    public record FailedToDownloadArtifactZip(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
+    public sealed record FailedToDownloadArtifactZip(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
         : DownloadArtifactZipResult;
 
     public static implicit operator DownloadArtifactZipResult(ZipArchive zipArchive) => new Ok(zipArchive);

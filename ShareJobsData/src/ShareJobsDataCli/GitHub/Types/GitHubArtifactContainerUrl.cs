@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.GitHub.Types;
 
-internal record GitHubArtifactContainerUrl
+internal sealed record GitHubArtifactContainerUrl
 {
     private readonly string _value;
 

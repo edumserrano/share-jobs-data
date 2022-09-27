@@ -6,10 +6,10 @@ internal abstract record EnsureSuccessStatusCodeResult
     {
     }
 
-    public record Ok()
+    public sealed record Ok()
         : EnsureSuccessStatusCodeResult;
 
-    public record NonSuccessStatusCode(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
+    public sealed record NonSuccessStatusCode(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
         : EnsureSuccessStatusCodeResult;
 
     public static implicit operator EnsureSuccessStatusCodeResult(FailedStatusCodeHttpResponse failedStatusCodeHttpResponse) => new NonSuccessStatusCode(failedStatusCodeHttpResponse);
@@ -27,7 +27,7 @@ internal abstract record EnsureSuccessStatusCodeResult
     }
 }
 
-public record FailedStatusCodeHttpResponse(
+public sealed record FailedStatusCodeHttpResponse(
     string Method,
     string RequestUrl,
     string StatusCode,

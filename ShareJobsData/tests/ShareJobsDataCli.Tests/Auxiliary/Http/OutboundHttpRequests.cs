@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.Tests.Auxiliary.Http;
 
-internal class OutboundHttpRequests : IReadOnlyCollection<LoggedSend>
+internal sealed class OutboundHttpRequests : IReadOnlyCollection<LoggedSend>
 {
     private readonly ConcurrentQueue<LoggedSend> _value;
 

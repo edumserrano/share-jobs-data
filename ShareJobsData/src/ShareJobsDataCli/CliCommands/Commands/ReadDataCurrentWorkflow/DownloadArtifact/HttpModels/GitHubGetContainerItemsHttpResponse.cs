@@ -1,11 +1,11 @@
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow.DownloadArtifact.HttpModels;
 
 #pragma warning disable CA1812 // Avoid uninstantiated internal classes. Referenced via JSON generic type deserialization.
-internal record GitHubGetContainerItemsHttpResponse(
+internal sealed record GitHubGetContainerItemsHttpResponse(
     int Count,
     [property: JsonPropertyName("value")] IReadOnlyList<GitHubArtifactContainerItem> ContainerItems);
 
-internal record GitHubArtifactContainerItem(
+internal sealed record GitHubArtifactContainerItem(
     long ContainerId,
     string ScopeIdentifier,
     string Path,

@@ -6,16 +6,16 @@ internal abstract record DownloadContainerItemResult
     {
     }
 
-    public record Ok(GitHubArtifactItemJsonContent ArtifactItemContent)
+    public sealed record Ok(GitHubArtifactItemJsonContent ArtifactItemContent)
         : DownloadContainerItemResult;
 
     public abstract record Error()
         : DownloadContainerItemResult;
 
-    public record FailedToDownloadContainerItem(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
+    public sealed record FailedToDownloadContainerItem(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
         : Error;
 
-    public record ContainerItemContentNotJson(GitHubArtifactItemNotJsonContent NotJsonContent)
+    public sealed record ContainerItemContentNotJson(GitHubArtifactItemNotJsonContent NotJsonContent)
         : Error;
 
     public static implicit operator DownloadContainerItemResult(GitHubArtifactItemJsonContent artifactItemContent) => new Ok(artifactItemContent);

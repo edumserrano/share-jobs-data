@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.Tests.Auxiliary.Http.GitHubHttpClient.CurrentWorkflowRun;
 
-internal class GetContainerItemsFromCurrentWorkflowRunResponseMockBuilder : BaseResponseMockBuilder<GetContainerItemsFromCurrentWorkflowRunResponseMockBuilder>
+internal sealed class GetContainerItemsFromCurrentWorkflowRunResponseMockBuilder : BaseResponseMockBuilder<GetContainerItemsFromCurrentWorkflowRunResponseMockBuilder>
 {
     private string? _fileContainerResourceUrl;
     private string? _artifactName;
