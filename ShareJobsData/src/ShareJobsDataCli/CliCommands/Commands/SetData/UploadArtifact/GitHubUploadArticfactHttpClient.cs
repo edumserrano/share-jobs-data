@@ -11,6 +11,7 @@ internal sealed class GitHubUploadArticfactHttpClient
         _httpClient = httpClient.NotNull();
     }
 
+    // TODO move info about this to some readme docs? should document the download/upload on same/different workflows
     // this process is explained here https://github.com/actions/upload-artifact/issues/180#issuecomment-1086306269
     // add something to dev readme about this
     // no need to gzip since content is always expected to be small json model

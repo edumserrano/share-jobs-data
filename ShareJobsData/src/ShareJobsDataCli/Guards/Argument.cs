@@ -1,3 +1,5 @@
+using Flurl.Util;
+
 namespace ShareJobsDataCli.Guards;
 
 // Using part of the idea of a ThrowHelper pattern due to the benefits explained here: https://dunnhq.com/posts/2022/throw-helper/
@@ -41,7 +43,7 @@ internal static class Argument
     {
         if (value < 0)
         {
-            GuardException.Throw($"{expression} must be a positive value. Received '{value}'.");
+            GuardException.Throw($"{expression} must be a positive value. Received '{value.ToInvariantString()}'.");
         }
 
         return value;
