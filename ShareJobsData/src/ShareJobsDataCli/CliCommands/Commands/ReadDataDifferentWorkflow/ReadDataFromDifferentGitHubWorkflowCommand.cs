@@ -1,5 +1,3 @@
-using ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow.Errors;
-
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow;
 
 [Command(_commandName)]
@@ -50,14 +48,14 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
         IsRequired = false,
         Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The data to share in YAML format.")]
-    public string ArtifactName { get; init; } = CommandDefaults.ArtifactName;
+    public string ArtifactName { get; init; } = CommandOptionsDefaults.ArtifactName;
 
     [CommandOption(
         "data-filename",
         IsRequired = false,
         Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The data to share in YAML format.")]
-    public string ArtifactFilename { get; init; } = CommandDefaults.ArtifactFilename;
+    public string ArtifactFilename { get; init; } = CommandOptionsDefaults.ArtifactFilename;
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
@@ -70,8 +68,8 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
         var artifactContainerName = new GitHubArtifactContainerName(ArtifactName);
         var artifactItemFilename = new GitHubArtifactItemFilename(ArtifactFilename);
 
-        using var httpClient = _httpClient.ConfigureGitHubDifferentWorkflowRunArticfactHttpClient(authToken, sourceRepositoryName);
-        var githubHttpClient = new GitHubDifferentWorkflowRunArticfactHttpClient(httpClient);
+        using var httpClient = _httpClient.ConfigureGitHubHttpClient(authToken, sourceRepositoryName);
+        var githubHttpClient = new GitHubDownloadArticfactFromDifferentWorkflowHttpClient(httpClient);
         var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(jobDataArtifactRepositoryName, runId, artifactContainerName, artifactItemFilename);
         if (!downloadResult.IsOk(out var gitHubArtifactItemJsonContent, out var downloadError))
         {
@@ -79,7 +77,7 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
             return;
         }
 
-        var stepOutput = new JobDataGitHubActionStepOutput(console);
+        var stepOutput = new GitHubActionStepOutput(console);
         await stepOutput.WriteAsync(gitHubArtifactItemJsonContent);
     }
 }

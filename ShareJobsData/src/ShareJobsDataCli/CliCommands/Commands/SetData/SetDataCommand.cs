@@ -27,14 +27,14 @@ public sealed class SetDataCommand : ICommand
         IsRequired = false,
         Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The name of the artifact.")]
-    public string ArtifactName { get; init; } = CommandDefaults.ArtifactName;
+    public string ArtifactName { get; init; } = CommandOptionsDefaults.ArtifactName;
 
     [CommandOption(
         "data-filename",
         IsRequired = false,
         Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The filename that contains the data.")]
-    public string ArtifactFilename { get; init; } = CommandDefaults.ArtifactFilename;
+    public string ArtifactFilename { get; init; } = CommandOptionsDefaults.ArtifactFilename;
 
     [CommandOption(
         "data",
@@ -66,8 +66,8 @@ public sealed class SetDataCommand : ICommand
         }
 
         var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, fileUploadContent: jobDataAsJson.AsJson());
-        using var httpClient = _httpClient.ConfigureGitHubCurrentWorkflowRunArticfactHttpClient(actionRuntimeToken, repository);
-        var githubHttpClient = new GitHubCurrentWorkflowRunArticfactHttpClient(httpClient);
+        using var httpClient = _httpClient.ConfigureGitHubHttpClient(actionRuntimeToken, repository);
+        var githubHttpClient = new GitHubUploadArticfactHttpClient(httpClient);
         var uploadArtifact = await githubHttpClient.UploadArtifactFileAsync(artifactContainerUrl, artifactContainerName, artifactFileUploadRequest);
         if (!uploadArtifact.IsOk(out var _, out var uploadError))
         {
@@ -77,7 +77,7 @@ public sealed class SetDataCommand : ICommand
 
         if (SetStepOutput)
         {
-            var stepOutput = new JobDataGitHubActionStepOutput(console);
+            var stepOutput = new GitHubActionStepOutput(console);
             await stepOutput.WriteAsync(jobDataAsJson);
         }
     }

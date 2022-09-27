@@ -1,4 +1,4 @@
-using static ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.DownloadArtifactFile.Results.DownloadArtifactFileFromCurrentWorkflowResult;
+using static ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow.DownloadArtifact.Results.DownloadArtifactFileFromCurrentWorkflowResult;
 
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow.Errors;
 

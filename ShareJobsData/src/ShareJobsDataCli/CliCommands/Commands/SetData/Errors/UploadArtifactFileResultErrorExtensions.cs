@@ -1,4 +1,4 @@
-using static ShareJobsDataCli.GitHub.Artifacts.CurrentWorkflowRun.UploadArtifactFile.Results.UploadArtifactFileResult;
+using static ShareJobsDataCli.CliCommands.Commands.SetData.UploadArtifact.Results.UploadArtifactFileResult;
 
 namespace ShareJobsDataCli.CliCommands.Commands.SetData.Errors;
 

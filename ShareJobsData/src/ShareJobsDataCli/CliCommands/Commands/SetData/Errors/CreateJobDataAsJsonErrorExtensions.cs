@@ -1,4 +1,4 @@
-using static ShareJobsDataCli.JobsData.CreateJobDataAsJsonResult;
+using static ShareJobsDataCli.JobData.CreateJobDataAsJsonResult;
 
 namespace ShareJobsDataCli.CliCommands.Commands.SetData.Errors;
 

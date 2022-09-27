@@ -1,5 +1,3 @@
-using ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow.Errors;
-
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow;
 
 [Command(_commandName)]
@@ -29,14 +27,14 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
         IsRequired = false,
         Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The name of the artifact.")]
-    public string ArtifactName { get; init; } = CommandDefaults.ArtifactName;
+    public string ArtifactName { get; init; } = CommandOptionsDefaults.ArtifactName;
 
     [CommandOption(
         "data-filename",
         IsRequired = false,
         Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The filename that contains the data.")]
-    public string ArtifactFilename { get; init; } = CommandDefaults.ArtifactFilename;
+    public string ArtifactFilename { get; init; } = CommandOptionsDefaults.ArtifactFilename;
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
@@ -48,8 +46,8 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
         var artifactContainerName = new GitHubArtifactContainerName(ArtifactName);
         var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, ArtifactFilename);
 
-        using var httpClient = _httpClient.ConfigureGitHubCurrentWorkflowRunArticfactHttpClient(actionRuntimeToken, repository);
-        var githubHttpClient = new GitHubCurrentWorkflowRunArticfactHttpClient(httpClient);
+        using var httpClient = _httpClient.ConfigureGitHubHttpClient(actionRuntimeToken, repository);
+        var githubHttpClient = new GitHubDownloadArticfactFromCurrentWorklfowHttpClient(httpClient);
         var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(containerUrl, artifactContainerName, artifactFilePath);
         if (!downloadResult.IsOk(out var gitHubArtifactItemJsonContent, out var downloadError))
         {
@@ -57,7 +55,7 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
             return;
         }
 
-        var stepOutput = new JobDataGitHubActionStepOutput(console);
+        var stepOutput = new GitHubActionStepOutput(console);
         await stepOutput.WriteAsync(gitHubArtifactItemJsonContent);
     }
 }
