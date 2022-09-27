@@ -1,4 +1,5 @@
 global using System.Diagnostics.CodeAnalysis;
+global using System.Globalization;
 global using System.IO.Compression;
 global using System.Net.Http.Headers;
 global using System.Net.Http.Json;

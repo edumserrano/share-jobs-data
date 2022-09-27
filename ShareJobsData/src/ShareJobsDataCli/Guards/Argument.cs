@@ -1,4 +1,4 @@
-using Flurl.Util;
+
 
 namespace ShareJobsDataCli.Guards;
 
@@ -43,7 +43,7 @@ internal static class Argument
     {
         if (value < 0)
         {
-            GuardException.Throw($"{expression} must be a positive value. Received '{value.ToInvariantString()}'.");
+            GuardException.Throw($"{expression} must be a positive value. Received '{value.ToString(CultureInfo.InvariantCulture)}'.");
         }
 
         return value;
