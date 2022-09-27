@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.CliCommands.Output;
 
-internal class GitHubActionStepOutput
+internal sealed class GitHubActionStepOutput
 {
     private readonly IConsole _console;
 

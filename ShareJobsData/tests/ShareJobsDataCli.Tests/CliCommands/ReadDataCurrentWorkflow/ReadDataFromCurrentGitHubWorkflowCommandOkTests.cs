@@ -6,7 +6,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.ReadDataCurrentWorkflow;
 [Trait("Category", XUnitCategories.Commands)]
 [Trait("Category", XUnitCategories.ReadDataFromCurrentGitHubWorkflowCommand)]
 [UsesVerify]
-public class ReadDataFromCurrentGitHubWorkflowCommandOkTests
+public sealed class ReadDataFromCurrentGitHubWorkflowCommandOkTests
 {
     /// <summary>
     /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> downloads the workflow artifact with the shared

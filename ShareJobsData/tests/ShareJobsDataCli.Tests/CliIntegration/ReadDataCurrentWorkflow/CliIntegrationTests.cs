@@ -8,7 +8,7 @@ namespace ShareJobsDataCli.Tests.CliIntegration.ReadDataCurrentWorkflow;
 [Trait("Category", XUnitCategories.CliIntegration)]
 [Trait("Category", XUnitCategories.ReadDataFromCurrentGitHubWorkflowCommand)]
 [UsesVerify]
-public class CliIntegrationTests
+public sealed class CliIntegrationTests
 {
     /// <summary>
     /// Tests the validation of the --artifact-name option for the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> command.

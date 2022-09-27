@@ -1,7 +1,7 @@
 namespace ShareJobsDataCli.CliCommands.Commands.SetData.UploadArtifact.HttpModels;
 
 #pragma warning disable CA1812 // Avoid uninstantiated internal classes. Referenced via JSON generic type deserialization.
-internal record GitHubCreateArtifactContainerHttpResponse(
+internal sealed record GitHubCreateArtifactContainerHttpResponse(
     long ContainerId,
     long Size,
     string FileContainerResourceUrl,

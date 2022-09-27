@@ -7,7 +7,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.ReadDataDifferentWorkflow;
 /// </summary>
 [Trait("Category", XUnitCategories.Validation)]
 [Trait("Category", XUnitCategories.ReadDataFromDifferentGitHubWorkflowCommand)]
-public class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
+public sealed class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
 {
     /// <summary>
     /// Validation test for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand.AuthToken"/> command option.
@@ -26,7 +26,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
             Repo = "repo-name",
             RunId = "run-id",
         };
-        var exception = await Should.ThrowAsync<ArgumentException>(() => command.ExecuteAsync(console).AsTask());
+        var exception = await Should.ThrowAsync<GuardException>(() => command.ExecuteAsync(console).AsTask());
         exception.Message.ShouldBe("gitHubAuthToken cannot be null or whitespace.");
     }
 
@@ -47,7 +47,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
             Repo = repo,
             RunId = "run-id",
         };
-        var exception = await Should.ThrowAsync<ArgumentException>(() => command.ExecuteAsync(console).AsTask());
+        var exception = await Should.ThrowAsync<GuardException>(() => command.ExecuteAsync(console).AsTask());
         exception.Message.ShouldBe("repository cannot be null or whitespace.");
     }
 
@@ -68,7 +68,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
             Repo = "repo-name",
             RunId = runId,
         };
-        var exception = await Should.ThrowAsync<ArgumentException>(() => command.ExecuteAsync(console).AsTask());
+        var exception = await Should.ThrowAsync<GuardException>(() => command.ExecuteAsync(console).AsTask());
         exception.Message.ShouldBe("runId cannot be null or whitespace.");
     }
 
@@ -90,7 +90,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
             RunId = "run-id",
             ArtifactName = artifactName,
         };
-        var exception = await Should.ThrowAsync<ArgumentException>(() => command.ExecuteAsync(console).AsTask());
+        var exception = await Should.ThrowAsync<GuardException>(() => command.ExecuteAsync(console).AsTask());
         exception.Message.ShouldBe("artifactName cannot be null or whitespace.");
     }
 
@@ -112,7 +112,7 @@ public class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
             RunId = "run-id",
             ArtifactFilename = artifactFilename,
         };
-        var exception = await Should.ThrowAsync<ArgumentException>(() => command.ExecuteAsync(console).AsTask());
+        var exception = await Should.ThrowAsync<GuardException>(() => command.ExecuteAsync(console).AsTask());
         exception.Message.ShouldBe("artifactFilename cannot be null or whitespace.");
     }
 }

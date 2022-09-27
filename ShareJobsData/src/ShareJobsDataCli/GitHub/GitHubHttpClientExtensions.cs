@@ -23,7 +23,7 @@ internal static class GitHubHttpClientExtensions
     // use this to configure a GitHub HTTP Client that requires a privileged token
     // the action runtime token is a specific type of token that is only available
     // to the agents running the GitHub workflow. These are not the same type as
-    // PAT tokens or for instance the GITHUB_TOKEN. 
+    // PAT tokens or for instance the GITHUB_TOKEN.
     public static HttpClient ConfigureGitHubHttpClient(
         this HttpClient httpClient,
         GitHubActionRuntimeToken actionRuntimeToken,

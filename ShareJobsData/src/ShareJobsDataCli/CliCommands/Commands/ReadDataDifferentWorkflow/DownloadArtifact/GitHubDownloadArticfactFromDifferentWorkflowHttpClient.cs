@@ -3,7 +3,7 @@ using static ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow.Dow
 
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow.DownloadArtifact;
 
-internal class GitHubDownloadArticfactFromDifferentWorkflowHttpClient
+internal sealed class GitHubDownloadArticfactFromDifferentWorkflowHttpClient
 {
     private readonly HttpClient _httpClient;
 
@@ -29,7 +29,7 @@ internal class GitHubDownloadArticfactFromDifferentWorkflowHttpClient
             return new FailedToListWorkflowRunArtifacts(errorJsonHttpResult);
         }
 
-        var artifact = workflowRunArtifacts.Artifacts.FirstOrDefault(x => x.Name == artifactContainerName);
+        var artifact = workflowRunArtifacts.Artifacts.FirstOrDefault(x => string.Equals(x.Name, artifactContainerName, StringComparison.Ordinal));
         if (artifact is null)
         {
             return new ArtifactNotFound(repoName, runId, artifactContainerName);
@@ -49,7 +49,7 @@ internal class GitHubDownloadArticfactFromDifferentWorkflowHttpClient
                 return new ArtifactFileNotFound(repoName, runId, artifactContainerName, artifactItemFilename);
             }
 
-            using var artifactAsStream = artifactFileAsZip.Open();
+            await using var artifactAsStream = artifactFileAsZip.Open();
             using var streamReader = new StreamReader(artifactAsStream, Encoding.UTF8);
             var artifactFileContent = await streamReader.ReadToEndAsync();
             var createArtifactItemJsonContentResult = GitHubArtifactItemJsonContent.Create(artifactFileContent);

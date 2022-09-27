@@ -6,7 +6,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.ReadDataCurrentWorkflow.DependencyE
 [Trait("Category", XUnitCategories.DependencyFailure)]
 [Trait("Category", XUnitCategories.ReadDataFromCurrentGitHubWorkflowCommand)]
 [UsesVerify]
-public class FailedHttpToDownloadArtifactTests
+public sealed class FailedHttpToDownloadArtifactTests
 {
     /// <summary>
     /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when

@@ -6,25 +6,25 @@ internal abstract record DownloadArtifactFileFromCurrentWorkflowResult
     {
     }
 
-    public record Ok(GitHubArtifactItemJsonContent GitHubArtifactItem)
+    public sealed record Ok(GitHubArtifactItemJsonContent GitHubArtifactItem)
         : DownloadArtifactFileFromCurrentWorkflowResult;
 
     public abstract record Error()
         : DownloadArtifactFileFromCurrentWorkflowResult;
 
-    public record ArtifactNotFound(GitHubArtifactContainerName ArtifactContainerName)
+    public sealed record ArtifactNotFound(GitHubArtifactContainerName ArtifactContainerName)
         : Error;
 
-    public record ArtifactContainerItemNotFound(GitHubArtifactItemFilePath ArtifactItemFilePath)
+    public sealed record ArtifactContainerItemNotFound(GitHubArtifactItemFilePath ArtifactItemFilePath)
         : Error;
 
-    public record FailedToListWorkflowRunArtifacts(JsonHttpResult<GitHubListArtifactsHttpResponse>.Error JsonHttpError)
+    public sealed record FailedToListWorkflowRunArtifacts(JsonHttpResult<GitHubListArtifactsHttpResponse>.Error JsonHttpError)
         : Error;
 
-    public record FailedToGetContainerItems(JsonHttpResult<GitHubGetContainerItemsHttpResponse>.Error JsonHttpError)
+    public sealed record FailedToGetContainerItems(JsonHttpResult<GitHubGetContainerItemsHttpResponse>.Error JsonHttpError)
         : Error;
 
-    public record FailedToDownloadArtifact(DownloadContainerItemResult.Error DownloadContainerItemError)
+    public sealed record FailedToDownloadArtifact(DownloadContainerItemResult.Error DownloadContainerItemError)
         : Error;
 
     public static implicit operator DownloadArtifactFileFromCurrentWorkflowResult(GitHubArtifactItemJsonContent gitHubArtifactItemContent) => new Ok(gitHubArtifactItemContent);

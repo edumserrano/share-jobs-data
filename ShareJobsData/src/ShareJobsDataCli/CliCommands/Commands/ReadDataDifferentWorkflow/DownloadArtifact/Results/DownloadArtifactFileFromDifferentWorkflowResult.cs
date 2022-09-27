@@ -6,25 +6,25 @@ internal abstract record DownloadArtifactFileFromDifferentWorkflowResult
     {
     }
 
-    public record Ok(GitHubArtifactItemJsonContent GitHubArtifactItem)
+    public sealed record Ok(GitHubArtifactItemJsonContent GitHubArtifactItem)
         : DownloadArtifactFileFromDifferentWorkflowResult;
 
     public abstract record Error()
         : DownloadArtifactFileFromDifferentWorkflowResult;
 
-    public record ArtifactNotFound(GitHubRepositoryName RepoName, GitHubRunId WorkflowRunId, GitHubArtifactContainerName ArtifactContainerName)
+    public sealed record ArtifactNotFound(GitHubRepositoryName RepoName, GitHubRunId WorkflowRunId, GitHubArtifactContainerName ArtifactContainerName)
         : Error;
 
-    public record ArtifactFileNotFound(GitHubRepositoryName RepoName, GitHubRunId WorkflowRunId, GitHubArtifactContainerName ArtifactContainerName, GitHubArtifactItemFilename ArtifactItemFilename)
+    public sealed record ArtifactFileNotFound(GitHubRepositoryName RepoName, GitHubRunId WorkflowRunId, GitHubArtifactContainerName ArtifactContainerName, GitHubArtifactItemFilename ArtifactItemFilename)
         : Error;
 
-    public record FailedToListWorkflowRunArtifacts(JsonHttpResult<GitHubListWorkflowRunArtifactsHttpResponse>.Error JsonHttpError)
+    public sealed record FailedToListWorkflowRunArtifacts(JsonHttpResult<GitHubListWorkflowRunArtifactsHttpResponse>.Error JsonHttpError)
         : Error;
 
-    public record FailedToDownloadArtifact(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
+    public sealed record FailedToDownloadArtifact(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
         : Error;
 
-    public record ArtifactItemContentNotJson(GitHubArtifactItemNotJsonContent NotJsonContent)
+    public sealed record ArtifactItemContentNotJson(GitHubArtifactItemNotJsonContent NotJsonContent)
         : Error;
 
     public static implicit operator DownloadArtifactFileFromDifferentWorkflowResult(GitHubArtifactItemJsonContent gitHubArtifactItemContent) => new Ok(gitHubArtifactItemContent);

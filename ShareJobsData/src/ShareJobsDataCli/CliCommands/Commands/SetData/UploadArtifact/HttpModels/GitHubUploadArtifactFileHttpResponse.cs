@@ -1,7 +1,9 @@
+using Flurl.Util;
+
 namespace ShareJobsDataCli.CliCommands.Commands.SetData.UploadArtifact.HttpModels;
 
 #pragma warning disable CA1812 // Avoid uninstantiated internal classes. Referenced via JSON generic type deserialization.
-internal record GitHubUploadArtifactFileHttpResponse(
+internal sealed record GitHubUploadArtifactFileHttpResponse(
     long ContainerId,
     string ScopeIdentifier,
     string Path,
@@ -24,6 +26,6 @@ internal sealed class UploadArtifactFileHttpResponseValidator : AbstractValidato
     {
         RuleFor(x => x.FileLength)
             .Must(fileLength => fileLength > 0)
-            .WithMessage(x => $"$.fileLength must be a positive value. Actual value: '{x.FileLength}'.");
+            .WithMessage(x => $"$.fileLength must be a positive value. Actual value: '{x.FileLength.ToInvariantString()}'.");
     }
 }

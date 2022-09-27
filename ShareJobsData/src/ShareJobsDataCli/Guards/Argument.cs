@@ -1,3 +1,5 @@
+using Flurl.Util;
+
 namespace ShareJobsDataCli.Guards;
 
 // Using part of the idea of a ThrowHelper pattern due to the benefits explained here: https://dunnhq.com/posts/2022/throw-helper/
@@ -21,7 +23,7 @@ internal static class Argument
     {
         if (value is null)
         {
-            ThrowArgumentNullException(expression);
+            GuardException.Throw($"{expression} cannot be null.");
         }
 
         return value;
@@ -31,7 +33,7 @@ internal static class Argument
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            ThrowArgumentException($"{expression} cannot be null or whitespace.");
+            GuardException.Throw($"{expression} cannot be null or whitespace.");
         }
 
         return value;
@@ -41,17 +43,9 @@ internal static class Argument
     {
         if (value < 0)
         {
-            ThrowArgumentException($"{expression} must be a positive value. Received '{value}'.");
+            GuardException.Throw($"{expression} must be a positive value. Received '{value.ToInvariantString()}'.");
         }
 
         return value;
     }
-
-    [DoesNotReturn]
-    //[MethodImpl(MethodImplOptions.NoInlining)] //do I need this? Should I split the throw and create methods like in the clr?
-    internal static void ThrowArgumentNullException(string paramName) => throw new ArgumentNullException(paramName);
-
-    [DoesNotReturn]
-    //[MethodImpl(MethodImplOptions.NoInlining)] //do I need this? Should I split the throw and create methods like in the clr?
-    internal static void ThrowArgumentException(string message) => throw new ArgumentException(message);
 }

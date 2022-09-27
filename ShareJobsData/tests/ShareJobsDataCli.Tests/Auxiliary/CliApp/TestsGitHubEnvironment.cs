@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.Tests.Auxiliary.CliApp;
 
-internal class TestsGitHubEnvironment : IGitHubEnvironment
+internal sealed class TestsGitHubEnvironment : IGitHubEnvironment
 {
     public string GitHubActionRuntimeToken => "____xbk9w02Bwt7WD29DzY3xRQVhdqLcGT1eS4lc";
 

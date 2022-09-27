@@ -6,19 +6,19 @@ internal abstract record UploadArtifactFileResult
     {
     }
 
-    public record Ok(GitHubFinalizeArtifactContainerHttpResponse GitHubArtifactContainer)
+    public sealed record Ok(GitHubFinalizeArtifactContainerHttpResponse GitHubArtifactContainer)
         : UploadArtifactFileResult;
 
     public abstract record Error()
         : UploadArtifactFileResult;
 
-    public record FailedToCreateArtifactContainer(JsonHttpResult<GitHubCreateArtifactContainerHttpResponse>.Error JsonHttpError)
+    public sealed record FailedToCreateArtifactContainer(JsonHttpResult<GitHubCreateArtifactContainerHttpResponse>.Error JsonHttpError)
         : Error;
 
-    public record FailedToUploadArtifact(JsonHttpResult<GitHubUploadArtifactFileHttpResponse>.Error JsonHttpError)
+    public sealed record FailedToUploadArtifact(JsonHttpResult<GitHubUploadArtifactFileHttpResponse>.Error JsonHttpError)
         : Error;
 
-    public record FailedToFinalizeArtifactContainer(JsonHttpResult<GitHubFinalizeArtifactContainerHttpResponse>.Error JsonHttpError)
+    public sealed record FailedToFinalizeArtifactContainer(JsonHttpResult<GitHubFinalizeArtifactContainerHttpResponse>.Error JsonHttpError)
         : Error;
 
     public static implicit operator UploadArtifactFileResult(GitHubFinalizeArtifactContainerHttpResponse gitHubArtifactContainer) => new Ok(gitHubArtifactContainer);

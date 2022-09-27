@@ -36,10 +36,10 @@ internal abstract record CreateGitHubArtifactItemJsonContentResult
     {
     }
 
-    public record Ok(GitHubArtifactItemJsonContent JsonContent)
+    public sealed record Ok(GitHubArtifactItemJsonContent JsonContent)
         : CreateGitHubArtifactItemJsonContentResult;
 
-    public record ArtifactItemNotJsonContent(GitHubArtifactItemNotJsonContent NotJsonContent)
+    public sealed record ArtifactItemNotJsonContent(GitHubArtifactItemNotJsonContent NotJsonContent)
         : CreateGitHubArtifactItemJsonContentResult;
 
     public static implicit operator CreateGitHubArtifactItemJsonContentResult(GitHubArtifactItemJsonContent jsonContent) => new Ok(jsonContent);

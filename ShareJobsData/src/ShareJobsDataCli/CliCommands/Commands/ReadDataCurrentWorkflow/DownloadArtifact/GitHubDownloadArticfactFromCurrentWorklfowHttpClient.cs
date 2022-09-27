@@ -3,7 +3,7 @@ using static ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow.Downl
 
 namespace ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow.DownloadArtifact;
 
-internal class GitHubDownloadArticfactFromCurrentWorklfowHttpClient
+internal sealed class GitHubDownloadArticfactFromCurrentWorklfowHttpClient
 {
     private readonly HttpClient _httpClient;
 
@@ -27,7 +27,7 @@ internal class GitHubDownloadArticfactFromCurrentWorklfowHttpClient
             return new FailedToListWorkflowRunArtifacts(listError);
         }
 
-        var artifactContainer = artifactContainers.Containers.FirstOrDefault(x => x.Name == containerName);
+        var artifactContainer = artifactContainers.Containers.FirstOrDefault(x => string.Equals(x.Name, containerName, StringComparison.Ordinal));
         if (artifactContainer is null)
         {
             return new ArtifactNotFound(containerName);
@@ -39,7 +39,7 @@ internal class GitHubDownloadArticfactFromCurrentWorklfowHttpClient
             return new FailedToGetContainerItems(getContainerItemsError);
         }
 
-        var artifactContainerFileItem = artifactContainerItems.ContainerItems.FirstOrDefault(x => x.ItemType == "file" && x.Path == itemFilePath);
+        var artifactContainerFileItem = artifactContainerItems.ContainerItems.FirstOrDefault(x => string.Equals(x.ItemType, "file", StringComparison.Ordinal) && string.Equals(x.Path, itemFilePath, StringComparison.Ordinal));
         if (artifactContainerFileItem is null)
         {
             return new ArtifactContainerItemNotFound(itemFilePath);

@@ -7,7 +7,7 @@ namespace ShareJobsDataCli.Tests.CliCommands.ReadDataCurrentWorkflow;
 /// </summary>
 [Trait("Category", XUnitCategories.Validation)]
 [Trait("Category", XUnitCategories.ReadDataFromCurrentGitHubWorkflowCommand)]
-public class ReadDataFromCurrentGitHubWorkflowCommandValidationTests
+public sealed class ReadDataFromCurrentGitHubWorkflowCommandValidationTests
 {
     /// <summary>
     /// Validation test for the <see cref="ReadDataFromCurrentGitHubWorkflowCommand.ArtifactName"/> command option.
@@ -24,7 +24,7 @@ public class ReadDataFromCurrentGitHubWorkflowCommandValidationTests
         {
             ArtifactName = artifactName,
         };
-        var exception = await Should.ThrowAsync<ArgumentException>(() => command.ExecuteAsync(console).AsTask());
+        var exception = await Should.ThrowAsync<GuardException>(() => command.ExecuteAsync(console).AsTask());
         exception.Message.ShouldBe("artifactName cannot be null or whitespace.");
     }
 
@@ -43,7 +43,7 @@ public class ReadDataFromCurrentGitHubWorkflowCommandValidationTests
         {
             ArtifactFilename = artifactFilename,
         };
-        var exception = await Should.ThrowAsync<ArgumentException>(() => command.ExecuteAsync(console).AsTask());
+        var exception = await Should.ThrowAsync<GuardException>(() => command.ExecuteAsync(console).AsTask());
         exception.Message.ShouldBe("artifactFilename cannot be null or whitespace.");
     }
 }

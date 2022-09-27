@@ -1,6 +1,6 @@
 namespace ShareJobsDataCli.JobData;
 
-internal record JobDataAsKeysAndValues
+internal sealed record JobDataAsKeysAndValues
 {
     public JobDataAsKeysAndValues(List<JobDataKeyAndValue> keysAndValues)
     {
@@ -10,7 +10,7 @@ internal record JobDataAsKeysAndValues
     public IReadOnlyList<JobDataKeyAndValue> KeysAndValues { get; }
 }
 
-internal record JobDataKeyAndValue
+internal sealed record JobDataKeyAndValue
 {
     public JobDataKeyAndValue(string key, string value)
     {

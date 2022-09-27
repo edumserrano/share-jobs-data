@@ -86,16 +86,16 @@ internal abstract record CreateJobDataAsJsonResult
     {
     }
 
-    public record Ok(JobDataAsJson JobDataAsJson)
+    public sealed record Ok(JobDataAsJson JobDataAsJson)
         : CreateJobDataAsJsonResult;
 
     public abstract record Error()
         : CreateJobDataAsJsonResult;
 
-    public record InvalidYml(string ErrorMessage, string Start = "", string End = "")
+    public sealed record InvalidYml(string ErrorMessage, string Start = "", string End = "")
         : Error;
 
-    public record CannotConvertYmlToJson(string ErrorMessage)
+    public sealed record CannotConvertYmlToJson(string ErrorMessage)
         : Error;
 
     public static implicit operator CreateJobDataAsJsonResult(JobDataAsJson jobDataAsJson) => new Ok(jobDataAsJson);

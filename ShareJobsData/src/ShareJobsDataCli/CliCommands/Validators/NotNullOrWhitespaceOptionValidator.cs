@@ -1,7 +1,7 @@
 namespace ShareJobsDataCli.CliCommands.Validators;
 
 #pragma warning disable CA1812 // Avoid uninstantiated internal classes. Referenced via typeof(NotNullOrWhitespaceOptionValidator) usage
-internal class NotNullOrWhitespaceOptionValidator : BindingValidator<string>
+internal sealed class NotNullOrWhitespaceOptionValidator : BindingValidator<string>
 {
     public override BindingValidationError? Validate(string? value)
     {
