@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.GitHub.Artifacts.Types;
+namespace ShareJobsDataCli.GitHub.Types;
 
 internal sealed record GitHubRepositoryName
 {
