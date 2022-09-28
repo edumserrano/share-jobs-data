@@ -57,6 +57,12 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
         Description = "The data to share in YAML format.")]
     public string ArtifactFilename { get; init; } = CommandOptionsDefaults.ArtifactFilename;
 
+    [CommandOption(
+        "output",
+        IsRequired = false,
+        Description = "How to output the job data in the step's output. It must be one of: strict-json, github-step-json.")]
+    public string Output { get; init; } = "strict-json";
+
     public async ValueTask ExecuteAsync(IConsole console)
     {
         console.NotNull();
@@ -67,6 +73,12 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
         var runId = new GitHubRunId(RunId);
         var artifactContainerName = new GitHubArtifactContainerName(ArtifactName);
         var artifactItemFilename = new GitHubArtifactItemFilename(ArtifactFilename);
+        var parseCommandOutputResult = ReadDataFromDifferentGitHubWorkflowCommandOutput.FromOption(console, Output);
+        if (!parseCommandOutputResult.IsOk(out var commandOutput, out var parseCommandOutputError))
+        {
+            await parseCommandOutputError.WriteToConsoleAsync(console, _commandName);
+            return;
+        }
 
         using var httpClient = _httpClient.ConfigureGitHubHttpClient(authToken, sourceRepositoryName);
         var githubHttpClient = new GitHubDownloadArticfactFromDifferentWorkflowHttpClient(httpClient);
@@ -77,7 +89,8 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
             return;
         }
 
-        var stepOutput = new GitHubActionStepOutput(console);
-        await stepOutput.WriteAsync(gitHubArtifactItemJsonContent);
+        var artifactItemAsJObject = gitHubArtifactItemJsonContent.AsJObject();
+        var jobData = new JobData(artifactItemAsJObject);
+        await commandOutput.WriteToConsoleAsync(jobData);
     }
 }

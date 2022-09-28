@@ -44,10 +44,10 @@ public sealed class SetDataCommand : ICommand
     public string DataAsYmlStr { get; init; } = default!;
 
     [CommandOption(
-        "set-step-output",
+        "output",
         IsRequired = false,
-        Description = "Whether or not the job data should also be set as a step output.")]
-    public bool SetStepOutput { get; init; } = true;
+        Description = "How to output the job data in the step's output. It must be one of: none, strict-json, github-step-json.")]
+    public string Output { get; init; } = "none";
 
     public async ValueTask ExecuteAsync(IConsole console)
     {
@@ -58,14 +58,21 @@ public sealed class SetDataCommand : ICommand
         var artifactContainerUrl = new GitHubArtifactContainerUrl(_gitHubEnvironment.GitHubActionRuntimeUrl, _gitHubEnvironment.GitHubActionRunId);
         var artifactContainerName = new GitHubArtifactContainerName(ArtifactName);
         var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, ArtifactFilename);
-        var createJobDataAsJsonResult = JobDataAsJson.FromYml(DataAsYmlStr);
-        if (!createJobDataAsJsonResult.IsOk(out var jobDataAsJson, out var createJobDataAsJsonError))
+        var parseCommandOutputResult = SetDataCommandOutput.FromOption(console, Output);
+        if (!parseCommandOutputResult.IsOk(out var commandOutput, out var parseCommandOutputError))
         {
-            await createJobDataAsJsonError.WriteToConsoleAsync(console, _commandName);
+            await parseCommandOutputError.WriteToConsoleAsync(console, _commandName);
             return;
         }
 
-        var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, fileUploadContent: jobDataAsJson.AsJson());
+        var createJobDataResult = JobData.FromYml(DataAsYmlStr);
+        if (!createJobDataResult.IsOk(out var jobData, out var createJobDataError))
+        {
+            await createJobDataError.WriteToConsoleAsync(console, _commandName);
+            return;
+        }
+
+        var artifactFileUploadRequest = new GitHubArtifactFileUploadRequest(artifactFilePath, fileUploadContent: jobData.AsJson());
         using var httpClient = _httpClient.ConfigureGitHubHttpClient(actionRuntimeToken, repository);
         var githubHttpClient = new GitHubUploadArticfactHttpClient(httpClient);
         var uploadArtifact = await githubHttpClient.UploadArtifactFileAsync(artifactContainerUrl, artifactContainerName, artifactFileUploadRequest);
@@ -75,10 +82,6 @@ public sealed class SetDataCommand : ICommand
             return;
         }
 
-        if (SetStepOutput)
-        {
-            var stepOutput = new GitHubActionStepOutput(console);
-            await stepOutput.WriteAsync(jobDataAsJson);
-        }
+        await commandOutput.WriteToConsoleAsync(jobData);
     }
 }

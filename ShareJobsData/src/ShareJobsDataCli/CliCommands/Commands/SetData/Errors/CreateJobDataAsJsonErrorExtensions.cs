@@ -1,22 +1,22 @@
-using static ShareJobsDataCli.JobData.CreateJobDataAsJsonResult;
+using static ShareJobsDataCli.JobsData.CreateJobDataResult;
 
 namespace ShareJobsDataCli.CliCommands.Commands.SetData.Errors;
 
-internal static class CreateJobDataAsJsonErrorExtensions
+internal static class CreateJobDataErrorExtensions
 {
     private const string _errorMessagePrefix = "Option --data has been provided with an invalid value.";
 
-    public static async Task WriteToConsoleAsync(this Error createJobDataAsJsonError, IConsole console, string command)
+    public static async Task WriteToConsoleAsync(this Error createJobDataError, IConsole console, string command)
     {
-        createJobDataAsJsonError.NotNull();
+        createJobDataError.NotNull();
         console.NotNull();
         command.NotNullOrWhiteSpace();
 
-        var error = createJobDataAsJsonError switch
+        var error = createJobDataError switch
         {
             InvalidYml invalidYml => GetErrorMessage(invalidYml),
             CannotConvertYmlToJson cannotConvertYmlToJson => GetErrorMessage(cannotConvertYmlToJson),
-            _ => throw UnexpectedTypeException.Create(createJobDataAsJsonError),
+            _ => throw UnexpectedTypeException.Create(createJobDataError),
         };
         await console.WriteErrorAsync(command, error);
     }

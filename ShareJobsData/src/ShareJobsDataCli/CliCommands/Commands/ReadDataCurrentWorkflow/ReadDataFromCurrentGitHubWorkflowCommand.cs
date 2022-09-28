@@ -36,6 +36,12 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
         Description = "The filename that contains the data.")]
     public string ArtifactFilename { get; init; } = CommandOptionsDefaults.ArtifactFilename;
 
+    [CommandOption(
+        "output",
+        IsRequired = false,
+        Description = "How to output the job data in the step's output. It must be one of: strict-json, github-step-json.")]
+    public string Output { get; init; } = "strict-json";
+
     public async ValueTask ExecuteAsync(IConsole console)
     {
         console.NotNull();
@@ -45,6 +51,12 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
         var containerUrl = new GitHubArtifactContainerUrl(_gitHubEnvironment.GitHubActionRuntimeUrl, _gitHubEnvironment.GitHubActionRunId);
         var artifactContainerName = new GitHubArtifactContainerName(ArtifactName);
         var artifactFilePath = new GitHubArtifactItemFilePath(artifactContainerName, ArtifactFilename);
+        var parseCommandOutputResult = ReadDataFromCurrentGitHubWorkflowCommandOutput.FromOption(console, Output);
+        if (!parseCommandOutputResult.IsOk(out var commandOutput, out var parseCommandOutputError))
+        {
+            await parseCommandOutputError.WriteToConsoleAsync(console, _commandName);
+            return;
+        }
 
         using var httpClient = _httpClient.ConfigureGitHubHttpClient(actionRuntimeToken, repository);
         var githubHttpClient = new GitHubDownloadArticfactFromCurrentWorklfowHttpClient(httpClient);
@@ -55,14 +67,8 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
             return;
         }
 
-        //var stepOutput = new GitHubActionStepOutput(console);
-        //await stepOutput.WriteAsync(gitHubArtifactItemJsonContent);
-
-        var jobDataAsJson = new JobDataAsJson(gitHubArtifactItemJsonContent.AsJObject());
-        var sanitizedValue = jobDataAsJson.AsJson()
-                .Replace("%", "%25", StringComparison.InvariantCulture)
-                .Replace("\n", "%0A", StringComparison.InvariantCulture)
-                .Replace("\r", "%0D", StringComparison.InvariantCulture);
-        await console.Output.WriteLineAsync($"::set-output name=data::{sanitizedValue}");
+        var artifactItemAsJObject = gitHubArtifactItemJsonContent.AsJObject();
+        var jobData = new JobData(artifactItemAsJObject);
+        await commandOutput.WriteToConsoleAsync(jobData);
     }
 }

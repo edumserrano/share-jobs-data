@@ -1,17 +1,17 @@
-using static ShareJobsDataCli.JobData.CreateJobDataAsJsonResult;
+using static ShareJobsDataCli.JobsData.CreateJobDataResult;
 
-namespace ShareJobsDataCli.JobData;
+namespace ShareJobsDataCli.JobsData;
 
-internal sealed record JobDataAsJson
+internal sealed record JobData
 {
     private readonly JObject _jObject;
 
-    public JobDataAsJson(JObject jObject)
+    public JobData(JObject jObject)
     {
         _jObject = jObject.NotNull();
     }
 
-    public static CreateJobDataAsJsonResult FromYml(string dataAsYmlStr)
+    public static CreateJobDataResult FromYml(string dataAsYmlStr)
     {
         dataAsYmlStr.NotNullOrWhiteSpace();
 
@@ -46,7 +46,7 @@ internal sealed record JobDataAsJson
 #pragma warning restore CA1031 // Do not catch general exception types
 
         SanitizeMultiLineValues(jObject);
-        return new JobDataAsJson(jObject);
+        return new JobData(jObject);
     }
 
     public string AsJson()
