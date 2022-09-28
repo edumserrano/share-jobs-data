@@ -2,16 +2,17 @@
   "name": "George Washington",
   "age": "89",
   "height_in_inches": "5.75",
-  "addresses": null,
-  "home": {
-    "street": "400 Mockingbird Lane",
-    "city": "Louaryland",
-    "state": "Hawidaho",
-    "zip": "99970",
-    "list": [
-      "first",
-      "second",
-      "third"
-    ]
+  "addresses": {
+    "home": {
+      "street": "400 Mockingbird Lane",
+      "city": "Louaryland",
+      "state": "Hawidaho",
+      "zip": "99970",
+      "list": [
+        "first",
+        "second",
+        "third"
+      ]
+    }
   }
 }
