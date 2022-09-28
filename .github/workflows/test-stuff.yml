@@ -71,14 +71,14 @@ jobs:
     - name: read output
       shell: pwsh
       run: |
-        Write-Output ${{ fromJson(steps.read.outputs.data).name }}
-        Write-Output ${{ fromJson(steps.read.outputs.data).addresses.home.street }}
-        Write-Output ${{ fromJson(steps.read.outputs.data).addresses.home.list[0] }}
+        Write-Output '${{ fromJson(steps.read.outputs.data).name }}'
+        Write-Output '${{ fromJson(steps.read.outputs.data).addresses.home.street }}'
+        Write-Output '${{ fromJson(steps.read.outputs.data).addresses.home.list[0] }}'
 
-        Write-Output '${{ steps.read.outputs.data.name }}'
-        Write-Output '${{ steps.read.outputs.data.age }}'
-        Write-Output '${{ steps.read.outputs.data.addresses.home.street }}'
-        Write-Output '${{ steps.read.outputs.data.addresses.home.list[0] }}'
+        # Write-Output '${{ steps.read.outputs.data.name }}'
+        # Write-Output '${{ steps.read.outputs.data.age }}'
+        # Write-Output '${{ steps.read.outputs.data.addresses.home.street }}'
+        # Write-Output '${{ steps.read.outputs.data.addresses.home.list[0] }}'
     # - name: ls download
     #   run: |
     #     ls -R
