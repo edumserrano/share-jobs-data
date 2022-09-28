@@ -23,7 +23,10 @@ internal sealed class GitHubActionStepOutput
                 .Replace("%", "%25", StringComparison.InvariantCulture)
                 .Replace("\n", "%0A", StringComparison.InvariantCulture)
                 .Replace("\r", "%0D", StringComparison.InvariantCulture);
-            var sanitizedKey = key.Replace(".", "_", StringComparison.InvariantCulture);
+            var sanitizedKey = key
+                .Replace(".", "_", StringComparison.InvariantCulture)
+                .Replace("[", "_", StringComparison.InvariantCulture)
+                .Replace("]", "_", StringComparison.InvariantCulture);
             await _console.Output.WriteLineAsync($"::set-output name={sanitizedKey}::{sanitizedValue}");
         }
     }

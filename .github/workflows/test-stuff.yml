@@ -72,7 +72,7 @@ jobs:
         Write-Output '${{ steps.read.outputs.name }}'
         Write-Output '${{ steps.read.outputs.age }}'
         Write-Output '${{ steps.read.outputs.addresses_home_street }}'
-        Write-Output '${{ steps.read.outputs.addresses_home_list[0] }}'
+        Write-Output '${{ steps.read.outputs.addresses_home_list_0_ }}'
     # - name: ls download
     #   run: |
     #     ls -R
