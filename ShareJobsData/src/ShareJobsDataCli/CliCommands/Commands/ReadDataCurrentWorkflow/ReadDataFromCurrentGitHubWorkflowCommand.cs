@@ -66,6 +66,6 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
                 .Replace("\n", "%0A", StringComparison.InvariantCulture)
                 .Replace("\r", "%0D", StringComparison.InvariantCulture);
         await console.Output.WriteLineAsync($"::set-output name=data::{sanitizedValue}");
-        await console.Output.WriteLineAsync($"::set-output name=data::{jobDataAsJson.AsJson()}");
+        //await console.Output.WriteLineAsync($"::set-output name=data::{jobDataAsJson.AsJson()}");
     }
 }
