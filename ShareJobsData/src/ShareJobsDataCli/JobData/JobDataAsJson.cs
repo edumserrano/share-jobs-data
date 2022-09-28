@@ -14,14 +14,12 @@ internal sealed record JobDataAsJson
     public static CreateJobDataAsJsonResult FromYml(string dataAsYmlStr)
     {
         dataAsYmlStr.NotNullOrWhiteSpace();
-        var deserializer = new DeserializerBuilder()
-            .IgnoreUnmatchedProperties()
-            .Build();
 
 #pragma warning disable CA1031 // Do not catch general exception types. Don't know what possible exceptions the yml parsing can throw.
         object ymlObject;
         try
         {
+            var deserializer = new DeserializerBuilder().Build();
             ymlObject = deserializer.Deserialize<object>(dataAsYmlStr);
         }
         catch (Exception anyYamlException)
@@ -47,6 +45,7 @@ internal sealed record JobDataAsJson
         }
 #pragma warning restore CA1031 // Do not catch general exception types
 
+        SanitizeMultiLineValues(jObject);
         return new JobDataAsJson(jObject);
     }
 
@@ -77,5 +76,30 @@ internal sealed record JobDataAsJson
         //   .Select(kvp => new JobDataKeyAndValue(kvp.Path, kvp.Value))
         //   .ToList();
         return new JobDataAsKeysAndValues(kvp);
+    }
+
+    // This removes newline characters from the end of multiline values in the YAML.
+    // Example:
+    //
+    // Name: |
+    //   Eduardo The Coding
+    //   Addict Serrano
+    // Gender: Male
+    //
+    // results in a yaml Dictionary<object,object> where the key 'Name' has the value 'Eduardo The Coding\nAddict Serrano\n'
+    //
+    // After this method, the value for the key 'Name' becomes 'Eduardo The Coding\nAddict Serrano'.
+    private static void SanitizeMultiLineValues(JObject jObject)
+    {
+        var jValues = jObject.DescendantsAndSelf().OfType<JValue>();
+        foreach (var jValue in jValues)
+        {
+            if (jValue.Value?.ToString() is { } valueAsString)
+            {
+                jValue.Value = valueAsString
+                    .TrimEnd('\n')
+                    .TrimEnd('\r');
+            }
+        }
     }
 }

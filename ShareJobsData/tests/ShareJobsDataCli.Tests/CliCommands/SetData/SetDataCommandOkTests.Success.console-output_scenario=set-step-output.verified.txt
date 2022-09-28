@@ -1,7 +1,8 @@
 ﻿::set-output name=name::George Washington
 ::set-output name=age::89
 ::set-output name=height_in_inches::5.75
-::set-output name=addresses.home.street::400 Mockingbird Lane
-::set-output name=addresses.home.city::Louaryland
-::set-output name=addresses.home.state::Hawidaho
-::set-output name=addresses.home.zip::99970
+::set-output name=addresses::
+::set-output name=home.street::400 Mockingbird Lane
+::set-output name=home.city::Louaryland
+::set-output name=home.state::Hawidaho
+::set-output name=home.zip::99970

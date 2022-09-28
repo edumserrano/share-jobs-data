@@ -40,3 +40,4 @@ global using ShareJobsDataCli.Http;
 global using ShareJobsDataCli.JobData;
 global using YamlDotNet.Core;
 global using YamlDotNet.Serialization;
+global using YamlDotNet.Serialization.NodeDeserializers;

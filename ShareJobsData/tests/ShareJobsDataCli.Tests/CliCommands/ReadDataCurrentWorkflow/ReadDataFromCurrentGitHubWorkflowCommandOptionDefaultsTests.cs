@@ -1,5 +1,3 @@
-using ShareJobsDataCli.GitHub;
-
 namespace ShareJobsDataCli.Tests.CliCommands.ReadDataCurrentWorkflow;
 
 /// <summary>
