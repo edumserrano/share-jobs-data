@@ -27,13 +27,13 @@ internal abstract record EnsureSuccessStatusCodeResult
     }
 }
 
-public sealed record FailedStatusCodeHttpResponse(
+internal sealed record FailedStatusCodeHttpResponse(
     string Method,
     string RequestUrl,
     string StatusCode,
     string ResponseBody);
 
-public static class FailedStatusCodeHttpResponseExtensions
+internal static class FailedStatusCodeHttpResponseExtensions
 {
     public static FailedStatusCodeHttpResponse ToFailedStatusCodeHttpResponse(this HttpResponseMessage httpResponse, string responseBody)
     {

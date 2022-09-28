@@ -1,3 +1,5 @@
+using ShareJobsDataCli.GitHub;
+
 namespace ShareJobsDataCli.Tests.CliCommands.ReadDataCurrentWorkflow;
 
 /// <summary>
@@ -13,7 +15,8 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommandOptionDefaultsTests
     [Fact]
     public void ArtifactNameDefaultsToNotNull()
     {
-        var command = new ReadDataFromCurrentGitHubWorkflowCommand();
+        var testsGitHubEnvironment = new TestsGitHubEnvironment();
+        var command = new ReadDataFromCurrentGitHubWorkflowCommand(gitHubEnvironment: testsGitHubEnvironment);
         using var console = new FakeInMemoryConsole();
         command.ArtifactName.ShouldBe("job-data");
     }
@@ -24,7 +27,8 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommandOptionDefaultsTests
     [Fact]
     public void ArtifactFilenameDefaultsToNotNull()
     {
-        var command = new ReadDataFromCurrentGitHubWorkflowCommand();
+        var testsGitHubEnvironment = new TestsGitHubEnvironment();
+        var command = new ReadDataFromCurrentGitHubWorkflowCommand(gitHubEnvironment: testsGitHubEnvironment);
         using var console = new FakeInMemoryConsole();
         command.ArtifactFilename.ShouldBe("job-data.json");
     }

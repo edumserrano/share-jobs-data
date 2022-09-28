@@ -16,7 +16,7 @@ public sealed class CliIntegrationTests
     [Theory]
     [InlineData("")]
     [InlineData("   ")]
-    public async Task AuthTokenValidation(string artifactName)
+    public async Task ArtifactNameValidation(string artifactName)
     {
         using var console = new FakeInMemoryConsole();
         var app = new ShareDataBetweenJobsCli();
@@ -43,7 +43,7 @@ public sealed class CliIntegrationTests
     [Theory]
     [InlineData("")]
     [InlineData("   ")]
-    public async Task RepoValidation(string artifactFilename)
+    public async Task ArtifactFilenameValidation(string artifactFilename)
     {
         using var console = new FakeInMemoryConsole();
         var app = new ShareDataBetweenJobsCli();

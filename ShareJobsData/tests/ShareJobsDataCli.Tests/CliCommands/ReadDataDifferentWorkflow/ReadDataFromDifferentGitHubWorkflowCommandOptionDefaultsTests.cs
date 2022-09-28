@@ -13,7 +13,8 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandOptionDefaultsTest
     [Fact]
     public void AuthTokenDefaultsToNull()
     {
-        var command = new ReadDataFromDifferentGitHubWorkflowCommand();
+        var testsGitHubEnvironment = new TestsGitHubEnvironment();
+        var command = new ReadDataFromDifferentGitHubWorkflowCommand(gitHubEnvironment: testsGitHubEnvironment);
         using var console = new FakeInMemoryConsole();
         command.AuthToken.ShouldBeNull();
     }
@@ -24,7 +25,8 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandOptionDefaultsTest
     [Fact]
     public void RepoDefaultsToNull()
     {
-        var command = new ReadDataFromDifferentGitHubWorkflowCommand();
+        var testsGitHubEnvironment = new TestsGitHubEnvironment();
+        var command = new ReadDataFromDifferentGitHubWorkflowCommand(gitHubEnvironment: testsGitHubEnvironment);
         using var console = new FakeInMemoryConsole();
         command.Repo.ShouldBeNull();
     }
@@ -35,7 +37,8 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandOptionDefaultsTest
     [Fact]
     public void RunIdDefaultsToNull()
     {
-        var command = new ReadDataFromDifferentGitHubWorkflowCommand();
+        var testsGitHubEnvironment = new TestsGitHubEnvironment();
+        var command = new ReadDataFromDifferentGitHubWorkflowCommand(gitHubEnvironment: testsGitHubEnvironment);
         using var console = new FakeInMemoryConsole();
         command.RunId.ShouldBeNull();
     }
@@ -46,7 +49,8 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandOptionDefaultsTest
     [Fact]
     public void ArtifactNameDefaultsToNotNull()
     {
-        var command = new ReadDataFromDifferentGitHubWorkflowCommand();
+        var testsGitHubEnvironment = new TestsGitHubEnvironment();
+        var command = new ReadDataFromDifferentGitHubWorkflowCommand(gitHubEnvironment: testsGitHubEnvironment);
         using var console = new FakeInMemoryConsole();
         command.ArtifactName.ShouldBe("job-data");
     }
@@ -57,7 +61,8 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandOptionDefaultsTest
     [Fact]
     public void ArtifactFilenameDefaultsToNotNull()
     {
-        var command = new ReadDataFromDifferentGitHubWorkflowCommand();
+        var testsGitHubEnvironment = new TestsGitHubEnvironment();
+        var command = new ReadDataFromDifferentGitHubWorkflowCommand(gitHubEnvironment: testsGitHubEnvironment);
         using var console = new FakeInMemoryConsole();
         command.ArtifactFilename.ShouldBe("job-data.json");
     }

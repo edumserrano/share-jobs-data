@@ -7,12 +7,14 @@ internal sealed class ConsoleErrorMessageBuilder
 
     public ConsoleErrorMessageBuilder UseCommand(string command)
     {
+        command.NotNullOrWhiteSpace();
         _command = command;
         return this;
     }
 
     public ConsoleErrorMessageBuilder UseError(string error)
     {
+        error.NotNullOrWhiteSpace();
         _error = error;
         return this;
     }

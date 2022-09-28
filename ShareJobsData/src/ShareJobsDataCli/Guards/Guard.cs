@@ -14,7 +14,7 @@ namespace ShareJobsDataCli.Guards;
 //
 // Can't throw the exception from the methods because I don't use this exception for validation purposes at the start of methods,
 // I use it to short circuit execution flow.
-internal static class Argument
+internal static class Guard
 {
     public static T NotNull<T>([NotNull] this T? value, [CallerArgumentExpression("value")] string expression = "")
         where T : class

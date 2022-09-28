@@ -8,6 +8,10 @@ internal static class JsonHttpResultErrorExtensions
         string httpRequest)
             where T : class
     {
+        jsonHttpResult.NotNull();
+        action.NotNullOrWhiteSpace();
+        httpRequest.NotNullOrWhiteSpace();
+
         return jsonHttpResult switch
         {
             JsonHttpResult<T>.JsonDeserializedToNull => GetErrorMessage(action, httpRequest),

@@ -13,7 +13,8 @@ public sealed class SetDataCommandOptionDefaultsTests
     [Fact]
     public void ArtifactNameDefaultsToNotNull()
     {
-        var command = new SetDataCommand();
+        var testsGitHubEnvironment = new TestsGitHubEnvironment();
+        var command = new SetDataCommand(gitHubEnvironment: testsGitHubEnvironment);
         using var console = new FakeInMemoryConsole();
         command.ArtifactName.ShouldBe("job-data");
     }
@@ -24,7 +25,8 @@ public sealed class SetDataCommandOptionDefaultsTests
     [Fact]
     public void ArtifactFilenameDefaultsToNotNull()
     {
-        var command = new SetDataCommand();
+        var testsGitHubEnvironment = new TestsGitHubEnvironment();
+        var command = new SetDataCommand(gitHubEnvironment: testsGitHubEnvironment);
         using var console = new FakeInMemoryConsole();
         command.ArtifactFilename.ShouldBe("job-data.json");
     }
@@ -35,7 +37,8 @@ public sealed class SetDataCommandOptionDefaultsTests
     [Fact]
     public void DataAsYmlStrDefaultsToNull()
     {
-        var command = new SetDataCommand();
+        var testsGitHubEnvironment = new TestsGitHubEnvironment();
+        var command = new SetDataCommand(gitHubEnvironment: testsGitHubEnvironment);
         using var console = new FakeInMemoryConsole();
         command.DataAsYmlStr.ShouldBeNull();
     }
@@ -46,7 +49,8 @@ public sealed class SetDataCommandOptionDefaultsTests
     [Fact]
     public void SetStepOutputDefaultsToTrue()
     {
-        var command = new SetDataCommand();
+        var testsGitHubEnvironment = new TestsGitHubEnvironment();
+        var command = new SetDataCommand(gitHubEnvironment: testsGitHubEnvironment);
         using var console = new FakeInMemoryConsole();
         command.SetStepOutput.ShouldBeTrue();
     }

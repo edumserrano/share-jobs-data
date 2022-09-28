@@ -11,6 +11,8 @@ internal sealed class GitHubActionStepOutput
 
     public async Task WriteAsync(JobDataAsKeysAndValues jobDataKeysAndValues)
     {
+        jobDataKeysAndValues.NotNull();
+
         foreach (var (key, value) in jobDataKeysAndValues.KeysAndValues)
         {
             // need to sanitize value before setting it as a step output.

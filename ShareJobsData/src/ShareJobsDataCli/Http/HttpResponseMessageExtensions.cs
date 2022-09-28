@@ -6,6 +6,8 @@ internal static class HttpResponseMessageExtensions
 {
     public static async ValueTask<EnsureSuccessStatusCodeResult> EnsureSuccessStatusCodeAsync(this HttpResponseMessage httpResponse)
     {
+        httpResponse.NotNull();
+
         if (httpResponse.IsSuccessStatusCode)
         {
             return new EnsureSuccessStatusCodeResult.Ok();
@@ -19,6 +21,8 @@ internal static class HttpResponseMessageExtensions
          where TModel : class
          where TValidator : AbstractValidator<TModel>, new()
     {
+        httpResponse.NotNull();
+
         var ensureSuccessStatusCodeResult = await httpResponse.EnsureSuccessStatusCodeAsync();
         if (!ensureSuccessStatusCodeResult.IsOk(out var failedStatusCodeHttpResponse))
         {

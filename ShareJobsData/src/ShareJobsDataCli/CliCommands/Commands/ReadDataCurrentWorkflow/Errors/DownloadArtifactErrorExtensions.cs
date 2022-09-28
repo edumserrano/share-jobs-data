@@ -6,6 +6,10 @@ internal static class DownloadArtifactErrorExtensions
 {
     public static Task WriteToConsoleAsync(this Error downloadArtifactError, IConsole console, string command)
     {
+        downloadArtifactError.NotNull();
+        console.NotNull();
+        command.NotNullOrWhiteSpace();
+
         var error = downloadArtifactError switch
         {
             ArtifactNotFound artifactNotFound => GetErrorMessage(artifactNotFound),

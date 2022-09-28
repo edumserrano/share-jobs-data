@@ -4,6 +4,8 @@ internal static class FailedStatusCodeHttpResponseErrorExtensions
 {
     public static string AsHttpErrorMessage(this FailedStatusCodeHttpResponse httpResponse)
     {
+        httpResponse.NotNull();
+
         var sb = new StringBuilder();
         sb.Append(httpResponse.Method)
             .Append(' ')

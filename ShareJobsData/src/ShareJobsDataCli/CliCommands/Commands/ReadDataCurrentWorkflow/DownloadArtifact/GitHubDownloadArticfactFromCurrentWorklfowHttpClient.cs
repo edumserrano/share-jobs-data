@@ -20,6 +20,7 @@ internal sealed class GitHubDownloadArticfactFromCurrentWorklfowHttpClient
     {
         containerUrl.NotNull();
         containerName.NotNull();
+        itemFilePath.NotNull();
 
         var workflowRunArtifactsResult = await ListWorkflowRunArtifactsAsync(containerUrl);
         if (!workflowRunArtifactsResult.IsOk(out var artifactContainers, out var listError))

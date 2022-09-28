@@ -4,7 +4,7 @@ internal sealed record JobDataAsKeysAndValues
 {
     public JobDataAsKeysAndValues(List<JobDataKeyAndValue> keysAndValues)
     {
-        KeysAndValues = keysAndValues;
+        KeysAndValues = keysAndValues.NotNull();
     }
 
     public IReadOnlyList<JobDataKeyAndValue> KeysAndValues { get; }
