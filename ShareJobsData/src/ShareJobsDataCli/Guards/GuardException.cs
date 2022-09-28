@@ -8,11 +8,5 @@ public sealed class GuardException : Exception
     }
 
     [DoesNotReturn]
-    internal static void Throw(string message) => throw CreateGuardException(message);
-
-    [MethodImpl(MethodImplOptions.NoInlining)]
-    private static Exception CreateGuardException(string message)
-    {
-        return new GuardException(message);
-    }
+    internal static void Throw(string message) => throw new GuardException(message);
 }
