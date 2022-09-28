@@ -60,6 +60,7 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
     [CommandOption(
         "output",
         IsRequired = false,
+        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "How to output the job data in the step's output. It must be one of: strict-json, github-step-json.")]
     public string Output { get; init; } = "strict-json";
 

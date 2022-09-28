@@ -10,7 +10,7 @@ internal static class ParseCommandOutputErrorExtensions
         console.NotNull();
         command.NotNullOrWhiteSpace();
 
-        var error = "";
+        var error = $"Option --output has been provided with an invalid value: '{unkownOutput.OutputOptionValue}'. It must be one of: strict-json, github-step-json.";
         return console.WriteErrorAsync(command, error);
     }
 }

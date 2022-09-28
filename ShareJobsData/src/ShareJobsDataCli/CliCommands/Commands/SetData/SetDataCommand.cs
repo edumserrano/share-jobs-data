@@ -46,6 +46,7 @@ public sealed class SetDataCommand : ICommand
     [CommandOption(
         "output",
         IsRequired = false,
+        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "How to output the job data in the step's output. It must be one of: none, strict-json, github-step-json.")]
     public string Output { get; init; } = "none";
 

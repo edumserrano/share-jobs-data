@@ -23,13 +23,11 @@ internal abstract record ParseSetDataCommandOutputResult
     public sealed record UnknownOutput(string OutputOptionValue)
         : ParseSetDataCommandOutputResult;
 
-
     public static implicit operator ParseSetDataCommandOutputResult(StrictJsonOutput strictJsonOutput) => new StrictJson(strictJsonOutput);
 
     public static implicit operator ParseSetDataCommandOutputResult(GitHubStepJsonOutput gitHubStepJson) => new GitHubStepJson(gitHubStepJson);
 
     public static implicit operator ParseSetDataCommandOutputResult(NoOutput noOutput) => new None(noOutput);
-
 
     public bool IsOk(
         [NotNullWhen(returnValue: true)] out SetDataCommandOutput? setDataCommandOutput,
