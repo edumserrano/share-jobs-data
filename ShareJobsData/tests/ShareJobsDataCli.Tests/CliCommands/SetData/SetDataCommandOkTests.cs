@@ -13,9 +13,10 @@ public sealed class SetDataCommandOkTests
     /// the data as GitHub step output if requested.
     /// </summary>
     [Theory]
-    [InlineData("set-step-output", true)]
-    [InlineData("dont-set-step-output", false)]
-    public async Task Success(string scenario, bool setStepOutput)
+    [InlineData("none")]
+    [InlineData("strict-json")]
+    [InlineData("github-step-json")]
+    public async Task Success(string outputOption)
     {
         const string artifactName = "job-data";
         const string artifactFilename = "job-data.json";
@@ -52,10 +53,10 @@ public sealed class SetDataCommandOkTests
 
         var command = new SetDataCommand(httpClient, githubEnvironment)
         {
-            SetStepOutput = setStepOutput,
             ArtifactName = artifactName,
             ArtifactFilename = artifactFilename,
             DataAsYmlStr = TestFiles.GetSharedFilepath("job-data.input.yml").ReadFile(),
+            Output = outputOption,
         };
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
@@ -64,7 +65,7 @@ public sealed class SetDataCommandOkTests
         var output = console.ReadAllAsString();
         await Verify(output)
             .AppendToMethodName("console-output")
-            .UseParameters(scenario);
+            .UseParameters(outputOption);
     }
 
     /// <summary>
@@ -165,7 +166,7 @@ public sealed class SetDataCommandOkTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("finalize-artifact-container.http-response.json"));
         });
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.CreateWithRecorder(testHttpMessageHandler);
+        var (httpClient, outboundHttpRequests) = TestHttpClient.CreateWithRecorder(testHttpMessageHandler);
 
         var command = new SetDataCommand(httpClient, githubEnvironment)
         {

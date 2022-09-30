@@ -41,7 +41,7 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
         IsRequired = false,
         Validators = new[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "How to output the job data in the step's output. It must be one of: strict-json, github-step-json.")]
-    public string Output { get; init; } = "strict-json";
+    public string Output { get; init; } = "github-step-json";
 
     public async ValueTask ExecuteAsync(IConsole console)
     {

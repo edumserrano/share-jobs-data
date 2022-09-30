@@ -10,10 +10,12 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandOkTests
 {
     /// <summary>
     /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> downloads the workflow artifact with the shared
-    /// job data and outputs it to the console as a GitHub step output.
+    /// job data and outputs it to the console using different output options.
     /// </summary>
-    [Fact]
-    public async Task Success()
+    [Theory]
+    [InlineData("strict-json")]
+    [InlineData("github-step-json")]
+    public async Task Success(string outputOption)
     {
         const string repoName = "edumserrano/share-jobs-data";
         const string runId = "test-run-id";
@@ -42,13 +44,16 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandOkTests
             RunId = runId,
             ArtifactName = "job-data",
             ArtifactFilename = "job-data.json",
+            Output = outputOption,
         };
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
 
         console.ReadErrorString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
-        await Verify(output).AppendToMethodName("console-output");
+        await Verify(output)
+            .AppendToMethodName("console-output")
+            .UseParameters(outputOption);
     }
 
     /// <summary>

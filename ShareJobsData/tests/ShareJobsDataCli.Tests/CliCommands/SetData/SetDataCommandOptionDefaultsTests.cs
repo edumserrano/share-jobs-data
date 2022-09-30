@@ -46,12 +46,12 @@ public sealed class SetDataCommandOptionDefaultsTests
     /// <summary>
     /// Validation test for the <see cref="SetDataCommand.SetStepOutput"/> command option default value.
     /// </summary>
-    [Fact]
-    public void SetStepOutputDefaultsToTrue()
-    {
-        var testsGitHubEnvironment = new TestsGitHubEnvironment();
-        var command = new SetDataCommand(gitHubEnvironment: testsGitHubEnvironment);
-        using var console = new FakeInMemoryConsole();
-        command.SetStepOutput.ShouldBeTrue();
-    }
+    //[Fact]
+    //public void SetStepOutputDefaultsToTrue()
+    //{
+    //    var testsGitHubEnvironment = new TestsGitHubEnvironment();
+    //    var command = new SetDataCommand(gitHubEnvironment: testsGitHubEnvironment);
+    //    using var console = new FakeInMemoryConsole();
+    //    command.SetStepOutput.ShouldBeTrue();
+    //}
 }
