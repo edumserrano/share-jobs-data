@@ -9,7 +9,7 @@ internal abstract record CreateJobDataResult
     public sealed record Ok(JobData JobDataAsJson)
         : CreateJobDataResult;
 
-    public abstract record Error()
+    public abstract record Error
         : CreateJobDataResult;
 
     public sealed record InvalidYml(string ErrorMessage, string Start = "", string End = "")

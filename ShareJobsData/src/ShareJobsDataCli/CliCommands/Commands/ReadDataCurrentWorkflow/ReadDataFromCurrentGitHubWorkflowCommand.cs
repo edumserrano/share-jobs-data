@@ -25,21 +25,21 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
     [CommandOption(
         "artifact-name",
         IsRequired = false,
-        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Validators = new[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The name of the artifact.")]
     public string ArtifactName { get; init; } = CommandOptionsDefaults.ArtifactName;
 
     [CommandOption(
         "data-filename",
         IsRequired = false,
-        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Validators = new[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The filename that contains the data.")]
     public string ArtifactFilename { get; init; } = CommandOptionsDefaults.ArtifactFilename;
 
     [CommandOption(
         "output",
         IsRequired = false,
-        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Validators = new[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "How to output the job data in the step's output. It must be one of: strict-json, github-step-json.")]
     public string Output { get; init; } = "strict-json";
 

@@ -16,5 +16,5 @@ internal sealed record GitHubApiVersion
         return version._value;
     }
 
-    public override string ToString() => (string)this;
+    public override string ToString() => this;
 }

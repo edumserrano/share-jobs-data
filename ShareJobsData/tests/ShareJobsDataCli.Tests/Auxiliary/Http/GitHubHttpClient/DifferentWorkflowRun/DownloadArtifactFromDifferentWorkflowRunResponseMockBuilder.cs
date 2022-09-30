@@ -14,7 +14,7 @@ internal sealed class DownloadArtifactFromDifferentWorkflowRunResponseMockBuilde
 
     protected override string OperationName { get; } = "download artifact from different workflow run";
 
-    protected override string? GetRequestUrl() => $"https://api.github.com/repos/{_repoName}/actions/artifacts/{_artifactId}/zip";
+    protected override string GetRequestUrl() => $"https://api.github.com/repos/{_repoName}/actions/artifacts/{_artifactId}/zip";
 
     protected override HttpContent? GetResponseContent()
     {

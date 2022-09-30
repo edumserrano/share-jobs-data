@@ -16,5 +16,5 @@ internal sealed record GitHubArtifactContainerUrl
         return containerUrl._value;
     }
 
-    public override string ToString() => (string)this;
+    public override string ToString() => this;
 }

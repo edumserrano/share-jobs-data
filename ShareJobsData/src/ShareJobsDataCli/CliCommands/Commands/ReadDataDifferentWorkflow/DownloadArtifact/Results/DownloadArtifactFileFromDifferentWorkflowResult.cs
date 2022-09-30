@@ -9,7 +9,7 @@ internal abstract record DownloadArtifactFileFromDifferentWorkflowResult
     public sealed record Ok(GitHubArtifactItemJsonContent GitHubArtifactItem)
         : DownloadArtifactFileFromDifferentWorkflowResult;
 
-    public abstract record Error()
+    public abstract record Error
         : DownloadArtifactFileFromDifferentWorkflowResult;
 
     public sealed record ArtifactNotFound(GitHubRepositoryName RepoName, GitHubRunId WorkflowRunId, GitHubArtifactContainerName ArtifactContainerName)

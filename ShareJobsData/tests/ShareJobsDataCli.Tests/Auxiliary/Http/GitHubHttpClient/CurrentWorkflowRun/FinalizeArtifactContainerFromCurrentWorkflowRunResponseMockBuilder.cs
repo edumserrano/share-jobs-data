@@ -16,5 +16,5 @@ internal sealed class FinalizeArtifactContainerFromCurrentWorkflowRunResponseMoc
 
     protected override string OperationName { get; } = "finalize artifact container from current workflow run";
 
-    protected override string? GetRequestUrl() => $"{_runtimeUrl}_apis/pipelines/workflows/{_runId}/artifacts?api-version=6.0-preview&artifactName={_containerName}";
+    protected override string GetRequestUrl() => $"{_runtimeUrl}_apis/pipelines/workflows/{_runId}/artifacts?api-version=6.0-preview&artifactName={_containerName}";
 }

@@ -14,5 +14,5 @@ internal sealed class GitHubRunId
         return runId._value;
     }
 
-    public override string ToString() => (string)this;
+    public override string ToString() => this;
 }

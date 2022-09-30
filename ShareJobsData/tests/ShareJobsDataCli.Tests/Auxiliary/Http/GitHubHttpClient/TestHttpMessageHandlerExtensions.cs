@@ -4,10 +4,7 @@ internal static class TestHttpMessageHandlerExtensions
 {
     public static HttpResponseMessageMockBuilder WhereRequestUriEquals(this HttpResponseMessageMockBuilder builder, string path)
     {
-        return builder.Where(httpRequestMessage =>
-        {
-            return httpRequestMessage.RequestUri!.ToString().Equals(path, StringComparison.OrdinalIgnoreCase);
-        });
+        return builder.Where(httpRequestMessage => string.Equals(httpRequestMessage.RequestUri!.ToString(), path, StringComparison.OrdinalIgnoreCase));
     }
 
     private static TestHttpMessageHandler MockHttpResponseWithCustomBuilder<TCustomHttpMockBuilder>(

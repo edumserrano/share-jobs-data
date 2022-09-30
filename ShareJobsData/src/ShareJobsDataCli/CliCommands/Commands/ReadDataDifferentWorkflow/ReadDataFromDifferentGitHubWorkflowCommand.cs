@@ -25,42 +25,42 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
     [CommandOption(
         "auth-token",
         IsRequired = true,
-        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Validators = new[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "GitHub token used to download the job data artifact.")]
     public string AuthToken { get; init; } = default!;
 
     [CommandOption(
         "repo",
         IsRequired = true,
-        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Validators = new[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The repository for the workflow run in the format of {owner}/{repo}.")]
     public string Repo { get; init; } = default!;
 
     [CommandOption(
         "run-id",
         IsRequired = true,
-        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Validators = new[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The unique identifier of the workflow run that contains the job data artifact.")]
     public string RunId { get; init; } = default!;
 
     [CommandOption(
         "artifact-name",
         IsRequired = false,
-        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Validators = new[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The data to share in YAML format.")]
     public string ArtifactName { get; init; } = CommandOptionsDefaults.ArtifactName;
 
     [CommandOption(
         "data-filename",
         IsRequired = false,
-        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Validators = new[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "The data to share in YAML format.")]
     public string ArtifactFilename { get; init; } = CommandOptionsDefaults.ArtifactFilename;
 
     [CommandOption(
         "output",
         IsRequired = false,
-        Validators = new Type[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Validators = new[] { typeof(NotNullOrWhitespaceOptionValidator) },
         Description = "How to output the job data in the step's output. It must be one of: strict-json, github-step-json.")]
     public string Output { get; init; } = "strict-json";
 

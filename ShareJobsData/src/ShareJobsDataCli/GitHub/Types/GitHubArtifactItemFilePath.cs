@@ -16,5 +16,5 @@ internal sealed record GitHubArtifactItemFilePath
         return filePath._value;
     }
 
-    public override string ToString() => (string)this;
+    public override string ToString() => this;
 }

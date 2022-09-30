@@ -29,7 +29,7 @@ internal abstract class BaseResponseMockBuilder<T>
         return (T)this;
     }
 
-    protected abstract string? GetRequestUrl();
+    protected abstract string GetRequestUrl();
 
     protected virtual HttpContent? GetResponseContent()
     {
@@ -57,14 +57,11 @@ internal abstract class BaseResponseMockBuilder<T>
         var responseContent = GetResponseContent();
         httpResponseMessageMockBuilder
             .WhereRequestUriEquals(requestUrl)
-            .RespondWith(httpRequestMessage =>
+            .RespondWith(httpRequestMessage => new HttpResponseMessage(ResponseHttpStatusCode)
             {
-                return new HttpResponseMessage(ResponseHttpStatusCode)
-                {
-                    // this is required when testing failure status codes because the app returns information from the http request made
-                    RequestMessage = httpRequestMessage,
-                    Content = responseContent,
-                };
+                // this is required when testing failure status codes because the app returns information from the http request made
+                RequestMessage = httpRequestMessage,
+                Content = responseContent,
             });
     }
 }

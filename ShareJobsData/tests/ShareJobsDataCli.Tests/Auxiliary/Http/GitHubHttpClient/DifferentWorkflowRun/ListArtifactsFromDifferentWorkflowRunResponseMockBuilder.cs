@@ -14,5 +14,5 @@ internal sealed class ListArtifactsFromDifferentWorkflowRunResponseMockBuilder :
 
     protected override string OperationName { get; } = "list artifacts from different workflow run";
 
-    protected override string? GetRequestUrl() => $"https://api.github.com/repos/{_repoName}/actions/runs/{_runId}/artifacts";
+    protected override string GetRequestUrl() => $"https://api.github.com/repos/{_repoName}/actions/runs/{_runId}/artifacts";
 }
