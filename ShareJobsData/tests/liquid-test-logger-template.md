@@ -20,10 +20,6 @@
 {%- assign failed_set_results = set.results  | where: "outcome", "Failed" -%}
 {%- assign skipped_set_results = set.results  | where: "outcome", "Skipped" -%}
 {%- assign passed_set_results = set.results  | where: "outcome", "Passed" -%}
-<details>
-<summary><strong>{{overall}} - {{ test_dll }} on {{ parameters.TargetFramework }}</strong></summary>
-
-----
 
 ## Run Summary
 
@@ -221,9 +217,5 @@ Source:
 </code></pre>
 </details>
 {%- endif -%}
-
-----
-
-</details>
 
 <!-- on-pr-test-results-{{ parameters.runnerOs }} -->
