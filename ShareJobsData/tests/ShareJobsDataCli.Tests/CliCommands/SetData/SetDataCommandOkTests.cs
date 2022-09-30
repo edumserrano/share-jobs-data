@@ -11,12 +11,17 @@ public sealed class SetDataCommandOkTests
     /// <summary>
     /// Tests that the <see cref="SetDataCommand"/> uploads the specified YML data as a workflow artifact and sets
     /// the data as GitHub step output if requested.
+    ///
+    /// This tests different output methods as well as testing that multiline yaml data input are outputted as expected.
+    /// Multiline yaml values should have the newline characters trimmed at the end.
     /// </summary>
     [Theory]
-    [InlineData("none")]
-    [InlineData("strict-json")]
-    [InlineData("github-step-json")]
-    public async Task Success(string outputOption)
+    [InlineData("no-output", "none", "job-data.input.yml")]
+    [InlineData("strict-json", "strict-json", "job-data.input.yml")]
+    [InlineData("github-step-json", "github-step-json", "job-data.input.yml")]
+    [InlineData("strict-json-with-multiline", "strict-json", "job-data-multiline.input.yml")]
+    [InlineData("github-step-json-with-multiline", "github-step-json", "job-data-multiline.input.yml")]
+    public async Task Success(string scenario, string outputOption, string dataOptionFilename)
     {
         const string artifactName = "job-data";
         const string artifactFilename = "job-data.json";
@@ -55,7 +60,7 @@ public sealed class SetDataCommandOkTests
         {
             ArtifactName = artifactName,
             ArtifactFilename = artifactFilename,
-            DataAsYmlStr = TestFiles.GetSharedFilepath("job-data.input.yml").ReadFile(),
+            DataAsYmlStr = TestFiles.GetSharedFilepath(dataOptionFilename).ReadFile(),
             Output = outputOption,
         };
         using var console = new FakeInMemoryConsole();
@@ -65,14 +70,19 @@ public sealed class SetDataCommandOkTests
         var output = console.ReadAllAsString();
         await Verify(output)
             .AppendToMethodName("console-output")
-            .UseParameters(outputOption);
+            .UseParameters(scenario);
     }
 
     /// <summary>
     /// Tests that the <see cref="SetDataCommand"/> uploads the specified YML data as JSON as a workflow artifact.
+    ///
+    /// This test uses single line and multiline yaml data input to make sure both are handled as expected.
+    /// Multiline yaml values should have the newline characters trimmed at the end.
     /// </summary>
-    [Fact]
-    public async Task UploadedArtifactIsIndentedJson()
+    [Theory]
+    [InlineData("job-data.input.yml")]
+    [InlineData("job-data-multiline.input.yml")]
+    public async Task UploadedArtifactIsIndentedJson(string dataOptionFilename)
     {
         const string artifactName = "job-data";
         const string artifactFilename = "job-data.json";
@@ -122,11 +132,13 @@ public sealed class SetDataCommandOkTests
         {
             ArtifactName = artifactName,
             ArtifactFilename = artifactFilename,
-            DataAsYmlStr = TestFiles.GetSharedFilepath("job-data.input.yml").ReadFile(),
+            DataAsYmlStr = TestFiles.GetSharedFilepath(dataOptionFilename).ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);
-        await Verify(artifactUploadContent).AppendToMethodName("uploaded-artifact-content");
+        await Verify(artifactUploadContent)
+            .AppendToMethodName("uploaded-artifact-content")
+            .UseParameters(dataOptionFilename);
     }
 
     /// <summary>

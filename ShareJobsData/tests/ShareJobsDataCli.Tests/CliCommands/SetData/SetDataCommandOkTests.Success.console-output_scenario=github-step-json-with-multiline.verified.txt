@@ -1,0 +1,2 @@
+﻿::set-output name=name::George line 1%0Aline 2%0Aline 3 Washington
+::set-output name=age::89
