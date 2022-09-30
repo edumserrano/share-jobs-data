@@ -9,9 +9,9 @@ internal sealed class GitHubRunId
         _value = runId.NotNullOrWhiteSpace();
     }
 
-    public static implicit operator string(GitHubRunId rundId)
+    public static implicit operator string(GitHubRunId runId)
     {
-        return rundId._value;
+        return runId._value;
     }
 
     public override string ToString() => (string)this;

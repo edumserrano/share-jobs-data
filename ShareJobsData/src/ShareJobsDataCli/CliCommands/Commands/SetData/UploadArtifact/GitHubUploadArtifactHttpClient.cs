@@ -2,11 +2,11 @@ using static ShareJobsDataCli.CliCommands.Commands.SetData.UploadArtifact.Result
 
 namespace ShareJobsDataCli.CliCommands.Commands.SetData.UploadArtifact;
 
-internal sealed class GitHubUploadArticfactHttpClient
+internal sealed class GitHubUploadArtifactHttpClient
 {
     private readonly HttpClient _httpClient;
 
-    public GitHubUploadArticfactHttpClient(HttpClient httpClient)
+    public GitHubUploadArtifactHttpClient(HttpClient httpClient)
     {
         _httpClient = httpClient.NotNull();
     }
@@ -37,8 +37,8 @@ internal sealed class GitHubUploadArticfactHttpClient
             return new FailedToUploadArtifact(uploadError);
         }
 
-        var finalizeArttifact = await FinalizeArtifactContainerAsync(containerUrl, containerName, containerSize: artifactItem.FileLength);
-        if (!finalizeArttifact.IsOk(out var gitHubArtifactContainer, out var finalizeError))
+        var finalizeArtifact = await FinalizeArtifactContainerAsync(containerUrl, containerName, containerSize: artifactItem.FileLength);
+        if (!finalizeArtifact.IsOk(out var gitHubArtifactContainer, out var finalizeError))
         {
             return new FailedToFinalizeArtifactContainer(finalizeError);
         }

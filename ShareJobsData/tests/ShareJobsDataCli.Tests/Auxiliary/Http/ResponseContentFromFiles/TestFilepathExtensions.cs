@@ -13,7 +13,7 @@ internal static class TestFilepathExtensions
         return new StringContent(responseContentAsString);
     }
 
-    public static StreamContent ReadFileAsAzipContent(this TestFilepath testFilepath)
+    public static StreamContent ReadFileAsZipContent(this TestFilepath testFilepath)
     {
         var zipFileStream = File.OpenRead(testFilepath);
         var streamContent = new StreamContent(zipFileStream);

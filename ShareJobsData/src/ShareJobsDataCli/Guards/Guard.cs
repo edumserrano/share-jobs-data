@@ -9,7 +9,7 @@ namespace ShareJobsDataCli.Guards;
 // In short:
 // "Having a throw new in your methods can be inefficient. The inefficiency comes from the fact that a fair amount of assembly code is
 // generated to throw the exception."
-// "... there is a pattern that can help both eliminate the extra assembly code instructions, and optimise the code so that registers
+// "... there is a pattern that can help both eliminate the extra assembly code instructions, and optimize the code so that registers
 // are not set-up needlessly."
 //
 // Can't throw the exception from the methods because I don't use this exception for validation purposes at the start of methods,

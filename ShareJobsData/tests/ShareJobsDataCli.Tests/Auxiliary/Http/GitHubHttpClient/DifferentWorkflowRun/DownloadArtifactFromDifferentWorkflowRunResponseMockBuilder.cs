@@ -18,6 +18,6 @@ internal sealed class DownloadArtifactFromDifferentWorkflowRunResponseMockBuilde
 
     protected override HttpContent? GetResponseContent()
     {
-        return ResponseContentFilepath?.ReadFileAsAzipContent();
+        return ResponseContentFilepath?.ReadFileAsZipContent();
     }
 }

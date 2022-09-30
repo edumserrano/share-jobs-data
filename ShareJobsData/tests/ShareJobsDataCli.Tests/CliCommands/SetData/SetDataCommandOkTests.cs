@@ -84,8 +84,8 @@ public sealed class SetDataCommandOkTests
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("create-artifact-container.http-response.json"));
         });
-        // not using the testHttpMessageHandler.MockUploadArtifactFileFromCurrentWorkflowRun auxiliar method because
-        // I want to be able to capture the HttpRequest content that is being sent and the auxiliar methods I created on top of the
+        // not using the testHttpMessageHandler.MockUploadArtifactFileFromCurrentWorkflowRun auxiliary method because
+        // I want to be able to capture the HttpRequest content that is being sent and the auxiliary methods I created on top of the
         // testHttpMessageHandler don't allow that.
         var artifactUploadContent = string.Empty;
         testHttpMessageHandler.MockHttpResponse(httpResponseMessageMockBuilder =>
@@ -93,7 +93,7 @@ public sealed class SetDataCommandOkTests
             const string fileContainerResourceUrl = "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982";
             var responseContent = TestFiles.GetSharedFilepath("upload-artifact.http-response.json").ReadFileAsStringContent();
             httpResponseMessageMockBuilder
-                .WhereRequestUriEquals($"{fileContainerResourceUrl}?itemPath={artifactName}%2F{artifactFilename}") // %2F is enconding for /
+                .WhereRequestUriEquals($"{fileContainerResourceUrl}?itemPath={artifactName}%2F{artifactFilename}") // %2F is encoding for /
                 .RespondWith(async (httpRequestMessage, cancellationToken) =>
                 {
                     var requestBytes = await httpRequestMessage.Content!.ReadAsByteArrayAsync(cancellationToken);

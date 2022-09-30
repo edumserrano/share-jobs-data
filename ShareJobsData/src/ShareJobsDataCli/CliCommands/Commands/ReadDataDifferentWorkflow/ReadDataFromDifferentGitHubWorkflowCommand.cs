@@ -82,7 +82,7 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
         }
 
         using var httpClient = _httpClient.ConfigureGitHubHttpClient(authToken, sourceRepositoryName);
-        var githubHttpClient = new GitHubDownloadArticfactFromDifferentWorkflowHttpClient(httpClient);
+        var githubHttpClient = new GitHubDownloadArtifactFromDifferentWorkflowHttpClient(httpClient);
         var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(jobDataArtifactRepositoryName, runId, artifactContainerName, artifactItemFilename);
         if (!downloadResult.IsOk(out var gitHubArtifactItemJsonContent, out var downloadError))
         {

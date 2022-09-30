@@ -22,17 +22,17 @@ internal abstract class ReadDataFromCurrentGitHubWorkflowCommandOutput
 
     public sealed class StrictJsonOutput : ReadDataFromCurrentGitHubWorkflowCommandOutput
     {
-        private readonly GitHubActionStrictJsonStepOutput _stritJsonOutput;
+        private readonly GitHubActionStrictJsonStepOutput _strictJsonOutput;
 
         public StrictJsonOutput(IConsole console)
         {
-            _stritJsonOutput = new GitHubActionStrictJsonStepOutput(console);
+            _strictJsonOutput = new GitHubActionStrictJsonStepOutput(console);
         }
 
         public override Task WriteToConsoleAsync(JobData jobData)
         {
             var json = jobData.AsJson();
-            return _stritJsonOutput.WriteToConsoleAsync(json);
+            return _strictJsonOutput.WriteToConsoleAsync(json);
         }
     }
 
