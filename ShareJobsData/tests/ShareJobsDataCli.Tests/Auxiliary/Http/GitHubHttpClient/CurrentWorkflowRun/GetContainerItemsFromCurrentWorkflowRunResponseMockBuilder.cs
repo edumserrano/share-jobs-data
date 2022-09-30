@@ -14,5 +14,5 @@ internal sealed class GetContainerItemsFromCurrentWorkflowRunResponseMockBuilder
 
     protected override string OperationName { get; } = "get container items from current workflow run";
 
-    protected override string? GetRequestUrl() => $"{_fileContainerResourceUrl}?itemPath={_artifactName}";
+    protected override string GetRequestUrl() => $"{_fileContainerResourceUrl}?itemPath={_artifactName}";
 }

@@ -6,7 +6,7 @@ internal abstract record EnsureSuccessStatusCodeResult
     {
     }
 
-    public sealed record Ok()
+    public sealed record Ok
         : EnsureSuccessStatusCodeResult;
 
     public sealed record NonSuccessStatusCode(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)
@@ -39,7 +39,7 @@ internal static class FailedStatusCodeHttpResponseExtensions
     {
         httpResponse.NotNull();
 
-        var method = httpResponse.RequestMessage?.Method?.ToString() ?? "Unknown";
+        var method = httpResponse.RequestMessage?.Method.ToString() ?? "Unknown";
         var url = httpResponse.RequestMessage?.RequestUri?.ToString() ?? "Unknown";
         var statusCode = httpResponse.StatusCode.ToString();
         return new FailedStatusCodeHttpResponse(method, url, statusCode, responseBody);

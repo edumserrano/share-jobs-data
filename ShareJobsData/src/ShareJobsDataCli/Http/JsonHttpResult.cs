@@ -35,10 +35,10 @@ internal abstract record JsonHttpResult<T>
     public sealed record Ok(T Response)
         : JsonHttpResult<T>;
 
-    public abstract record Error()
+    public abstract record Error
         : JsonHttpResult<T>;
 
-    public sealed record JsonDeserializedToNull()
+    public sealed record JsonDeserializedToNull
         : Error;
 
     public sealed record JsonModelValidationFailed(ValidationResult ValidationResult)

@@ -9,7 +9,7 @@ internal abstract record DownloadContainerItemResult
     public sealed record Ok(GitHubArtifactItemJsonContent ArtifactItemContent)
         : DownloadContainerItemResult;
 
-    public abstract record Error()
+    public abstract record Error
         : DownloadContainerItemResult;
 
     public sealed record FailedToDownloadContainerItem(FailedStatusCodeHttpResponse FailedStatusCodeHttpResponse)

@@ -13,19 +13,11 @@ public interface IGitHubEnvironment
 
 internal sealed record GitHubEnvironment : IGitHubEnvironment
 {
-    public GitHubEnvironment()
-    {
-        GitHubActionRuntimeToken = Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_TOKEN") ?? string.Empty;
-        GitHubActionRuntimeUrl = Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL") ?? string.Empty;
-        GitHubActionRunId = Environment.GetEnvironmentVariable("GITHUB_RUN_ID") ?? string.Empty;
-        GitHubRepository = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY") ?? string.Empty;
-    }
+    public string GitHubActionRuntimeToken { get; } = Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_TOKEN") ?? string.Empty;
 
-    public string GitHubActionRuntimeToken { get; }
+    public string GitHubActionRuntimeUrl { get; } = Environment.GetEnvironmentVariable("ACTIONS_RUNTIME_URL") ?? string.Empty;
 
-    public string GitHubActionRuntimeUrl { get; }
+    public string GitHubActionRunId { get; } = Environment.GetEnvironmentVariable("GITHUB_RUN_ID") ?? string.Empty;
 
-    public string GitHubActionRunId { get; }
-
-    public string GitHubRepository { get; }
+    public string GitHubRepository { get; } = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY") ?? string.Empty;
 }

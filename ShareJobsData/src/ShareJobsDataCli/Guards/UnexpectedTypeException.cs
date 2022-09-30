@@ -10,7 +10,7 @@ namespace ShareJobsDataCli.Guards;
 // In short:
 // "Having a throw new in your methods can be inefficient. The inefficiency comes from the fact that a fair amount of assembly code is
 // generated to throw the exception."
-// "... there is a pattern that can help both eliminate the extra assembly code instructions, and optimise the code so that registers
+// "... there is a pattern that can help both eliminate the extra assembly code instructions, and optimize the code so that registers
 // are not set-up needlessly."
 //
 // Not using a "proper" ThrowHelper because I want to throw this exception from a switch case. If I had the ThrowHelper throw the exception

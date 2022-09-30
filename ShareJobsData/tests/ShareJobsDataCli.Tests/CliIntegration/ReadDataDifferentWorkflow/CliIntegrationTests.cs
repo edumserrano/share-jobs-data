@@ -127,7 +127,6 @@ public sealed class CliIntegrationTests
 
         var settings = new VerifySettings();
         settings.ScrubAppName();
-        var errorString = console.ReadErrorString();
         var output = console.ReadAllAsString();
         await Verify(output, settings).AppendToMethodName("console-output");
         console.ReadOutputString().ShouldNotBeEmpty();

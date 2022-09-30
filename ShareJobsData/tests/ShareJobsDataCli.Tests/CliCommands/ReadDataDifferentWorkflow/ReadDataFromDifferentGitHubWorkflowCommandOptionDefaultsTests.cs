@@ -66,4 +66,16 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandOptionDefaultsTest
         using var console = new FakeInMemoryConsole();
         command.ArtifactFilename.ShouldBe("job-data.json");
     }
+
+    /// <summary>
+    /// Validation test for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand.Output"/> command option default value.
+    /// </summary>
+    [Fact]
+    public void OutputDefaultsToGitHubStepJson()
+    {
+        var testsGitHubEnvironment = new TestsGitHubEnvironment();
+        var command = new ReadDataFromDifferentGitHubWorkflowCommand(gitHubEnvironment: testsGitHubEnvironment);
+        using var console = new FakeInMemoryConsole();
+        command.Output.ShouldBe("github-step-json");
+    }
 }

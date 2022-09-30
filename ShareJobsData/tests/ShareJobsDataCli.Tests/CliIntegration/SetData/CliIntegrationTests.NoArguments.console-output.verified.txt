@@ -10,5 +10,5 @@ OPTIONS
 * --data            The data to share in YAML format. 
   --artifact-name   The name of the artifact. Default: "job-data".
   --data-filename   The filename that contains the data. Default: "job-data.json".
-  --set-step-output  Whether or not the job data should also be set as a step output. Default: "True".
+  --output          How to output the job data in the step's output. It must be one of: none, strict-json, github-step-json. Default: "none".
   -h|--help         Shows help text. 

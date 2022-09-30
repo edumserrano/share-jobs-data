@@ -2,21 +2,15 @@ namespace ShareJobsDataCli.CliCommands.Output;
 
 internal static class GitHubActionStepOutputExtensions
 {
-    public static Task WriteAsync(this GitHubActionStepOutput gitHubActionStepOutput, GitHubArtifactItemJsonContent gitHubArtifactItemJsonContent)
+    // need to sanitize value before setting it as a step output.
+    // See:
+    // - https://github.com/orgs/community/discussions/26288#discussioncomment-3251220
+    // - https://trstringer.com/github-actions-multiline-strings/
+    public static string SanitizeGitHubStepOutput(this string value)
     {
-        gitHubActionStepOutput.NotNull();
-        gitHubArtifactItemJsonContent.NotNull();
-
-        var jobDataAsJson = new JobDataAsJson(gitHubArtifactItemJsonContent.AsJObject());
-        return gitHubActionStepOutput.WriteAsync(jobDataAsJson);
-    }
-
-    public static Task WriteAsync(this GitHubActionStepOutput gitHubActionStepOutput, JobDataAsJson jobDataAsJson)
-    {
-        gitHubActionStepOutput.NotNull();
-        jobDataAsJson.NotNull();
-
-        var jobDataAsKeysAndValues = jobDataAsJson.AsKeyValues();
-        return gitHubActionStepOutput.WriteAsync(jobDataAsKeysAndValues);
+        return value
+            .Replace("%", "%25", StringComparison.InvariantCulture)
+            .Replace("\n", "%0A", StringComparison.InvariantCulture)
+            .Replace("\r", "%0D", StringComparison.InvariantCulture);
     }
 }

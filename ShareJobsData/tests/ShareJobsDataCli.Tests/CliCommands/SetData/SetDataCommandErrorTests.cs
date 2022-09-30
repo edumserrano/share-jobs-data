@@ -13,7 +13,7 @@ public sealed class SetDataCommandErrorTests
     {
         var githubEnvironment = new TestsGitHubEnvironment();
         using var testHttpMessageHandler = new TestHttpMessageHandler();
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.CreateWithRecorder(testHttpMessageHandler);
+        var (httpClient, outboundHttpRequests) = TestHttpClient.CreateWithRecorder(testHttpMessageHandler);
 
         var command = new SetDataCommand(httpClient, githubEnvironment)
         {
@@ -33,7 +33,7 @@ public sealed class SetDataCommandErrorTests
     {
         var githubEnvironment = new TestsGitHubEnvironment();
         using var testHttpMessageHandler = new TestHttpMessageHandler();
-        (var httpClient, var outboundHttpRequests) = TestHttpClient.CreateWithRecorder(testHttpMessageHandler);
+        var (httpClient, outboundHttpRequests) = TestHttpClient.CreateWithRecorder(testHttpMessageHandler);
 
         var command = new SetDataCommand(httpClient, githubEnvironment)
         {

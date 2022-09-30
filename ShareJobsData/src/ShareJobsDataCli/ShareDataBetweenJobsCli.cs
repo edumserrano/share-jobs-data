@@ -11,7 +11,6 @@ public class ShareDataBetweenJobsCli
 
     public ValueTask<int> RunAsync(params string[] args)
     {
-        args ??= Array.Empty<string>();
         return CliApplicationBuilder
             .Build()
             .RunAsync(args);

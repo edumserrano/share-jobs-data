@@ -14,5 +14,5 @@ internal sealed class CreateArtifactContainerFromCurrentWorkflowRunResponseMockB
 
     protected override string OperationName { get; } = "create artifact container from current workflow run";
 
-    protected override string? GetRequestUrl() => $"{_runtimeUrl}_apis/pipelines/workflows/{_runId}/artifacts?api-version=6.0-preview";
+    protected override string GetRequestUrl() => $"{_runtimeUrl}_apis/pipelines/workflows/{_runId}/artifacts?api-version=6.0-preview";
 }

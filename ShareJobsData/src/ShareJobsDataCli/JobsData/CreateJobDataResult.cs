@@ -1,16 +1,16 @@
-﻿namespace ShareJobsDataCli.JobData;
+namespace ShareJobsDataCli.JobsData;
 
-internal abstract record CreateJobDataAsJsonResult
+internal abstract record CreateJobDataResult
 {
-    private CreateJobDataAsJsonResult()
+    private CreateJobDataResult()
     {
     }
 
-    public sealed record Ok(JobDataAsJson JobDataAsJson)
-        : CreateJobDataAsJsonResult;
+    public sealed record Ok(JobData JobDataAsJson)
+        : CreateJobDataResult;
 
-    public abstract record Error()
-        : CreateJobDataAsJsonResult;
+    public abstract record Error
+        : CreateJobDataResult;
 
     public sealed record InvalidYml(string ErrorMessage, string Start = "", string End = "")
         : Error;
@@ -18,10 +18,10 @@ internal abstract record CreateJobDataAsJsonResult
     public sealed record CannotConvertYmlToJson(string ErrorMessage)
         : Error;
 
-    public static implicit operator CreateJobDataAsJsonResult(JobDataAsJson jobDataAsJson) => new Ok(jobDataAsJson);
+    public static implicit operator CreateJobDataResult(JobData jobDataAsJson) => new Ok(jobDataAsJson);
 
     public bool IsOk(
-       [NotNullWhen(returnValue: true)] out JobDataAsJson? jobDataAsJson,
+       [NotNullWhen(returnValue: true)] out JobData? jobDataAsJson,
        [NotNullWhen(returnValue: false)] out Error? error)
     {
         jobDataAsJson = null;

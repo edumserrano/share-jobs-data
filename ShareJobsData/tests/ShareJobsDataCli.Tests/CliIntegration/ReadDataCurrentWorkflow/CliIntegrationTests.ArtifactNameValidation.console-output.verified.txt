@@ -10,4 +10,5 @@ USAGE
 OPTIONS
   --artifact-name   The name of the artifact. Default: "job-data".
   --data-filename   The filename that contains the data. Default: "job-data.json".
+  --output          How to output the job data in the step's output. It must be one of: strict-json, github-step-json. Default: "github-step-json".
   -h|--help         Shows help text. 

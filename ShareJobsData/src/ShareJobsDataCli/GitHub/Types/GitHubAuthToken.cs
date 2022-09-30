@@ -14,5 +14,5 @@ internal sealed record GitHubAuthToken
         return gitHubAuthToken._value;
     }
 
-    public override string ToString() => (string)this;
+    public override string ToString() => this;
 }

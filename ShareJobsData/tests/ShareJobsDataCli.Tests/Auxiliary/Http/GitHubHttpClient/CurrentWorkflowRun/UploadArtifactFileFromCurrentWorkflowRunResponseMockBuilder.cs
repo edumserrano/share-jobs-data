@@ -19,5 +19,5 @@ internal sealed class UploadArtifactFileFromCurrentWorkflowRunResponseMockBuilde
 
     protected override string OperationName { get; } = "upload artifact file from current workflow run";
 
-    protected override string? GetRequestUrl() => $"{_fileContainerResourceUrl}?itemPath={_artifactName}%2F{_artifactFilename}"; // %2F is enconding for /
+    protected override string GetRequestUrl() => $"{_fileContainerResourceUrl}?itemPath={_artifactName}%2F{_artifactFilename}"; // %2F is encoding for /
 }
