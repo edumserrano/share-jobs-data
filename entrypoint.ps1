@@ -15,19 +15,27 @@ function Main()
   }
 
   $command = $inputArgs[0]
-  # The --auth-token is set with a default value on the action.yml for ease of use.
-  # However, this option is only valid for the read-data-different-workflow command so
-  # we have to remove the option and its value if we are executing a different command
-  # or else the CLI will return an error
+  # The --auth-token and --repo have a default value set on the action.yml for ease of use.
+  # However, these options are only valid for the read-data-different-workflow command so
+  # we have to remove them if we are executing a different command or else the CLI will return an error.
   if($command -ne "read-data-different-workflow")
   {
     $authTokenIdx = $argsAsList.IndexOf("--auth-token")
-    if(authTokenIdx -ne -1)
+    if($authTokenIdx -ne -1)
     {
       $authTokenOption = $argsAsList[$authTokenIdx]
       $authTokenValue = $argsAsList[$authTokenIdx + 1]
       $argsAsList.Remove($authTokenOption)
       $argsAsList.Remove($authTokenValue)
+    }
+
+    $repoIdx = $argsAsList.IndexOf("repo")
+    if($repoIdx -ne -1)
+    {
+      $repoOption = $argsAsList[$repoIdx]
+      $repoValue = $argsAsList[$repoIdx + 1]
+      $argsAsList.Remove($repoOption)
+      $argsAsList.Remove($repoValue)
     }
   }
 
