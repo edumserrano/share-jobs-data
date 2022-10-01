@@ -77,10 +77,10 @@ jobs:
     - name: read output
       shell: pwsh
       run: |
-        Write-Output '${{ steps.read.outputs.data.name }}'
-        Write-Output '${{ steps.read.outputs.data.age }}'
-        Write-Output '${{ steps.read.outputs.data.addresses_home_street }}'
-        Write-Output '${{ steps.read.outputs.data.addresses_home_list_0_ }}'
+        Write-Output '${{ steps.read.outputs.name }}'
+        Write-Output '${{ steps.read.outputs.age }}'
+        Write-Output '${{ steps.read.outputs.addresses_home_street }}'
+        Write-Output '${{ steps.read.outputs.addresses_home_list_0_ }}'
     # - name: ls download
     #   run: |
     #     ls -R
