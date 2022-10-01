@@ -1,5 +1,3 @@
-using Microsoft.VisualStudio.TestPlatform.Utilities;
-
 namespace ShareJobsDataCli.Tests.CliIntegration.ReadDataDifferentWorkflow;
 
 /// <summary>

@@ -1,42 +1,30 @@
+using static ShareJobsDataCli.CliCommands.Commands.SetData.UploadArtifact.Results.UploadArtifactFileResult;
+
 namespace ShareJobsDataCli.CliCommands.Commands.SetData.UploadArtifact.Results;
 
-internal abstract record UploadArtifactFileResult
+internal sealed class UploadArtifactFileResult
+    : OneOfBase<GitHubFinalizeArtifactContainerHttpResponse,
+        FailedToCreateArtifactContainer,
+        FailedToUploadArtifact,
+        FailedToFinalizeArtifactContainer>
 {
-    private UploadArtifactFileResult()
+    public UploadArtifactFileResult(
+        OneOf<GitHubFinalizeArtifactContainerHttpResponse,
+            FailedToCreateArtifactContainer,
+            FailedToUploadArtifact,
+            FailedToFinalizeArtifactContainer> _)
+        : base(_)
     {
     }
 
-    public sealed record Ok(GitHubFinalizeArtifactContainerHttpResponse GitHubArtifactContainer)
-        : UploadArtifactFileResult;
+    public sealed record FailedToCreateArtifactContainer(JsonHttpResult<GitHubCreateArtifactContainerHttpResponse>.Error JsonHttpError);
 
-    public abstract record Error
-        : UploadArtifactFileResult;
+    public sealed record FailedToUploadArtifact(JsonHttpResult<GitHubUploadArtifactFileHttpResponse>.Error JsonHttpError);
 
-    public sealed record FailedToCreateArtifactContainer(JsonHttpResult<GitHubCreateArtifactContainerHttpResponse>.Error JsonHttpError)
-        : Error;
+    public sealed record FailedToFinalizeArtifactContainer(JsonHttpResult<GitHubFinalizeArtifactContainerHttpResponse>.Error JsonHttpError);
 
-    public sealed record FailedToUploadArtifact(JsonHttpResult<GitHubUploadArtifactFileHttpResponse>.Error JsonHttpError)
-        : Error;
-
-    public sealed record FailedToFinalizeArtifactContainer(JsonHttpResult<GitHubFinalizeArtifactContainerHttpResponse>.Error JsonHttpError)
-        : Error;
-
-    public static implicit operator UploadArtifactFileResult(GitHubFinalizeArtifactContainerHttpResponse gitHubArtifactContainer) => new Ok(gitHubArtifactContainer);
-
-    public bool IsOk(
-       [NotNullWhen(returnValue: true)] out GitHubFinalizeArtifactContainerHttpResponse? gitHubArtifactContainer,
-       [NotNullWhen(returnValue: false)] out Error? error)
-    {
-        gitHubArtifactContainer = null;
-        error = null;
-
-        if (this is Ok ok)
-        {
-            gitHubArtifactContainer = ok.GitHubArtifactContainer;
-            return true;
-        }
-
-        error = (Error)this;
-        return false;
-    }
+    public static implicit operator UploadArtifactFileResult(GitHubFinalizeArtifactContainerHttpResponse _) => new UploadArtifactFileResult(_);
+    public static implicit operator UploadArtifactFileResult(FailedToCreateArtifactContainer _) => new UploadArtifactFileResult(_);
+    public static implicit operator UploadArtifactFileResult(FailedToUploadArtifact _) => new UploadArtifactFileResult(_);
+    public static implicit operator UploadArtifactFileResult(FailedToFinalizeArtifactContainer _) => new UploadArtifactFileResult(_);
 }

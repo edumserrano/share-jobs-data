@@ -17,7 +17,6 @@ namespace ShareJobsDataCli.Guards;
 internal static class Guard
 {
     public static T NotNull<T>([NotNull] this T? value, [CallerArgumentExpression("value")] string expression = "")
-        where T : class
     {
         if (value is null)
         {
