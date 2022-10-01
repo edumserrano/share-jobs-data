@@ -13,18 +13,55 @@ function Main()
       $argsAsList.Add($arg)
     }
   }
-  
+
+  $command = $inputArgs[0]
+  # The --auth-token is set with a default value on the action.yml for ease of use.
+  # However, this option is only valid for the read-data-different-workflow command so
+  # we have to remove the option and its value if we are executing a different command
+  # or else the CLI will return an error
+  if($command -ne "read-data-different-workflow")
+  {
+    $authTokenIdx = $argsAsList.IndexOf("--auth-token")
+    if(authTokenIdx -ne -1)
+    {
+      $authTokenOption = $argsAsList[$authTokenIdx]
+      $authTokenValue = $argsAsList[$authTokenIdx + 1]
+      $argsAsList.Remove($authTokenOption)
+      $argsAsList.Remove($authTokenValue)
+    }
+  }
+
+  # $argsAsList = [Collections.Generic.List[String]]::new()
+  # argsAsList.Add($inputArgs[0]) # command value
+  # argsAsList.Add($inputArgs[1]) # --artifact-name
+  # argsAsList.Add($inputArgs[2]) # --artifact-name value
+  # argsAsList.Add($inputArgs[3]) # --data-filename
+  # argsAsList.Add($inputArgs[4]) # --data-filename value
+  # argsAsList.Add($inputArgs[5]) # --output
+  # argsAsList.Add($inputArgs[6]) # --output value
+
+
+  # $command = $inputArgs[0]
+  # if($command -eq "set-data")
+  # {
+
+  # }
+  # elseif($command -eq "read-data-current-workflow")
+  # {
+
+  # }
+  # elseif($command -eq "read-data-different-workflow")
+  # {
+
+  # }
+
   Write-Output "Executing: dotnet '/app/ShareJobsDataCli.dll' $argsAsList"
-  $output = dotnet '/app/ShareJobsDataCli.dll' $argsAsList
-  
-  Write-Output $output
+  dotnet '/app/ShareJobsDataCli.dll' $argsAsList
 
   if($LASTEXITCODE -ne 0 ) {
       Write-Output "::error::Share data jobs didn't complete successfully. See the step's log for more details."
       exit $LASTEXITCODE
   }
-  
-  # Write-Output "::set-output name=mlc-result::$output"  
 }
 
 # invoke entrypoint function

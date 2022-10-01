@@ -7,22 +7,63 @@ inputs:
   command:
     description: "Command to use: 'set-data', 'read-data-current-workflow' or 'read-data-different-workflow'."
     required: true
+  # common command options
+  artifact-name:
+    description: 'The name of the artifact.'
+    required: true
+    default: 'job-data'
+  data-filename:
+    description: 'The filename that contains the data.'
+    required: true
+    default: 'job-data.json'
+  output:
+    description: "How to output the job data in the step's output. It must be one of: none, strict-json, github-step-json."
+    required: true
+    default: 'github-step-json'
+  # set-data command options
   data:
-    description: 'YAML representation of the data to share.'
+    description: 'The data to share in YAML format.'
     required: false
-# outputs:
-#   mlc-result:
-#     description: 'The result from the Markdown Link Check action in JSON format.'
+    default: ''
+  # read-data-different-workflow command options
+  auth-token:
+    description: 'GitHub token used to download the job data artifact.'
+    required: false
+    default: ${{ github.token }}
+  repo:
+    description: 'The repository for the workflow run in the format of {owner}/{repo}.'
+    required: false
+    default: ${{ github.repository }}
+  run-id:
+    description: 'The unique identifier of the workflow run that contains the job data artifact.'
+    required: false
+    default: ''
+outputs:
+  data:
+    description: 'Job data in JSON format. Populated when the output action input parameter is set to strict-json.'
+  # Note:
+  # When the output action input parameter is set to github-step-json the action will set dynamic output values.
+  # The keys for the output values depend on the data shared.
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - ${{ inputs.command }}
-    # - --auth-token
-    # - ${{ inputs.auth-token }}
-    # # The syntax for the optional parameters uses a kind of way of doing a ternary operator. See https://github.com/actions/runner/issues/409
-    # # I don't want to include them in the call to the CLI if the values are the default empty value. Or else the CLI will say the value for that option is missing
-    # # So if the optional action inputs below are equal to '' I set them to the default of a space ' ' and then on the entrypoint.ps1 I remove any arg that is empty or whitespace before doing the CLI call
-    # # Note: can't set to an empty string '' instead of a space ' ' because then the ternary operator doesn't work, it will always evaluate to the right hand side of the ||. See https://github.com/actions/runner/issues/409#issuecomment-1013325196
+    - --artifact-name
+    - ${{ inputs.artifact-name }}
+    - --data-filename
+    - ${{ inputs.data-filename }}
+    - --output
+    - ${{ inputs.output }}
+    - --auth-token
+    - ${{ inputs.auth-token }}
+    # The syntax for the optional parameters uses a kind of way of doing a ternary operator. See https://github.com/actions/runner/issues/409
+    # I don't want to include them in the call to the CLI if the values are the default empty value. Or else the CLI will say the value for that option is missing
+    # So if the optional action inputs below are equal to '' I set them to the default of a space ' ' and then on the entrypoint.ps1 I remove any arg that is empty or whitespace before doing the CLI call
+    # Note: can't set to an empty string '' instead of a space ' ' because then the ternary operator doesn't work, it will always evaluate to the right hand side of the ||. See https://github.com/actions/runner/issues/409#issuecomment-1013325196
     - ${{ inputs.data == ''  && ' ' || '--data' }}
     - ${{ inputs.data == ''  && ' ' || inputs.data }}
+    - ${{ inputs.repo == ''  && ' ' || '--repo' }}
+    - ${{ inputs.repo == ''  && ' ' || inputs.repo }}
+    - ${{ inputs.run-id == ''  && ' ' || '--run-id' }}
+    - ${{ inputs.run-id == ''  && ' ' || inputs.run-id }}
