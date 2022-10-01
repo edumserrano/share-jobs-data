@@ -39,30 +39,6 @@ function Main()
     }
   }
 
-  # $argsAsList = [Collections.Generic.List[String]]::new()
-  # argsAsList.Add($inputArgs[0]) # command value
-  # argsAsList.Add($inputArgs[1]) # --artifact-name
-  # argsAsList.Add($inputArgs[2]) # --artifact-name value
-  # argsAsList.Add($inputArgs[3]) # --data-filename
-  # argsAsList.Add($inputArgs[4]) # --data-filename value
-  # argsAsList.Add($inputArgs[5]) # --output
-  # argsAsList.Add($inputArgs[6]) # --output value
-
-
-  # $command = $inputArgs[0]
-  # if($command -eq "set-data")
-  # {
-
-  # }
-  # elseif($command -eq "read-data-current-workflow")
-  # {
-
-  # }
-  # elseif($command -eq "read-data-different-workflow")
-  # {
-
-  # }
-
   Write-Output "Executing: dotnet '/app/ShareJobsDataCli.dll' $argsAsList"
   dotnet '/app/ShareJobsDataCli.dll' $argsAsList
 
