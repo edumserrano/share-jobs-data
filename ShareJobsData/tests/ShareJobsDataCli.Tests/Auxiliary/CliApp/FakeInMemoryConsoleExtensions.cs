@@ -7,6 +7,6 @@ internal static class FakeInMemoryConsoleExtensions
         // don't know how I would test that the errors have a red foreground =/
         var output = console.ReadOutputString();
         var error = console.ReadErrorString();
-        return error + output;
+        return (error + output).NormalizeLineEndingsToUnix();
     }
 }

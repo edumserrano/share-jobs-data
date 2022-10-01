@@ -12,6 +12,7 @@ global using DotNet.Sdk.Extensions.Testing.HttpMocking.HttpMessageHandlers.Respo
 global using ShareJobsDataCli.CliCommands.Commands.ReadDataCurrentWorkflow;
 global using ShareJobsDataCli.CliCommands.Commands.ReadDataDifferentWorkflow;
 global using ShareJobsDataCli.CliCommands.Commands.SetData;
+global using ShareJobsDataCli.CliCommands.Output;
 global using ShareJobsDataCli.GitHub;
 global using ShareJobsDataCli.Guards;
 global using ShareJobsDataCli.Tests.Auxiliary.CliApp;

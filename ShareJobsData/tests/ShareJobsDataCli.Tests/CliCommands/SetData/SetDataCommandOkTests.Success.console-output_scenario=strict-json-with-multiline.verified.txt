@@ -1,1 +1,1 @@
-﻿::set-output name=data::{%0D%0A  "name": "George line 1\nline 2\nline 3 Washington",%0D%0A  "age": "89"%0D%0A}
+﻿::set-output name=data::{%0A  "name": "George line 1\nline 2\nline 3 Washington",%0A  "age": "89"%0A}
