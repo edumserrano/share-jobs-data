@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.Tests.CliCommands.SetData;
+namespace ShareJobsDataCli.Tests.Features.SetData;
 
 /// <summary>
 /// These tests make sure that the <see cref="SetDataCommand"/> outputs the value to the console.

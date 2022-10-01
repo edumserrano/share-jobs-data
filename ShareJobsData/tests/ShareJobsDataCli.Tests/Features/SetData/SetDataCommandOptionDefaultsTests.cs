@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.Tests.CliCommands.SetData;
+namespace ShareJobsDataCli.Tests.Features.SetData;
 
 /// <summary>
 /// These tests check the default values for the <see cref="SetDataCommand"/>.

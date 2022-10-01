@@ -1,38 +1,33 @@
-namespace ShareJobsDataCli.Tests.CliCommands.ReadDataDifferentWorkflow;
+namespace ShareJobsDataCli.Tests.Features.ReadDataCurrentWorkflow;
 
 /// <summary>
-/// These tests check what happens when a logic violation occurs when running the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/>.
+/// These tests check what happens when a logic violation occurs when running the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/>.
 /// </summary>
 [Trait("Category", XUnitCategories.LogicFailure)]
-[Trait("Category", XUnitCategories.ReadDataFromDifferentGitHubWorkflowCommand)]
+[Trait("Category", XUnitCategories.ReadDataFromCurrentGitHubWorkflowCommand)]
 [UsesVerify]
-public sealed class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
+public sealed class ReadDataFromCurrentGitHubWorkflowCommandErrorTests
 {
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> shows expected error message when it can't download
-    /// the specified artifact because it doesn't exist on the specified workflow run id.
+    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when it can't download
+    /// the specified artifact because it doesn't exist on the current workflow run.
     /// </summary>
     [Fact]
     public async Task ArtifactNotFound()
     {
-        const string repoName = "edumserrano/share-jobs-data";
-        const string runId = "test-run-id";
+        var githubEnvironment = new TestsGitHubEnvironment();
         using var testHttpMessageHandler = new TestHttpMessageHandler();
-        testHttpMessageHandler.MockListArtifactsFromDifferentWorkflowRun(builder =>
+        testHttpMessageHandler.MockListArtifactsFromCurrentWorkflowRun(builder =>
         {
             builder
-                .FromWorkflowRun(repoName, runId)
+                .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
         using var httpClient = new HttpClient(testHttpMessageHandler);
-        var githubEnvironment = new TestsGitHubEnvironment();
 
-        var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
+        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
-            AuthToken = "auth-token",
-            Repo = repoName,
-            RunId = runId,
             ArtifactName = "not-gonna-find-it",
             ArtifactFilename = "job-data.json",
         };
@@ -45,38 +40,36 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
     }
 
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> shows expected error message when it can't download
-    /// the specified artifact file because it doesn't exist on the downloaded artifact.
+    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when it can't download
+    /// the specified artifact file because it doesn't exist on the downloaded artifact from the current workflow run.
     /// </summary>
     [Fact]
     public async Task ArtifactFileNotFound()
     {
-        const string repoName = "edumserrano/share-jobs-data";
-        const string runId = "test-run-id";
+        const string artifactName = "job-data";
+        var githubEnvironment = new TestsGitHubEnvironment();
         using var testHttpMessageHandler = new TestHttpMessageHandler();
-        testHttpMessageHandler.MockListArtifactsFromDifferentWorkflowRun(builder =>
+        testHttpMessageHandler.MockListArtifactsFromCurrentWorkflowRun(builder =>
         {
             builder
-                .FromWorkflowRun(repoName, runId)
+                .FromCurrentWorkflowRun(githubEnvironment.GitHubActionRuntimeUrl, githubEnvironment.GitHubActionRunId)
                 .WithResponseStatusCode(HttpStatusCode.OK)
                 .WithResponseContentFromFilepath(TestFiles.GetSharedFilepath("list-artifacts.http-response.json"));
         });
-        testHttpMessageHandler.MockDownloadArtifactFromDifferentWorkflowRun(builder =>
+        testHttpMessageHandler.MockGetContainerItemsFromCurrentWorkflowRun(builder =>
         {
             builder
-                .FromWorkflowArtifactId(repoName, artifactId: "351670722")
+                .FromFileContainerResourceUrl(
+                    fileContainerResourceUrl: "https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982",
+                    artifactName: artifactName)
                 .WithResponseStatusCode(HttpStatusCode.OK)
-                .WithResponseContentFromFilepath(TestFiles.GetFilepath("download-artifact.http-response.zip"));
+                .WithResponseContentFromFilepath(TestFiles.GetFilepath("get-container-items.http-response.json"));
         });
         using var httpClient = new HttpClient(testHttpMessageHandler);
-        var githubEnvironment = new TestsGitHubEnvironment();
 
-        var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
+        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
-            AuthToken = "auth-token",
-            Repo = repoName,
-            RunId = runId,
-            ArtifactName = "job-data",
+            ArtifactName = artifactName,
             ArtifactFilename = "not-gonna-find-me.json",
         };
         using var console = new FakeInMemoryConsole();
@@ -88,7 +81,7 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
     }
 
     /// <summary>
-    /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> shows expected error message when the --output is invalid.
+    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when the --output is invalid.
     /// </summary>
     [Fact]
     public async Task InvalidOutput()
@@ -97,11 +90,8 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
         using var testHttpMessageHandler = new TestHttpMessageHandler();
         var (httpClient, outboundHttpRequests) = TestHttpClient.CreateWithRecorder(testHttpMessageHandler);
 
-        var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
+        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
         {
-            AuthToken = "auth-token",
-            Repo = "edumserrano/share-jobs-data",
-            RunId = "test-run-id",
             Output = "not-valid-value",
         };
         using var console = new FakeInMemoryConsole();

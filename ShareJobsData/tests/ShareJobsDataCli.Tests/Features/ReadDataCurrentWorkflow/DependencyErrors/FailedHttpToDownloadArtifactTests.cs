@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.Tests.CliCommands.ReadDataCurrentWorkflow.DependencyErrors;
+namespace ShareJobsDataCli.Tests.Features.ReadDataCurrentWorkflow.DependencyErrors;
 
 /// <summary>
 /// These tests check what happens when the download artifact item HTTP dependency of the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> fails.

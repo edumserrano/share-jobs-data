@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.Tests.CliCommands.ReadDataCurrentWorkflow;
+namespace ShareJobsDataCli.Tests.Features.ReadDataCurrentWorkflow;
 
 /// <summary>
 /// These tests make sure that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> outputs the value to the console.

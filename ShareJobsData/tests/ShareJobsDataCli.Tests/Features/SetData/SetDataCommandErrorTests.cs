@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.Tests.CliCommands.SetData;
+namespace ShareJobsDataCli.Tests.Features.SetData;
 
 /// <summary>
 /// These tests check what happens when a logic violation occurs when running the <see cref="SetDataCommand"/>.

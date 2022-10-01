@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.Tests.CliCommands.ReadDataDifferentWorkflow;
+namespace ShareJobsDataCli.Tests.Features.ReadDataDifferentWorkflow;
 
 /// <summary>
 /// These tests check the default values for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/>.

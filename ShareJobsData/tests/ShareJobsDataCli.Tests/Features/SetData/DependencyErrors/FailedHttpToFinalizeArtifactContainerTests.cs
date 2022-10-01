@@ -1,4 +1,4 @@
-namespace ShareJobsDataCli.Tests.CliCommands.SetData.DependencyErrors;
+namespace ShareJobsDataCli.Tests.Features.SetData.DependencyErrors;
 
 /// <summary>
 /// These tests check what happens when the upload artifact file HTTP dependency of the <see cref="SetDataCommand"/> fails.

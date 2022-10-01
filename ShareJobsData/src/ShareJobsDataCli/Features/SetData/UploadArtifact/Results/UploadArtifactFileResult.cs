@@ -2,11 +2,10 @@ using static ShareJobsDataCli.Features.SetData.UploadArtifact.Results.UploadArti
 
 namespace ShareJobsDataCli.Features.SetData.UploadArtifact.Results;
 
-internal sealed class UploadArtifactFileResult
-    : OneOfBase<GitHubFinalizeArtifactContainerHttpResponse,
-        FailedToCreateArtifactContainer,
-        FailedToUploadArtifact,
-        FailedToFinalizeArtifactContainer>
+internal sealed class UploadArtifactFileResult : OneOfBase<GitHubFinalizeArtifactContainerHttpResponse,
+                                                        FailedToCreateArtifactContainer,
+                                                        FailedToUploadArtifact,
+                                                        FailedToFinalizeArtifactContainer>
 {
     public UploadArtifactFileResult(
         OneOf<GitHubFinalizeArtifactContainerHttpResponse,
