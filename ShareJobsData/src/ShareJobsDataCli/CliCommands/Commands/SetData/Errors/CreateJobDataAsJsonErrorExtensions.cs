@@ -6,22 +6,18 @@ internal static class CreateJobDataErrorExtensions
 {
     private const string _errorMessagePrefix = "Option --data has been provided with an invalid value.";
 
-    public static async Task WriteToConsoleAsync(this Error createJobDataError, IConsole console, string command)
+    public static async Task WriteToConsoleAsync(this OneOf<InvalidYml, CannotConvertYmlToJson> createJobDataError, IConsole console, string command)
     {
-        createJobDataError.NotNull();
         console.NotNull();
         command.NotNullOrWhiteSpace();
 
-        var error = createJobDataError switch
-        {
-            InvalidYml invalidYml => GetErrorMessage(invalidYml),
-            CannotConvertYmlToJson cannotConvertYmlToJson => GetErrorMessage(cannotConvertYmlToJson),
-            _ => throw UnexpectedTypeException.Create(createJobDataError),
-        };
+        var error = createJobDataError.Match(
+            GetInvalidYmlErrorMessage,
+            GetCannotConvertYmlToJsonErrorMessage);
         await console.WriteErrorAsync(command, error);
     }
 
-    private static string GetErrorMessage(InvalidYml invalidYml)
+    private static string GetInvalidYmlErrorMessage(InvalidYml invalidYml)
     {
         var sb = new StringBuilder();
         sb.Append("Failed to parse YAML because '").Append(invalidYml.ErrorMessage);
@@ -40,7 +36,7 @@ internal static class CreateJobDataErrorExtensions
         return $"{_errorMessagePrefix} {ymlError}";
     }
 
-    private static string GetErrorMessage(CannotConvertYmlToJson cannotConvertYmlToJson)
+    private static string GetCannotConvertYmlToJsonErrorMessage(CannotConvertYmlToJson cannotConvertYmlToJson)
     {
         return $"{_errorMessagePrefix} Cannot convert YAML input to JSON because '{cannotConvertYmlToJson.ErrorMessage}'.";
     }
