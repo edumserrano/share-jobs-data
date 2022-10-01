@@ -29,7 +29,7 @@ function Main()
       $argsAsList.Remove($authTokenValue)
     }
 
-    $repoIdx = $argsAsList.IndexOf("repo")
+    $repoIdx = $argsAsList.IndexOf("--repo")
     if($repoIdx -ne -1)
     {
       $repoOption = $argsAsList[$repoIdx]
