@@ -1,0 +1,3 @@
+﻿An error occurred trying to execute the read-data-different-workflow command.
+Error(s):
+- Option --output has been provided with an invalid value: 'not-valid-value'. It must be one of: strict-json, github-step-json.

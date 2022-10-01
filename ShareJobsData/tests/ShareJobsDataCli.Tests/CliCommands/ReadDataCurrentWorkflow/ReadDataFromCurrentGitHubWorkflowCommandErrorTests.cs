@@ -79,4 +79,27 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommandErrorTests
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
     }
+
+    /// <summary>
+    /// Tests that the <see cref="ReadDataFromCurrentGitHubWorkflowCommand"/> shows expected error message when the --output is invalid.
+    /// </summary>
+    [Fact]
+    public async Task InvalidOutput()
+    {
+        var githubEnvironment = new TestsGitHubEnvironment();
+        using var testHttpMessageHandler = new TestHttpMessageHandler();
+        var (httpClient, outboundHttpRequests) = TestHttpClient.CreateWithRecorder(testHttpMessageHandler);
+
+        var command = new ReadDataFromCurrentGitHubWorkflowCommand(httpClient, githubEnvironment)
+        {
+            Output = "not-valid-value",
+        };
+        using var console = new FakeInMemoryConsole();
+        await command.ExecuteAsync(console);
+
+        console.ReadOutputString().ShouldBeEmpty();
+        outboundHttpRequests.ShouldBeEmpty();
+        var output = console.ReadAllAsString();
+        await Verify(output).AppendToMethodName("console-output");
+    }
 }

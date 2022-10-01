@@ -8,6 +8,9 @@ namespace ShareJobsDataCli.Tests.CliCommands.SetData;
 [UsesVerify]
 public sealed class SetDataCommandErrorTests
 {
+    /// <summary>
+    /// Tests that the <see cref="SetDataCommand"/> shows expected error message when the --data is invalid YAML.
+    /// </summary>
     [Fact]
     public async Task InvalidYml()
     {
@@ -33,6 +36,10 @@ public sealed class SetDataCommandErrorTests
             .AppendToMethodName("console-output");
     }
 
+    /// <summary>
+    /// Tests that the <see cref="SetDataCommand"/> shows expected error message when the --data is cannot be converted
+    /// from YAML to JSON.
+    /// </summary>
     [Fact]
     public async Task CannotConvertToJson()
     {
@@ -43,6 +50,30 @@ public sealed class SetDataCommandErrorTests
         var command = new SetDataCommand(httpClient, githubEnvironment)
         {
             DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+        };
+        using var console = new FakeInMemoryConsole();
+        await command.ExecuteAsync(console);
+
+        console.ReadOutputString().ShouldBeEmpty();
+        outboundHttpRequests.ShouldBeEmpty();
+        var output = console.ReadAllAsString();
+        await Verify(output).AppendToMethodName("console-output");
+    }
+
+    /// <summary>
+    /// Tests that the <see cref="SetDataCommand"/> shows expected error message when the --output is invalid.
+    /// </summary>
+    [Fact]
+    public async Task InvalidOutput()
+    {
+        var githubEnvironment = new TestsGitHubEnvironment();
+        using var testHttpMessageHandler = new TestHttpMessageHandler();
+        var (httpClient, outboundHttpRequests) = TestHttpClient.CreateWithRecorder(testHttpMessageHandler);
+
+        var command = new SetDataCommand(httpClient, githubEnvironment)
+        {
+            DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
+            Output = "not-valid-value",
         };
         using var console = new FakeInMemoryConsole();
         await command.ExecuteAsync(console);

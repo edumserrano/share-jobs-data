@@ -86,4 +86,30 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandErrorTests
         var output = console.ReadAllAsString();
         await Verify(output).AppendToMethodName("console-output");
     }
+
+    /// <summary>
+    /// Tests that the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> shows expected error message when the --output is invalid.
+    /// </summary>
+    [Fact]
+    public async Task InvalidOutput()
+    {
+        var githubEnvironment = new TestsGitHubEnvironment();
+        using var testHttpMessageHandler = new TestHttpMessageHandler();
+        var (httpClient, outboundHttpRequests) = TestHttpClient.CreateWithRecorder(testHttpMessageHandler);
+
+        var command = new ReadDataFromDifferentGitHubWorkflowCommand(httpClient, githubEnvironment)
+        {
+            AuthToken = "auth-token",
+            Repo = "edumserrano/share-jobs-data",
+            RunId = "test-run-id",
+            Output = "not-valid-value",
+        };
+        using var console = new FakeInMemoryConsole();
+        await command.ExecuteAsync(console);
+
+        console.ReadOutputString().ShouldBeEmpty();
+        outboundHttpRequests.ShouldBeEmpty();
+        var output = console.ReadAllAsString();
+        await Verify(output).AppendToMethodName("console-output");
+    }
 }
