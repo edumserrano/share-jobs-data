@@ -30,6 +30,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Run share jobs data
+      id: share
       uses: ./
       with:
         command: set-data
@@ -49,6 +50,11 @@ jobs:
               - first
               - second
               - third
+    - name: Dump outputs from previous step
+      shell: pwsh
+      env:
+        STEP_OUTPUT: ${{ toJSON(steps.share.outputs) }}
+      run: $env:STEP_OUTPUT
 
   read-job:
     name: read
