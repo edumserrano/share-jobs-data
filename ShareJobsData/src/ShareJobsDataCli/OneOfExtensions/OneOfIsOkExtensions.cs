@@ -2,22 +2,6 @@ namespace ShareJobsDataCli.OneOfExtensions;
 
 internal static class OneOfIsOkExtensions
 {
-    public static bool IsOk<T0, T1>(
-        this OneOfBase<T0, T1> oneOf,
-        [NotNullWhen(returnValue: true)] out T0? ok,
-        out T1 error)
-    {
-        return oneOf.TryPickT0(out ok, out error);
-    }
-
-    public static bool Is<T0, T1, T2>(
-        this OneOfBase<T0, T1, T2> oneOf,
-        [NotNullWhen(returnValue: true)] out T0? ok,
-        out OneOf<T1, T2> error)
-    {
-        return oneOf.TryPickT0(out ok, out error);
-    }
-
     public static bool IsOk<T0, T1, T2>(
         this OneOfBase<T0, T1, T2> oneOf,
         [NotNullWhen(returnValue: true)] out T0? ok,
