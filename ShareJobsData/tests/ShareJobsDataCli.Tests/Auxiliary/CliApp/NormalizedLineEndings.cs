@@ -2,8 +2,8 @@ namespace ShareJobsDataCli.Tests.Auxiliary.CliApp;
 
 internal static class NormalizedLineEndings
 {
-    private const string CR = "%0D"; //encoded \r
-    private const string LF = "%0A"; //encoded \n
+    private const string _cr = "%0D"; // encoded \r
+    private const string _lf = "%0A"; // encoded \n
 
     /// <summary>
     /// Ensures that the string only contains encoded Unix line endings.
@@ -24,6 +24,6 @@ internal static class NormalizedLineEndings
     /// <returns>Same string value bue with newlines always in Unix.</returns>
     public static string NormalizeLineEndingsToUnix(this string original)
     {
-        return original.Replace(CR + LF, LF, StringComparison.Ordinal);
+        return original.Replace(_cr + _lf, _lf, StringComparison.Ordinal);
     }
 }
