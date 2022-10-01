@@ -1,3 +1,3 @@
 ﻿An error occurred trying to execute the set-data command.
 Error(s):
-- Option --data has been provided with an invalid value. Failed to parse YAML because 'While scanning a plain scalar value, found invalid mapping. Start: Line: 2, Col: 6, Idx: 30. End: Line: 2, Col: 6, Idx: 30.'
+- Option --data has been provided with an invalid value. Failed to parse YAML because 'While scanning a plain scalar value, found invalid mapping. Start: Line: 2, Col: 6, {scrubbed line ending idx}. End: Line: 2, Col: 6, {scrubbed line ending idx}.'

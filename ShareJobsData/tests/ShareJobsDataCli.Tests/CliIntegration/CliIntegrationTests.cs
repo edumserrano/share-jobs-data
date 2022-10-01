@@ -20,10 +20,10 @@ public sealed class CliIntegrationTests
         app.CliApplicationBuilder.UseConsole(console);
         await app.RunAsync();
 
-        var settings = new VerifySettings();
-        settings.ScrubAppName();
         var output = console.ReadAllAsString();
-        await Verify(output, settings).AppendToMethodName("console-output");
+        await Verify(output)
+            .ScrubAppName()
+            .AppendToMethodName("console-output");
         console.ReadErrorString().ShouldBeEmpty();
     }
 }

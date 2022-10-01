@@ -1,3 +1,5 @@
+using Microsoft.VisualStudio.TestPlatform.Utilities;
+
 namespace ShareJobsDataCli.Tests.CliIntegration.ReadDataDifferentWorkflow;
 
 /// <summary>
@@ -22,10 +24,10 @@ public sealed class CliIntegrationTests
         app.CliApplicationBuilder.UseConsole(console);
         await app.RunAsync("read-data-different-workflow");
 
-        var settings = new VerifySettings();
-        settings.ScrubAppName();
         var output = console.ReadAllAsString();
-        await Verify(output, settings).AppendToMethodName("console-output");
+        await Verify(output)
+            .ScrubAppName()
+            .AppendToMethodName("console-output");
         console.ReadOutputString().ShouldNotBeEmpty();
         console.ReadErrorString().ShouldNotBeEmpty();
     }
@@ -47,10 +49,10 @@ public sealed class CliIntegrationTests
         };
         await app.RunAsync(args);
 
-        var settings = new VerifySettings();
-        settings.ScrubAppName();
         var output = console.ReadAllAsString();
-        await Verify(output, settings).AppendToMethodName("console-output");
+        await Verify(output)
+            .ScrubAppName()
+            .AppendToMethodName("console-output");
         console.ReadOutputString().ShouldNotBeEmpty();
         console.ReadErrorString().ShouldNotBeEmpty();
     }
@@ -72,10 +74,10 @@ public sealed class CliIntegrationTests
         };
         await app.RunAsync(args);
 
-        var settings = new VerifySettings();
-        settings.ScrubAppName();
         var output = console.ReadAllAsString();
-        await Verify(output, settings).AppendToMethodName("console-output");
+        await Verify(output)
+            .ScrubAppName()
+            .AppendToMethodName("console-output");
         console.ReadOutputString().ShouldNotBeEmpty();
         console.ReadErrorString().ShouldNotBeEmpty();
     }
@@ -97,10 +99,10 @@ public sealed class CliIntegrationTests
         };
         await app.RunAsync(args);
 
-        var settings = new VerifySettings();
-        settings.ScrubAppName();
         var output = console.ReadAllAsString();
-        await Verify(output, settings).AppendToMethodName("console-output");
+        await Verify(output)
+            .ScrubAppName()
+            .AppendToMethodName("console-output");
         console.ReadOutputString().ShouldNotBeEmpty();
         console.ReadErrorString().ShouldNotBeEmpty();
     }
@@ -125,10 +127,10 @@ public sealed class CliIntegrationTests
         };
         await app.RunAsync(args);
 
-        var settings = new VerifySettings();
-        settings.ScrubAppName();
         var output = console.ReadAllAsString();
-        await Verify(output, settings).AppendToMethodName("console-output");
+        await Verify(output)
+            .ScrubAppName()
+            .AppendToMethodName("console-output");
         console.ReadOutputString().ShouldNotBeEmpty();
         console.ReadErrorString().ShouldNotBeEmpty();
     }
@@ -153,10 +155,10 @@ public sealed class CliIntegrationTests
         };
         await app.RunAsync(args);
 
-        var settings = new VerifySettings();
-        settings.ScrubAppName();
         var output = console.ReadAllAsString();
-        await Verify(output, settings).AppendToMethodName("console-output");
+        await Verify(output)
+            .ScrubAppName()
+            .AppendToMethodName("console-output");
         console.ReadOutputString().ShouldNotBeEmpty();
         console.ReadErrorString().ShouldNotBeEmpty();
     }
@@ -181,10 +183,10 @@ public sealed class CliIntegrationTests
         };
         await app.RunAsync(args);
 
-        var settings = new VerifySettings();
-        settings.ScrubAppName();
         var output = console.ReadAllAsString();
-        await Verify(output, settings).AppendToMethodName("console-output");
+        await Verify(output)
+            .ScrubAppName()
+            .AppendToMethodName("console-output");
         console.ReadOutputString().ShouldNotBeEmpty();
         console.ReadErrorString().ShouldNotBeEmpty();
     }
@@ -210,10 +212,10 @@ public sealed class CliIntegrationTests
         };
         await app.RunAsync(args);
 
-        var settings = new VerifySettings();
-        settings.ScrubAppName();
         var output = console.ReadAllAsString();
-        await Verify(output, settings).AppendToMethodName("console-output");
+        await Verify(output)
+            .ScrubAppName()
+            .AppendToMethodName("console-output");
         console.ReadOutputString().ShouldNotBeEmpty();
         console.ReadErrorString().ShouldNotBeEmpty();
     }
@@ -240,10 +242,41 @@ public sealed class CliIntegrationTests
         };
         await app.RunAsync(args);
 
-        var settings = new VerifySettings();
-        settings.ScrubAppName();
         var output = console.ReadAllAsString();
-        await Verify(output, settings).AppendToMethodName("console-output");
+        await Verify(output)
+            .ScrubAppName()
+            .AppendToMethodName("console-output");
+        console.ReadOutputString().ShouldNotBeEmpty();
+        console.ReadErrorString().ShouldNotBeEmpty();
+    }
+
+    /// <summary>
+    /// Tests the validation of the --output option for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand"/> command.
+    /// </summary>
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    public async Task OutputValidation(string outputOption)
+    {
+        using var console = new FakeInMemoryConsole();
+        var app = new ShareDataBetweenJobsCli();
+        app.CliApplicationBuilder.UseConsole(console);
+        var args = new[]
+        {
+            "read-data-different-workflow",
+            "--auth-token", "some auth token",
+            "--repo", "some repo",
+            "--run-id", "some run id",
+            "--artifact-name", "some artifact name",
+            "--data-filename", "some data filename",
+            "--output", outputOption,
+        };
+        await app.RunAsync(args);
+
+        var output = console.ReadAllAsString();
+        await Verify(output)
+            .ScrubAppName()
+            .AppendToMethodName("console-output");
         console.ReadOutputString().ShouldNotBeEmpty();
         console.ReadErrorString().ShouldNotBeEmpty();
     }
