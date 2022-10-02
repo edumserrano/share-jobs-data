@@ -92,7 +92,6 @@ jobs:
         Write-Output "::error::Action didn't produce expected github-step-json output."
         Exit 1
 
-
   share-job-strict-json-output:
     name: share with strict-json output
     permissions:
