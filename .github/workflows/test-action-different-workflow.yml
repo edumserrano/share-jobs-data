@@ -1,4 +1,4 @@
-name: Test GitHub action - share data on different workflow
+name: 'Test GH action: share data on different workflow'
 
 on:
   workflow_run:
@@ -27,14 +27,14 @@ jobs:
       run: |
         Write-Output "::notice::This worklfow was triggered by a 'workflow_run' from '${{ github.event.workflow_run.name }}'."
 
-  read-job-github-step-json-output:
-    name: read with github-step-json output
+  read-data-different-workflow-with-github-step-json-output:
+    name: read-data-different-workflow command with github-step-json output
     permissions:
       contents: read
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Run read jobs data
+    - name: Run read-data-different-workflow command
       id: read
       uses: ./
       with:
@@ -70,14 +70,14 @@ jobs:
         Write-Output "::error::Action didn't produce expected github-step-json output."
         Exit 1
 
-  read-job-strict-json-output:
-    name: read with strict-json output
+  read-data-different-workflow-with-strict-json-output:
+    name: read-data-different-workflow command with strict-json output
     permissions:
       contents: read
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Run read jobs data
+    - name: Run read-data-different-workflow command
       id: read
       uses: ./
       with:
@@ -138,3 +138,50 @@ jobs:
 
         Write-Output "::error::Action didn't produce expected github-step-json output."
         Exit 1
+
+  pr-status:
+    name: Set PR status
+    needs: [
+      read-data-different-workflow-with-github-step-json-output,
+      read-data-different-workflow-with-strict-json-output,
+    ]
+    if: github.event.workflow_run.event == 'pull_request' && always()
+    permissions:
+      statuses: write
+    runs-on: ubuntu-latest
+    steps:
+    - name: Dump github context for debug purposes
+      env:
+        GITHUB_CONTEXT: ${{ toJSON(github) }}
+      run: $env:GITHUB_CONTEXT
+    - uses: actions/checkout@v3
+    - name: Create GitHub status on PR
+      run: |
+        $read1JobResult = '${{ needs.read-data-different-workflow-with-github-step-json-output.result }}'
+        $read2JobResult = '${{ needs.read-data-different-workflow-with-strict-json-output.result }}'
+
+        if ($read1JobResult -eq 'success' `
+            && $read2JobResult -eq 'success')
+        {
+          $description = 'Successful'
+          $state = 'success'
+        }
+        else
+        {
+          $description = 'Error'
+          $state = 'error'
+        }
+
+        $uri = "https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.event.workflow_run.head_sha }}"
+        $headers = @{
+          Accept = "application/vnd.github.v3+json"
+          Authorization = "Bearer ${{ secrets.GITHUB_TOKEN }}"
+        }
+        $body = @{
+          context = '${{ github.workflow }} / ${{ github.event.workflow_run.name }} (${{ github.event_name }})' # mimic format from github
+          description = $description
+          target_url = 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+          state = $state
+        } | ConvertTo-Json -compress
+
+        Invoke-RestMethod -Method 'Post' -Uri $uri -Headers $headers -Body $body
