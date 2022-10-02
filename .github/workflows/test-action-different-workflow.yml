@@ -3,7 +3,7 @@ name: 'Test GH action: share data on different workflow'
 on:
   workflow_run:
     workflows: [
-      "Test GitHub action - share data on current workflow",
+      "Test GH action: share data on current workflow",
     ]
     types:
     - completed
