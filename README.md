@@ -216,8 +216,8 @@ When using `strict-json`, the shared YAML data is converted to JSON and set as t
 ```yml
 # Imagine you have shared the following YAML:
 #
-# - name: Eduardo Serrano
-# - age: 21
+# name: Eduardo Serrano
+# age: 21
 #
 # After reading the shared data on a step with id 'read' and using the ouput option of `strict-json`
 # you can access the JSON output as follows:
@@ -235,10 +235,10 @@ When using `github-step-json`, the shared YAML data is converted to JSON but ins
 ```yml
 # Imagine you have shared the following YAML:
 #
-# - name:
-#     first: Eduardo
-#     last: Serrano
-# - age: 21
+# name:
+#   first: Eduardo
+#   last: Serrano
+# age: 21
 #
 # After reading the shared data on a step with id 'read' and using the ouput option of `github-step-json`
 # you can access the values from the shared YAML as follows:
@@ -261,10 +261,10 @@ Yes, you can use the [`fromJson` function](https://docs.github.com/en/actions/le
 ```yml
 # Imagine you have shared the following YAML:
 #
-# - name:
-#     first: Eduardo
-#     last: Serrano
-# - age: 21
+# name:
+#   first: Eduardo
+#   last: Serrano
+# age: 21
 #
 # After reading the shared data on a step with id 'read' and using the ouput option of `strict-json`
 # you can access the JSON output as follows:
