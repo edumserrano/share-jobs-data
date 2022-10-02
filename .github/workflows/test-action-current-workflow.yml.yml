@@ -23,13 +23,13 @@ jobs:
         Write-Output "::notice::This worklfow was triggered by a 'workflow_run' from '${{ github.event.workflow_run.name }}'."
 
   share-job-github-step-json-output:
-    name: share
+    name: share with github-step-json output
     permissions:
       contents: read
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Run share jobs data
+    - name: Run set-data command
       id: set
       uses: ./
       with:
@@ -55,9 +55,29 @@ jobs:
       env:
         STEP_OUTPUT: ${{ toJSON(steps.set.outputs) }}
       run: $env:STEP_OUTPUT
+    - name: Verify set-data command output
+      run: |
+        if('${{ steps.set.outputs.name }}' -eq 'George Washington'
+          && '${{ steps.set.outputs.age }}' -eq '89'
+          && '${{ steps.set.outputs.height_in_inches }}' -eq '5.75'
+          && '${{ steps.set.outputs.addresses.home.street }}' -eq '400 Mockingbird Lane\naddress line 2'
+          && '${{ steps.set.outputs.addresses.home.city }}' -eq 'Louaryland'
+          && '${{ steps.set.outputs.addresses.home.state }}' -eq 'Hawidaho'
+          && '${{ steps.set.outputs.addresses.home.zip }}' -eq '99970'
+          && '${{ steps.set.outputs.addresses.home.list_0_ }}' -eq 'first'
+          && '${{ steps.set.outputs.addresses.home.list_1_ }}' -eq 'second'
+          && '${{ steps.set.outputs.addresses.home.list_2_ }}' -eq 'third')
+        {
+          Write-Output "Action produced expected output values."
+          Exit 0
+        }
+
+        Write-Output "::error::Action didn't produce expected github-step-json output."
+        Exit 1
+
 
   share-job-strict-json-output:
-    name: share
+    name: share with strict-json output
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -92,7 +112,7 @@ jobs:
       run: $env:STEP_OUTPUT
 
   share-job-none-output:
-    name: share
+    name: share with none output
     permissions:
       contents: read
     runs-on: ubuntu-latest
