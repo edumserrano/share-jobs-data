@@ -185,4 +185,3 @@ jobs:
         } | ConvertTo-Json -compress
 
         Invoke-RestMethod -Method 'Post' -Uri $uri -Headers $headers -Body $body
-
