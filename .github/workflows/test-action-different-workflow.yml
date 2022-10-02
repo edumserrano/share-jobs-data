@@ -178,7 +178,7 @@ jobs:
           Authorization = "Bearer ${{ secrets.GITHUB_TOKEN }}"
         }
         $body = @{
-          context = '${{ github.workflow }} / ${{ github.event.workflow_run.name }} (${{ github.event_name }})' # mimic format from github
+          context = '${{ github.workflow }} / read-data-different-workflow command (${{ github.event.workflow_run.event }})' # mimic format from github
           description = $description
           target_url = 'https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
           state = $state
