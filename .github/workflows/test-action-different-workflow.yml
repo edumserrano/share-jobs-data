@@ -32,7 +32,6 @@ jobs:
     permissions:
       contents: read
     runs-on: ubuntu-latest
-    needs: [share-job-github-step-json-output]
     steps:
     - uses: actions/checkout@v3
     - name: Run read jobs data
@@ -76,7 +75,6 @@ jobs:
     permissions:
       contents: read
     runs-on: ubuntu-latest
-    needs: [share-job-strict-json-output]
     steps:
     - uses: actions/checkout@v3
     - name: Run read jobs data
