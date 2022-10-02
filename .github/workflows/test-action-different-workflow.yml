@@ -28,7 +28,7 @@ jobs:
         Write-Output "::notice::This worklfow was triggered by a 'workflow_run' from '${{ github.event.workflow_run.name }}'."
 
   read-job-github-step-json-output:
-    name: read with github-step-json output
+    name: Read from different workflow with github-step-json output
     permissions:
       contents: read
     runs-on: ubuntu-latest
@@ -71,7 +71,7 @@ jobs:
         Exit 1
 
   read-job-strict-json-output:
-    name: read with strict-json output
+    name: Read from different workflow with strict-json output
     permissions:
       contents: read
     runs-on: ubuntu-latest
