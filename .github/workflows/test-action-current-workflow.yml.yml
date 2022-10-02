@@ -114,6 +114,55 @@ jobs:
       env:
         STEP_OUTPUT: ${{ toJSON(steps.set.outputs) }}
       run: $env:STEP_OUTPUT
+    - name: Verify set-data command output
+      run: |
+        # verify using github fromJson function
+        $street = @'
+        400 Mockingbird Lane
+        address line 2
+        '@
+        if('${{ fromJson(steps.set.outputs.data).name }}' -eq 'George Washington' `
+          -and '${{ fromJson(steps.set.outputs.data).age }}' -eq '89' `
+          -and '${{ fromJson(steps.set.outputs.data).height_in_inches }}' -eq '5.75' `
+          -and '${{ fromJson(steps.set.outputs.data).addresses_home_street }}' -eq $street `
+          -and '${{ fromJson(steps.set.outputs.data).addresses_home_city }}' -eq 'Louaryland' `
+          -and '${{ fromJson(steps.set.outputs.data).addresses_home_state }}' -eq 'Hawidaho' `
+          -and '${{ fromJson(steps.set.outputs.data).addresses_home_zip }}' -eq '99970' `
+          -and '${{ fromJson(steps.set.outputs.data).addresses_home_list_0_ }}' -eq 'first' `
+          -and '${{ fromJson(steps.set.outputs.data).addresses_home_list_1_ }}' -eq 'second' `
+          -and '${{ fromJson(steps.set.outputs.data).addresses_home_list_2_ }}' -eq 'third')
+        {
+          Write-Output "Action produced expected output values."
+          Exit 0
+        }
+
+        Write-Output "::error::Action didn't produce expected github-step-json output."
+        Exit 1
+    - name: Verify set-data command output 2
+      run: |
+        # verify using powershell
+        $data = '${{ steps.set.outputs.data }}' | ConvertFrom-Json
+        $street = @'
+        400 Mockingbird Lane
+        address line 2
+        '@
+        if('${{ data.name }}' -eq 'George Washington' `
+          -and '${{ data.age }}' -eq '89' `
+          -and '${{ data.height_in_inches }}' -eq '5.75' `
+          -and '${{ data.addresses_home_street }}' -eq $street `
+          -and '${{ data.addresses_home_city }}' -eq 'Louaryland' `
+          -and '${{ data.addresses_home_state }}' -eq 'Hawidaho' `
+          -and '${{ data.addresses_home_zip }}' -eq '99970' `
+          -and '${{ data.addresses_home_list_0_ }}' -eq 'first' `
+          -and '${{ data.addresses_home_list_1_ }}' -eq 'second' `
+          -and '${{ data.addresses_home_list_2_ }}' -eq 'third')
+        {
+          Write-Output "Action produced expected output values."
+          Exit 0
+        }
+
+        Write-Output "::error::Action didn't produce expected github-step-json output."
+        Exit 1
 
   share-job-none-output:
     name: share with none output
@@ -149,6 +198,16 @@ jobs:
       env:
         STEP_OUTPUT: ${{ toJSON(steps.set.outputs) }}
       run: $env:STEP_OUTPUT
+    - name: Verify set-data command output
+      run: |
+        if('${{ steps.set.outputs }}' -eq '')
+        {
+          Write-Output "Action didn't produce any output as expected."
+          Exit 0
+        }
+
+        Write-Output "::error::Action produced output when using output was set to none."
+        Exit 1
 
   read-job:
     name: read
