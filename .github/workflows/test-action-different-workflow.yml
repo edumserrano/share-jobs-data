@@ -1,4 +1,4 @@
-name: Test GH action2
+name: 'Test GH action: share data on different workflow'
 
 on:
   workflow_run:
