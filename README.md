@@ -158,7 +158,7 @@ This action supports the following flows:
 
 The operation that the action performs is controlled via the `command` action input.
 
->**warning**
+>**Warning**
 >
 > Some action inputs are only valid for a specifc `command` as indicated by the `restricted to command` column.
 
@@ -193,7 +193,7 @@ See [here](#what-is-the-difference-between-using-strict-json-or-github-step-json
 | ------ | ----------------------------------------------------------------------------------------------- |
 | `data` | Job data in JSON format. Populated only when the `output` action input is set to `strict-json`. |
 
->**warning**
+>**Warning**
 >
 >- When setting the `output` action input to `none`: nothing is written to the step's output.
 >- When setting the `output` action input to `github-step-json`: the action outputs are dynamic, they will depend on the shared data. See [here](#what-is-the-difference-between-using-strict-json-or-github-step-json-as-the-ouput) for more detail.
