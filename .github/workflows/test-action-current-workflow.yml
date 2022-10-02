@@ -1,4 +1,4 @@
-name: Test GitHub action - share data on current workflow
+name: 'Test GH action: share data on current workflow'
 
 on:
   workflow_dispatch:
