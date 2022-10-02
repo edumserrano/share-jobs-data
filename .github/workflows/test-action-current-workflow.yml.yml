@@ -22,7 +22,7 @@ jobs:
       run: |
         Write-Output "::notice::This worklfow was triggered by a 'workflow_run' from '${{ github.event.workflow_run.name }}'."
 
-  share-job:
+  share-job-github-step-json-output:
     name: share
     permissions:
       contents: read
@@ -34,8 +34,79 @@ jobs:
       uses: ./
       with:
         command: set-data
+        artifact-name: from-set-with-github-step-json-output
         data: |
           name: George Washington
+          age: 89
+          height_in_inches: 5.75
+          addresses:
+            home:
+              street: |
+                400 Mockingbird Lane
+                address line 2
+              city: Louaryland
+              state: Hawidaho
+              zip: 99970
+              list:
+              - first
+              - second
+              - third
+    - name: Dump outputs from previous step
+      env:
+        STEP_OUTPUT: ${{ toJSON(steps.set.outputs) }}
+      run: $env:STEP_OUTPUT
+
+  share-job-strict-json-output:
+    name: share
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run share jobs data
+      id: set
+      uses: ./
+      with:
+        command: set-data
+        artifact-name: from-set-with-strict-json-output
+        output: strict-json
+        data: |
+          name: George Washington
+          age: 89
+          height_in_inches: 5.75
+          addresses:
+            home:
+              street: |
+                400 Mockingbird Lane
+                address line 2
+              city: Louaryland
+              state: Hawidaho
+              zip: 99970
+              list:
+              - first
+              - second
+              - third
+    - name: Dump outputs from previous step
+      env:
+        STEP_OUTPUT: ${{ toJSON(steps.set.outputs) }}
+      run: $env:STEP_OUTPUT
+
+  share-job-none-output:
+    name: share
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run share jobs data
+      id: set
+      uses: ./
+      with:
+        command: set-data
+        output: none
+        data: |
+          name: George Washington
+          artifact-name: from-set-with-none-output
           age: 89
           height_in_inches: 5.75
           addresses:
@@ -68,6 +139,7 @@ jobs:
       uses: ./
       with:
         command: read-data-current-workflow
+        artifact-name: from-set-with-github-step-json-output
     - name: Dump outputs from previous step
       env:
         STEP_OUTPUT: ${{ toJSON(steps.read.outputs) }}
