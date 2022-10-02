@@ -236,8 +236,8 @@ When using `github-step-json`, the shared YAML data is converted to JSON but ins
 # Imagine you have shared the following YAML:
 #
 # - name:
-#     - first: Eduardo
-#     - last: Serrano
+#     first: Eduardo
+#     last: Serrano
 # - age: 21
 #
 # After reading the shared data on a step with id 'read' and using the ouput option of `github-step-json`
@@ -262,8 +262,8 @@ Yes, you can use the [`fromJson` function](https://docs.github.com/en/actions/le
 # Imagine you have shared the following YAML:
 #
 # - name:
-#     - first: Eduardo
-#     - last: Serrano
+#     first: Eduardo
+#     last: Serrano
 # - age: 21
 #
 # After reading the shared data on a step with id 'read' and using the ouput option of `strict-json`
