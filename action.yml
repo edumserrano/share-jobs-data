@@ -1,5 +1,5 @@
 name: 'Share GitHub jobs data'
-description: 'Allows sharing data across GitHub workflow jobs. Supports data of any shape: multiple properties, nested properties, lists, etc.'
+description: 'Share data across GitHub workflow jobs. Supports data of any shape: multiple properties, nested properties, lists, etc.'
 branding:
   icon: clipboard
   color: blue
