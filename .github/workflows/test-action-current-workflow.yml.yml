@@ -124,13 +124,13 @@ jobs:
         if('${{ fromJson(steps.set.outputs.data).name }}' -eq 'George Washington' `
           -and '${{ fromJson(steps.set.outputs.data).age }}' -eq '89' `
           -and '${{ fromJson(steps.set.outputs.data).height_in_inches }}' -eq '5.75' `
-          -and '${{ fromJson(steps.set.outputs.data).addresses_home_street }}' -eq $street `
-          -and '${{ fromJson(steps.set.outputs.data).addresses_home_city }}' -eq 'Louaryland' `
-          -and '${{ fromJson(steps.set.outputs.data).addresses_home_state }}' -eq 'Hawidaho' `
-          -and '${{ fromJson(steps.set.outputs.data).addresses_home_zip }}' -eq '99970' `
-          -and '${{ fromJson(steps.set.outputs.data).addresses_home_list_0_ }}' -eq 'first' `
-          -and '${{ fromJson(steps.set.outputs.data).addresses_home_list_1_ }}' -eq 'second' `
-          -and '${{ fromJson(steps.set.outputs.data).addresses_home_list_2_ }}' -eq 'third')
+          -and '${{ fromJson(steps.set.outputs.data).addresses.home.street }}' -eq $street `
+          -and '${{ fromJson(steps.set.outputs.data).addresses.home.city }}' -eq 'Louaryland' `
+          -and '${{ fromJson(steps.set.outputs.data).addresses.home.state }}' -eq 'Hawidaho' `
+          -and '${{ fromJson(steps.set.outputs.data).addresses.home.zip }}' -eq '99970' `
+          -and '${{ fromJson(steps.set.outputs.data).addresses.home.list[0] }}' -eq 'first' `
+          -and '${{ fromJson(steps.set.outputs.data).addresses.home.list[1] }}' -eq 'second' `
+          -and '${{ fromJson(steps.set.outputs.data).addresses.home.list[2] }}' -eq 'third')
         {
           Write-Output "Action produced expected output values."
           Exit 0
@@ -149,13 +149,13 @@ jobs:
         if($data.name -eq 'George Washington' `
           -and $data.age -eq '89' `
           -and $data.height_in_inches -eq '5.75' `
-          -and $data.addresses_home_street -eq $street `
-          -and $data.addresses_home_city -eq 'Louaryland' `
-          -and $data.addresses_home_state -eq 'Hawidaho' `
-          -and $data.addresses_home_zip -eq '99970' `
-          -and $data.addresses_home_list_0_ -eq 'first' `
-          -and $data.addresses_home_list_1_ -eq 'second' `
-          -and $data.addresses_home_list_2_ -eq 'third')
+          -and $data.addresses.home.street -eq $street `
+          -and $data.addresses.home.city -eq 'Louaryland' `
+          -and $data.addresses.home.state -eq 'Hawidaho' `
+          -and $data.addresses.home.zip -eq '99970' `
+          -and $data.addresses.home.list[0] -eq 'first' `
+          -and $data.addresses.home.list[1] -eq 'second' `
+          -and $data.addresses.home.list[2] -eq 'third')
         {
           Write-Output "Action produced expected output values."
           Exit 0
