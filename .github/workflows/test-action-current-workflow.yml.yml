@@ -146,16 +146,16 @@ jobs:
         400 Mockingbird Lane
         address line 2
         '@
-        if('${{ data.name }}' -eq 'George Washington' `
-          -and '${{ data.age }}' -eq '89' `
-          -and '${{ data.height_in_inches }}' -eq '5.75' `
-          -and '${{ data.addresses_home_street }}' -eq $street `
-          -and '${{ data.addresses_home_city }}' -eq 'Louaryland' `
-          -and '${{ data.addresses_home_state }}' -eq 'Hawidaho' `
-          -and '${{ data.addresses_home_zip }}' -eq '99970' `
-          -and '${{ data.addresses_home_list_0_ }}' -eq 'first' `
-          -and '${{ data.addresses_home_list_1_ }}' -eq 'second' `
-          -and '${{ data.addresses_home_list_2_ }}' -eq 'third')
+        if($data.name -eq 'George Washington' `
+          -and $data.age -eq '89' `
+          -and $data.height_in_inches -eq '5.75' `
+          -and $data.addresses_home_street -eq $street `
+          -and $data.addresses_home_city -eq 'Louaryland' `
+          -and $data.addresses_home_state -eq 'Hawidaho' `
+          -and $data.addresses_home_zip -eq '99970' `
+          -and $data.addresses_home_list_0_ -eq 'first' `
+          -and $data.addresses_home_list_1_ -eq 'second' `
+          -and $data.addresses_home_list_2_ -eq 'third')
         {
           Write-Output "Action produced expected output values."
           Exit 0
