@@ -60,7 +60,7 @@ jobs:
         if('${{ steps.set.outputs.name }}' -eq 'George Washington' `
           -and '${{ steps.set.outputs.age }}' -eq '89' `
           -and '${{ steps.set.outputs.height_in_inches }}' -eq '5.75' `
-          -and '${{ steps.set.outputs.addresses_home_street }}' -eq '400 Mockingbird Lane\naddress line 2' `
+          # -and '${{ steps.set.outputs.addresses_home_street }}' -eq '400 Mockingbird Lane\naddress line 2' `
           -and '${{ steps.set.outputs.addresses.home.city }}' -eq 'Louaryland' `
           -and '${{ steps.set.outputs.addresses.home.state }}' -eq 'Hawidaho' `
           -and '${{ steps.set.outputs.addresses.home.zip }}' -eq '99970' `
