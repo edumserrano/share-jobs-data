@@ -230,7 +230,7 @@ When using `strict-json`, the shared YAML data is converted to JSON and set as t
     Write-Output $data.age  # outputs: 21
 ```
 
-When using `github-step-json`, the shared YAML data is converted to JSON but instead of setting the JSON string as the single output of the action, the action will set an output for each JSON value using the JSON path *with a twist* as the output key. For instance, when sharing a YAML object like this:
+When using `github-step-json`, the shared YAML data is converted to JSON but instead of setting the JSON string as the single output of the action, the action will set an output for each JSON value using the JSON path compatible with GitHub step output as the output key. For instance, when sharing a YAML object like this:
 
 ```yml
 # Imagine you have shared the following YAML:
