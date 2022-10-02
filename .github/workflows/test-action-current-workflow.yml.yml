@@ -35,6 +35,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - name: Set name value
+      id: set-name
+      run: |
+        # just to show an example that data to share can be built in different steps
+        # and then shared using this action
+        Write-Output '::set-output name=name::George Washington'
     - name: Run set-data command
       id: set
       uses: ./
@@ -43,7 +49,7 @@ jobs:
         artifact-name: from-set-with-github-step-json-output
         # output: github-step-json # this is the default
         data: |
-          name: George Washington
+          name: ${{ steps.set-name.outputs.name }}
           age: 89
           height_in_inches: 5.75
           addresses:
