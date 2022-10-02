@@ -1,4 +1,4 @@
-name: 'Share jobs data'
+name: 'Share GitHub jobs data'
 description: 'Allows sharing data across GitHub workflow jobs.'
 branding:
   icon: clipboard
@@ -9,11 +9,11 @@ inputs:
     required: true
   # common command options
   artifact-name:
-    description: 'The name of the artifact.'
+    description: 'The name of the workflow artifact where data is going to be stored or retrieved from.'
     required: true
     default: 'job-data'
   data-filename:
-    description: 'The filename that contains the data.'
+    description: 'The filename inside the workflow artifact that contains (in case of reading) or will contain (in case of writing) the data to share.'
     required: true
     default: 'job-data.json'
   output:
@@ -40,7 +40,7 @@ inputs:
     default: ''
 outputs:
   data:
-    description: 'Job data in JSON format. Populated when the output action input parameter is set to strict-json.'
+    description: 'Job data in JSON format. Populated only when the output action input parameter is set to strict-json.'
   # Note:
   # When the output action input parameter is set to github-step-json the action will set dynamic output values.
   # The keys for the output values depend on the data shared.

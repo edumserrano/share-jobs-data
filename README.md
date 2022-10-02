@@ -1,4 +1,4 @@
-# Share jobs data
+# Share GitHub jobs data
 
 [![Build and test](https://github.com/edumserrano/share-jobs-data/actions/workflows/build-test.yml/badge.svg)](https://github.com/edumserrano/share-jobs-data/actions/workflows/build-test.yml)
 [![Test GH action: share data on current workflow](https://github.com/edumserrano/share-jobs-data/actions/workflows/test-action-current-workflow.yml/badge.svg)](https://github.com/edumserrano/share-jobs-data/actions/workflows/test-action-current-workflow.yml)
