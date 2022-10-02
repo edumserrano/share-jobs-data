@@ -200,7 +200,7 @@ jobs:
       run: $env:STEP_OUTPUT
     - name: Verify set-data command output
       run: |
-        if('${{ steps.set.outputs }}' -eq '')
+        if('${{ fromJson(steps.set.outputs) }}' -eq '{}')
         {
           Write-Output "Action didn't produce any output as expected."
           Exit 0
