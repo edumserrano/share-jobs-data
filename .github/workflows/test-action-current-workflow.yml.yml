@@ -1,4 +1,4 @@
-name: Test stuff
+name: Test GitHub action - share data on current workflow
 
 on:
   workflow_dispatch:
@@ -24,13 +24,13 @@ jobs:
 
   share-job:
     name: share
-    # permissions:
-    #   contents: read
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Run share jobs data
-      id: share
+      id: set
       uses: ./
       with:
         command: set-data
@@ -51,15 +51,14 @@ jobs:
               - second
               - third
     - name: Dump outputs from previous step
-      shell: pwsh
       env:
-        STEP_OUTPUT: ${{ toJSON(steps.share.outputs) }}
+        STEP_OUTPUT: ${{ toJSON(steps.set.outputs) }}
       run: $env:STEP_OUTPUT
 
   read-job:
     name: read
-    # permissions:
-    #   contents: read
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     needs: [share-job]
     steps:
@@ -70,62 +69,12 @@ jobs:
       with:
         command: read-data-current-workflow
     - name: Dump outputs from previous step
-      shell: pwsh
       env:
         STEP_OUTPUT: ${{ toJSON(steps.read.outputs) }}
       run: $env:STEP_OUTPUT
     - name: read output
-      shell: pwsh
       run: |
         Write-Output '${{ steps.read.outputs.name }}'
         Write-Output '${{ steps.read.outputs.age }}'
         Write-Output '${{ steps.read.outputs.addresses_home_street }}'
         Write-Output '${{ steps.read.outputs.addresses_home_list_0_ }}'
-    # - name: ls download
-    #   run: |
-    #     ls -R
-    # - name: cat download
-    #   run: |
-    #     cat test.txt
-
-  # test2:
-  #   name: test 2
-  #   # permissions:
-  #   #   contents: read
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #   - name: pwsh list env
-  #     run: |
-  #       dir env:
-  #   - name: unbunt list env
-  #     shell: bash
-  #     run: env
-  #   - name: bash echo
-  #     shell: bash
-  #     run: |
-  #         echo "ACTIONS_RUNTIME_URL: $ACTIONS_RUNTIME_URL"
-  #         echo "GITHUB_RUN_ID: $GITHUB_RUN_ID"
-  #         echo "ACTIONS_RUNTIME_TOKEN: $ACTIONS_RUNTIME_TOKEN"
-  #   - uses: actions/github-script@v6.1.0
-  #     with:
-  #       script: |
-  #         const runtimeUrl = process.env['ACTIONS_RUNTIME_URL']
-  #         console.log(runtimeUrl)
-  #   - name: Debug 2
-  #     env:
-  #       SOME_URL: ${{ env.ACTIONS_RUNTIME_URL }}
-  #       SOME_URL_2: test
-  #     run: |
-  #       Write-Output $Env:SOME_URL
-  #       Write-Output $Env:SOME_URL_2
-  #   - name: Debug
-  #     run: |
-  #       Write-Output $Env:ACTIONS_RUNTIME_URL
-  #       Write-Output $Env:GITHUB_RUN_ID
-  #       "hi" > test.txt
-  #   - name: Upload test
-  #     uses: actions/upload-artifact@v3
-  #     with:
-  #       name: my-test
-  #       path: ./test.txt
