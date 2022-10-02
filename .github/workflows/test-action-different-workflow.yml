@@ -83,7 +83,7 @@ jobs:
       with:
         command: read-data-different-workflow
         run-id: ${{ github.event.workflow_run.id }}
-        artifact-name: from-set-with-github-step-json-output
+        artifact-name: from-set-with-strict-json-output
         output: strict-json
     - name: Dump outputs from previous step
       env:

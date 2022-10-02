@@ -277,7 +277,7 @@ jobs:
       uses: ./
       with:
         command: read-data-current-workflow
-        artifact-name: from-set-with-github-step-json-output
+        artifact-name: from-set-with-strict-json-output
         output: strict-json
     - name: Dump outputs from previous step
       env:
