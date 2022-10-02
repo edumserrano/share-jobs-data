@@ -156,7 +156,11 @@ This action supports the following flows:
 - set and read data across jobs in the same workflow.
 - set and read data across jobs in different workflow.
 
-The operation that the action performs is controlled via the `command` action input. Note that some action inputs are only valid for a specifc `command`. This is indicated by the `restricted to command` column in the table below.
+The operation that the action performs is controlled via the `command` action input.
+
+>**warning**
+>
+> Some action inputs are only valid for a specifc `command` as indicated by the `restricted to command` column.
 
 | Name            | restricted to command          | Description                                                                                                                          | Required | Default                                  |
 | --------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ | -------- | ---------------------------------------- |
@@ -189,8 +193,10 @@ See [here](#what-is-the-difference-between-using-strict-json-or-github-step-json
 | ------ | ----------------------------------------------------------------------------------------------- |
 | `data` | Job data in JSON format. Populated only when the `output` action input is set to `strict-json`. |
 
-- When setting the `output` action input to `none`: nothing is written to the step's output.
-- When setting the `output` action input to `github-step-json`: the action outputs are dynamic, they will depend on the shared data. See [here](#what-is-the-difference-between-using-strict-json-or-github-step-json-as-the-ouput) for more detail.
+>**warning**
+>
+>- When setting the `output` action input to `none`: nothing is written to the step's output.
+>- When setting the `output` action input to `github-step-json`: the action outputs are dynamic, they will depend on the shared data. See [here](#what-is-the-difference-between-using-strict-json-or-github-step-json-as-the-ouput) for more detail.
 
 ## Tips
 
