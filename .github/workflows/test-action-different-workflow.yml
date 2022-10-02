@@ -138,5 +138,3 @@ jobs:
 
         Write-Output "::error::Action didn't produce expected github-step-json output."
         Exit 1
-
-
