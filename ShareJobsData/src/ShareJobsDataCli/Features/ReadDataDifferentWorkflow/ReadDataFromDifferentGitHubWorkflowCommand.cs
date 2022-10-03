@@ -77,7 +77,7 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
         var parseCommandOutputResult = ReadDataFromDifferentGitHubWorkflowCommandOutput.FromOption(console, Output);
         if (!parseCommandOutputResult.IsOk(out var commandOutput, out var parseCommandOutputError))
         {
-            await parseCommandOutputError.WriteToConsoleAsync(console, _commandName);
+            parseCommandOutputError.Throw(_commandName);
             return;
         }
 
@@ -86,7 +86,7 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommand : ICommand
         var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(jobDataArtifactRepositoryName, runId, artifactContainerName, artifactItemFilename);
         if (!downloadResult.IsOk(out var gitHubArtifactItemJsonContent, out var downloadError))
         {
-            await downloadError.WriteToConsoleAsync(console, _commandName);
+            downloadError.Throw(_commandName);
             return;
         }
 

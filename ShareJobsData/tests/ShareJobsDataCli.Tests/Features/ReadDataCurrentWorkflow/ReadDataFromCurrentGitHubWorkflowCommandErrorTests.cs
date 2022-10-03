@@ -32,11 +32,10 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommandErrorTests
             ArtifactFilename = "job-data.json",
         };
         using var console = new FakeInMemoryConsole();
-        await command.ExecuteAsync(console);
+        var exception = await Should.ThrowAsync<CommandException>(command.ExecuteAsync(console).AsTask());
 
         console.ReadOutputString().ShouldBeEmpty();
-        var output = console.ReadAllAsString();
-        await Verify(output).AppendToMethodName("console-output");
+        await Verify(exception.Message).AppendToMethodName("console-output");
     }
 
     /// <summary>
@@ -73,11 +72,10 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommandErrorTests
             ArtifactFilename = "not-gonna-find-me.json",
         };
         using var console = new FakeInMemoryConsole();
-        await command.ExecuteAsync(console);
+        var exception = await Should.ThrowAsync<CommandException>(command.ExecuteAsync(console).AsTask());
 
         console.ReadOutputString().ShouldBeEmpty();
-        var output = console.ReadAllAsString();
-        await Verify(output).AppendToMethodName("console-output");
+        await Verify(exception.Message).AppendToMethodName("console-output");
     }
 
     /// <summary>
@@ -95,11 +93,10 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommandErrorTests
             Output = "not-valid-value",
         };
         using var console = new FakeInMemoryConsole();
-        await command.ExecuteAsync(console);
+        var exception = await Should.ThrowAsync<CommandException>(command.ExecuteAsync(console).AsTask());
 
         console.ReadOutputString().ShouldBeEmpty();
         outboundHttpRequests.ShouldBeEmpty();
-        var output = console.ReadAllAsString();
-        await Verify(output).AppendToMethodName("console-output");
+        await Verify(exception.Message).AppendToMethodName("console-output");
     }
 }

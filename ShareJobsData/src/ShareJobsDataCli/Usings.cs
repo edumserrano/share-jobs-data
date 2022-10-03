@@ -9,6 +9,7 @@ global using System.Text;
 global using System.Text.Json.Serialization;
 global using CliFx;
 global using CliFx.Attributes;
+global using CliFx.Exceptions;
 global using CliFx.Extensibility;
 global using CliFx.Infrastructure;
 global using FluentValidation;

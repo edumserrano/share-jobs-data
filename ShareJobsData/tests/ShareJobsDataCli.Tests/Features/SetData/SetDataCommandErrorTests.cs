@@ -23,12 +23,12 @@ public sealed class SetDataCommandErrorTests
             DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
-        await command.ExecuteAsync(console);
+        var exception = await Should.ThrowAsync<CommandException>(command.ExecuteAsync(console).AsTask());
 
         console.ReadOutputString().ShouldBeEmpty();
         outboundHttpRequests.ShouldBeEmpty();
         var output = console.ReadAllAsString();
-        await Verify(output)
+        await Verify(exception.Message)
             // this scrubber is required due to line ending differences in Windows vs Unix. This verified file shows Idx:30 when running on Windows
             // and Idx:29 when running on Unix. Since the app is not doing any normalization of line endings on the output I'll do this for now
             .ScrubLinesWithReplace(line => line.Replace("Idx: 30", "{scrubbed line ending idx}", StringComparison.OrdinalIgnoreCase))
@@ -52,12 +52,11 @@ public sealed class SetDataCommandErrorTests
             DataAsYmlStr = TestFiles.GetFilepath("job-data.input.yml").ReadFile(),
         };
         using var console = new FakeInMemoryConsole();
-        await command.ExecuteAsync(console);
+        var exception = await Should.ThrowAsync<CommandException>(command.ExecuteAsync(console).AsTask());
 
         console.ReadOutputString().ShouldBeEmpty();
         outboundHttpRequests.ShouldBeEmpty();
-        var output = console.ReadAllAsString();
-        await Verify(output).AppendToMethodName("console-output");
+        await Verify(exception.Message).AppendToMethodName("console-output");
     }
 
     /// <summary>
@@ -76,11 +75,10 @@ public sealed class SetDataCommandErrorTests
             Output = "not-valid-value",
         };
         using var console = new FakeInMemoryConsole();
-        await command.ExecuteAsync(console);
+        var exception = await Should.ThrowAsync<CommandException>(command.ExecuteAsync(console).AsTask());
 
         console.ReadOutputString().ShouldBeEmpty();
         outboundHttpRequests.ShouldBeEmpty();
-        var output = console.ReadAllAsString();
-        await Verify(output).AppendToMethodName("console-output");
+        await Verify(exception.Message).AppendToMethodName("console-output");
     }
 }
