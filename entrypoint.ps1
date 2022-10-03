@@ -25,8 +25,8 @@ function Main()
     {
       $authTokenOption = $argsAsList[$authTokenIdx]
       $authTokenValue = $argsAsList[$authTokenIdx + 1]
-      $argsAsList.Remove($authTokenOption)
-      $argsAsList.Remove($authTokenValue)
+      $argsAsList.Remove($authTokenOption) | Out-Null # supress True from showing in the output. See https://devblogs.microsoft.com/powershell/suppressing-return-values-in-powershell-functions/
+      $argsAsList.Remove($authTokenValue) | Out-Null
     }
 
     $repoIdx = $argsAsList.IndexOf("--repo")
@@ -34,8 +34,8 @@ function Main()
     {
       $repoOption = $argsAsList[$repoIdx]
       $repoValue = $argsAsList[$repoIdx + 1]
-      $argsAsList.Remove($repoOption)
-      $argsAsList.Remove($repoValue)
+      $argsAsList.Remove($repoOption) | Out-Null
+      $argsAsList.Remove($repoValue) | Out-Null
     }
   }
 
