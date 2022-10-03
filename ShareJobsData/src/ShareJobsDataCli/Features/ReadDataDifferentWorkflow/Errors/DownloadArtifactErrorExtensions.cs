@@ -4,12 +4,10 @@ namespace ShareJobsDataCli.Features.ReadDataDifferentWorkflow.Errors;
 
 internal static class DownloadArtifactErrorExtensions
 {
-    public static Task WriteToConsoleAsync(this Error downloadArtifactError, IConsole console, string command)
+    [DoesNotReturn]
+    public static void Throw(this Error downloadArtifactError, string command)
     {
         downloadArtifactError.NotNull();
-        console.NotNull();
-        command.NotNullOrWhiteSpace();
-
         var error = downloadArtifactError switch
         {
             ArtifactNotFound artifactNotFound => GetErrorMessage(artifactNotFound),
@@ -19,7 +17,7 @@ internal static class DownloadArtifactErrorExtensions
             FailedToListWorkflowRunArtifacts failedToListWorkflowRunArtifacts => failedToListWorkflowRunArtifacts.JsonHttpError.AsErrorMessage("download artifact", "list workflow artifacts"),
             _ => throw UnexpectedTypeException.Create(downloadArtifactError),
         };
-        return console.WriteErrorAsync(command, error);
+        CommandExceptionThrowHelper.Throw(command, error);
     }
 
     private static string GetErrorMessage(ArtifactNotFound artifactNotFound)

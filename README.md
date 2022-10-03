@@ -389,11 +389,6 @@ The `read-data-different-workflow` command supports:
 - `repo`
 - `run-id`
 
-<!-- ## Example usages of this action in GitHub workflows
-
-- [This workflow](https://github.com/edumserrano/markdown-link-check-log-parser/blob/main/.github/workflows/test-action.yml) is used to test that the action works as expected.
-- [This workflow](https://github.com/edumserrano/dotnet-sdk-extensions/blob/20774e155d9883f7a7400cef24689e85af48d788/.github/workflows/markdown-link-check-broken-links.yml#L123) shows the usage of the action as part of a process that creates a GitHub issue when broken links are found. The result from this action is added to the issue. -->
-
 <!-- ## Dev notes
 
 For notes aimed at developers working on this repo or just trying to understand it go [here](/docs/dev-notes/README.md). It will show you how to build and run the solution among other things. -->

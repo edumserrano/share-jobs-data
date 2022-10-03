@@ -62,14 +62,14 @@ public sealed class SetDataCommand : ICommand
         var parseCommandOutputResult = SetDataCommandOutput.FromOption(console, Output);
         if (!parseCommandOutputResult.IsOk(out var commandOutput, out var parseCommandOutputError))
         {
-            await parseCommandOutputError.WriteToConsoleAsync(console, _commandName);
+            parseCommandOutputError.Throw(_commandName);
             return;
         }
 
         var createJobDataResult = JobData.FromYml(DataAsYmlStr);
         if (!createJobDataResult.IsOk(out var jobData, out var createJobDataError))
         {
-            await createJobDataError.WriteToConsoleAsync(console, _commandName);
+            createJobDataError.Throw(_commandName);
             return;
         }
 
@@ -79,7 +79,7 @@ public sealed class SetDataCommand : ICommand
         var uploadArtifact = await githubHttpClient.UploadArtifactFileAsync(artifactContainerUrl, artifactContainerName, artifactFileUploadRequest);
         if (!uploadArtifact.IsOk(out _, out var uploadError))
         {
-            await uploadError.WriteToConsoleAsync(console, _commandName);
+            uploadError.Throw(_commandName);
             return;
         }
 

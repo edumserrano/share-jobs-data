@@ -6,15 +6,13 @@ internal static class CreateJobDataErrorExtensions
 {
     private const string _errorMessagePrefix = "Option --data has been provided with an invalid value.";
 
-    public static async Task WriteToConsoleAsync(this OneOf<InvalidYml, CannotConvertYmlToJson> createJobDataError, IConsole console, string command)
+    [DoesNotReturn]
+    internal static void Throw(this OneOf<InvalidYml, CannotConvertYmlToJson> createJobDataError, string command)
     {
-        console.NotNull();
-        command.NotNullOrWhiteSpace();
-
         var error = createJobDataError.Match(
             GetInvalidYmlErrorMessage,
             GetCannotConvertYmlToJsonErrorMessage);
-        await console.WriteErrorAsync(command, error);
+        CommandExceptionThrowHelper.Throw(command, error);
     }
 
     private static string GetInvalidYmlErrorMessage(InvalidYml invalidYml)

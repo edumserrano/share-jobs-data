@@ -55,7 +55,7 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
         var parseCommandOutputResult = ReadDataFromCurrentGitHubWorkflowCommandOutput.FromOption(console, Output);
         if (!parseCommandOutputResult.IsOk(out var commandOutput, out var parseCommandOutputError))
         {
-            await parseCommandOutputError.WriteToConsoleAsync(console, _commandName);
+            parseCommandOutputError.Throw(_commandName);
             return;
         }
 
@@ -64,7 +64,7 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
         var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(containerUrl, artifactContainerName, artifactFilePath);
         if (!downloadResult.IsOk(out var gitHubArtifactItemJsonContent, out var downloadError))
         {
-            await downloadError.WriteToConsoleAsync(console, _commandName);
+            downloadError.Throw(_commandName);
             return;
         }
 
