@@ -27,6 +27,7 @@
   - [Can I share any YAML data?](#can-i-share-any-yaml-data)
   - [Is there a limit to the amount of data I can share?](#is-there-a-limit-to-the-amount-of-data-i-can-share)
   - [What options are available for each `command`?](#what-options-are-available-for-each-command)
+  - [I can't figure out the output from this action. What do I do?](#i-cant-figure-out-the-output-from-this-action-what-do-i-do)
 
 ## Description
 
@@ -388,6 +389,54 @@ The `read-data-different-workflow` command supports:
 - `auth-token`
 - `repo`
 - `run-id`
+
+### I can't figure out the output from this action. What do I do?
+
+If you're struggling to get the right keys for the output of this action then you can try the following:
+
+```yml
+# Imagine you have shared the following YAML:
+#
+# name: Eduardo Serrano
+# age: 21
+#
+- name: Read data
+  id: read-data  # must have an id so that you can access the output from this step which contains the shared data
+  uses: edumserrano/share-jobs-data@v1.0.0
+  with:
+    command: read-data-current-workflow # this example works with any 'command' value
+    output: github-step-json            # this example works with any 'output' value
+# the step  below will log a JSON object with the key and values associated with each of the outputs
+# from the previous step
+- name: Dump outputs from previous step
+  shell: pwsh
+  env:
+    STEP_OUTPUT: ${{ toJSON(steps.read-data.outputs) }}
+  run: $env:STEP_OUTPUT
+```
+
+The above will show the following on the console log for the step named with id `read-data`:
+
+- if using `output` set to `github-step-json`:
+
+```json
+{
+  "name": "George Washington",
+  "age": "89"
+}
+```
+
+Which means you can access the values of `steps.read-data.outputs.name` and `steps.read-data.outputs.age`.
+
+- if using `output` set to `strict-json`:
+
+```json
+{
+  "data": "{\n  \"name\": \"George Washington\",\n  \"age\": \"89\"}\n}"
+}
+```
+
+Which means you can access the values of `steps.read-data.outputs.data` and you will a JSON which you then [need to parse to get access to its value](#what-is-the-difference-between-using-strict-json-or-github-step-json-as-the-ouput).
 
 <!-- ## Dev notes
 
