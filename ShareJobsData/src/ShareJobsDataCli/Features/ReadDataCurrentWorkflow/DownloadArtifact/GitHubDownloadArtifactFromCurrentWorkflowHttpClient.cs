@@ -86,7 +86,10 @@ internal sealed class GitHubDownloadArtifactFromCurrentWorkflowHttpClient
     private async Task<DownloadContainerItemResult> DownloadContainerItemAsync(string contentLocation)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, contentLocation);
-        httpRequest.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip"); // TODO-: not really needed since I'm not uploading gzip compressed stream on the set-data command ?
+        // the this Accept-Encoding header below was set on the GitHub toolkit repo were I reverse engineered
+        // the API calls but I probably don't need it since I'm not uploading gzip compressed content on
+        // the set-data command
+        httpRequest.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip");
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/octet-stream;api-version={GitHubApiVersion.Latest}");
         var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
         var ensureSuccessStatusCodeResult = await httpResponse.EnsureSuccessStatusCodeAsync();

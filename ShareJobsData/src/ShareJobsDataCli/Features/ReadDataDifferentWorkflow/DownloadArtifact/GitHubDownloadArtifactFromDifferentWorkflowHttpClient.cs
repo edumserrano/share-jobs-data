@@ -12,6 +12,7 @@ internal sealed class GitHubDownloadArtifactFromDifferentWorkflowHttpClient
         _httpClient = httpClient.NotNull();
     }
 
+    // based on the public APIs documented at https://docs.github.com/en/rest/actions/artifacts
     public async Task<DownloadArtifactFileFromDifferentWorkflowResult> DownloadArtifactFileAsync(
         GitHubRepositoryName repoName,
         GitHubRunId runId,
