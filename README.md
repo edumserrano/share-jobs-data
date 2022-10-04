@@ -19,7 +19,7 @@
 - [Action outputs](#action-outputs)
 - [Tips](#tips)
   - [What is the difference between using `strict-json` or `github-step-json` as the `ouput`?](#what-is-the-difference-between-using-strict-json-or-github-step-json-as-the-ouput)
-  - [Can I use GitHub's `fromJson` function to parse the JSON data?](#can-i-use-githubs-fromjson-function-to-parse-the-json-data)
+  - [Can I use GitHub's `fromJson` function to parse the output when using `strict-json` ?](#can-i-use-githubs-fromjson-function-to-parse-the-output-when-using-strict-json-)
   - [Can I share multiple sets of data?](#can-i-share-multiple-sets-of-data)
   - [Can I read shared data in the same job?](#can-i-read-shared-data-in-the-same-job)
   - [Can I share data with multiline YAML?](#can-i-share-data-with-multiline-yaml)
@@ -255,7 +255,7 @@ When using `github-step-json`, the shared YAML data is converted to JSON but ins
 
 Using `github-step-json`, you don't have to parse the JSON from the shared data.
 
-### Can I use GitHub's `fromJson` function to parse the JSON data?
+### Can I use GitHub's `fromJson` function to parse the output when using `strict-json` ?
 
 Yes, you can use the [`fromJson` function](https://docs.github.com/en/actions/learn-github-actions/expressions#fromjson) as follows:
 
