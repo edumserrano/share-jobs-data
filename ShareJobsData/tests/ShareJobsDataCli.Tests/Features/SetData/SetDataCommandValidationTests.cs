@@ -2,7 +2,7 @@ namespace ShareJobsDataCli.Tests.Features.SetData;
 
 /// <summary>
 /// These tests check the validation on the options for the <see cref="SetDataCommand"/>.
-/// There tests are not for the Validators applied to the command options. They are for logic constrains enforced
+/// These tests are not for the Validators applied to the command options. They are for logic constrains enforced
 /// before the command can be executed.
 /// </summary>
 [Trait("Category", XUnitCategories.Validation)]
