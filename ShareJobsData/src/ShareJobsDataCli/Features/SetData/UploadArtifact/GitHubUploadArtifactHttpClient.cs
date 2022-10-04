@@ -11,11 +11,18 @@ internal sealed class GitHubUploadArtifactHttpClient
         _httpClient = httpClient.NotNull();
     }
 
-    // TODO- move info about this to some readme docs? should document the download/upload on same/different workflows
-    // this process is explained here https://github.com/actions/upload-artifact/issues/180#issuecomment-1086306269
-    // add something to dev readme about this
-    // no need to gzip since content is always expected to be small json model
-    // if I gzip on upload I would have to gzip on download
+    // The GitHub's APIs used to upload an artifact are internal APIs which are subject to
+    // breaking changes.
+    //
+    // See: https://github.com/actions/upload-artifact/issues/180#issuecomment-1086306269
+    // "They're effectively "internal" APIs that don't hit api.github.com but some of our
+    // backend services. Anyone can hit them but we're deliberately not advertising this
+    // and these APIs are not documented on https://docs.github.com/en/rest/reference/actions#artifacts"
+    //
+    // The usage of these internal APIs was reverse engineered by exploring the code flow from:
+    // https://github.com/actions/toolkit/blob/03eca1b0c77c26d3eaa0a4e9c1583d6e32b87f6f/packages/artifact/src/internal/upload-http-client.ts#L101
+    // https://github.com/actions/toolkit/blob/03eca1b0c77c26d3eaa0a4e9c1583d6e32b87f6f/packages/artifact/src/internal/upload-http-client.ts#L421
+    // https://github.com/actions/toolkit/blob/03eca1b0c77c26d3eaa0a4e9c1583d6e32b87f6f/packages/artifact/src/internal/upload-http-client.ts#L542
     public async Task<UploadArtifactFileResult> UploadArtifactFileAsync(
         GitHubArtifactContainerUrl containerUrl,
         GitHubArtifactContainerName containerName,

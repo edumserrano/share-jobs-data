@@ -28,6 +28,7 @@
   - [Is there a limit to the amount of data I can share?](#is-there-a-limit-to-the-amount-of-data-i-can-share)
   - [What options are available for each `command`?](#what-options-are-available-for-each-command)
   - [I can't figure out the output from this action. What do I do?](#i-cant-figure-out-the-output-from-this-action-what-do-i-do)
+- [Dev notes](#dev-notes)
 
 ## Description
 
@@ -438,6 +439,6 @@ Which means you can access the values of `steps.read-data.outputs.name` and `ste
 
 Which means you can access the values of `steps.read-data.outputs.data` and you will a JSON which you then [need to parse to get access to its value](#what-is-the-difference-between-using-strict-json-or-github-step-json-as-the-ouput).
 
-<!-- ## Dev notes
+## Dev notes
 
-For notes aimed at developers working on this repo or just trying to understand it go [here](/docs/dev-notes/README.md). It will show you how to build and run the solution among other things. -->
+For notes aimed at developers working on this repo or just trying to understand it go [here](/docs/dev-notes/README.md). It will show you how to build and run the solution among other things.

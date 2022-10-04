@@ -12,7 +12,16 @@ internal sealed class GitHubDownloadArtifactFromCurrentWorkflowHttpClient
         _httpClient = httpClient.NotNull();
     }
 
-    // taken from exploring https://github.com/actions/toolkit/blob/90be12a59c20a6ecc43b234c1885fc2852d3212d/packages/artifact/src/internal/artifact-client.ts#L157
+    // The GitHub's APIs used to download an artifact on the current workflow are internal APIs
+    // which are subject to breaking changes.
+    //
+    // See: https://github.com/actions/upload-artifact/issues/180#issuecomment-1086306269
+    // "They're effectively "internal" APIs that don't hit api.github.com but some of our
+    // backend services. Anyone can hit them but we're deliberately not advertising this
+    // and these APIs are not documented on https://docs.github.com/en/rest/reference/actions#artifacts"
+    //
+    // The usage of these internal APIs was reverse engineered by exploring the code flow from:
+    // https://github.com/actions/toolkit/blob/90be12a59c20a6ecc43b234c1885fc2852d3212d/packages/artifact/src/internal/artifact-client.ts#L157
     public async Task<DownloadArtifactFileFromCurrentWorkflowResult> DownloadArtifactFileAsync(
         GitHubArtifactContainerUrl containerUrl,
         GitHubArtifactContainerName containerName,
