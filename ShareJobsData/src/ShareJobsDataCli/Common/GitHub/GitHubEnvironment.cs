@@ -11,8 +11,6 @@ public interface IGitHubEnvironment
     string GitHubRepository { get; }
 
     string GitHubOutputFile { get; }
-
-    string GitHubOutputFile2 { get; }
 }
 
 internal sealed record GitHubEnvironment : IGitHubEnvironment
@@ -26,6 +24,4 @@ internal sealed record GitHubEnvironment : IGitHubEnvironment
     public string GitHubRepository { get; } = Environment.GetEnvironmentVariable("GITHUB_REPOSITORY") ?? string.Empty;
 
     public string GitHubOutputFile { get; } = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? string.Empty;
-
-    public string GitHubOutputFile2 { get; } = Environment.GetEnvironmentVariable("GITHUB_OUTPUT", EnvironmentVariableTarget.Process) ?? string.Empty;
 }

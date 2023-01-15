@@ -10,7 +10,5 @@ internal sealed class TestsGitHubEnvironment : IGitHubEnvironment
 
     public string GitHubRepository => "source-repo";
 
-    public string GitHubOutputFile => "GitHubOutputFile";
-
-    public string GitHubOutputFile2 => "GitHubOutputFile2";
+    public string GitHubOutputFile => "/github/file_commands/set_output_ffff02fb-8c70-41e9-b178-7eb55db9935e";
 }
