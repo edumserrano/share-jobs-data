@@ -12,8 +12,7 @@ internal static class Program
         Console.WriteLine("summary-details=123");
         Console.WriteLine($"IsOutputRedirected={Console.IsOutputRedirected}");
 
-        //var app = new ShareDataBetweenJobsCli();
-        //return await app.RunAsync(args);
-        return 0;
+        var app = new ShareDataBetweenJobsCli();
+        return await app.RunAsync(args);
     }
 }
