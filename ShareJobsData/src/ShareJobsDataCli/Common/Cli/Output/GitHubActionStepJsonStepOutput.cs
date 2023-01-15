@@ -27,7 +27,8 @@ internal sealed class GitHubActionStepJsonStepOutput
                 .Replace(".", "_", StringComparison.InvariantCulture)
                 .Replace("[", "_", StringComparison.InvariantCulture)
                 .Replace("]", "_", StringComparison.InvariantCulture);
-            await _console.Output.WriteLineAsync($"{sanitizedKey}={value}");
+            var sanitizedValue = value.SanitizeGitHubStepOutput();
+            await _console.Output.WriteLineAsync($"{sanitizedKey}={sanitizedValue}");
         }
     }
 }
