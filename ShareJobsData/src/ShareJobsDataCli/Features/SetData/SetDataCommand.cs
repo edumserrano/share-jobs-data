@@ -54,6 +54,9 @@ public sealed class SetDataCommand : ICommand
     {
         console.NotNull();
 
+        await console.Output.WriteLineAsync($"GitHubOutputFile={_gitHubEnvironment.GitHubOutputFile}");
+        await console.Output.WriteLineAsync($"GitHubOutputFile2={_gitHubEnvironment.GitHubOutputFile2}");
+
         var actionRuntimeToken = new GitHubActionRuntimeToken(_gitHubEnvironment.GitHubActionRuntimeToken);
         var repository = new GitHubRepositoryName(_gitHubEnvironment.GitHubRepository);
         var artifactContainerUrl = new GitHubArtifactContainerUrl(_gitHubEnvironment.GitHubActionRuntimeUrl, _gitHubEnvironment.GitHubActionRunId);
