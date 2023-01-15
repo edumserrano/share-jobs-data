@@ -19,8 +19,9 @@ internal static class GitHubActionStepOutputExtensions
         string key,
         string value)
     {
-        await consoleWriter.WriteLineAsync($"{key}<<EOF");
+        var delimiter = Encoding.UTF8.GetString(RandomNumberGenerator.GetBytes(8));
+        await consoleWriter.WriteLineAsync($"{key}<<{delimiter}");
         await consoleWriter.WriteLineAsync(value);
-        await consoleWriter.WriteLineAsync("EOF");
+        await consoleWriter.WriteLineAsync(delimiter);
     }
 }
