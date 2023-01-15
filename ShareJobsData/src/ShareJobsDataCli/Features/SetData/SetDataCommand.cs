@@ -54,6 +54,7 @@ public sealed class SetDataCommand : ICommand
     {
         console.NotNull();
         await console.Output.WriteLineAsync($"GitHubOutputFile={_gitHubEnvironment.GitHubOutputFile}");
+        await console.Output.WriteLineAsync($"IsOutputRedirected={console.IsOutputRedirected}");
         
 
         var actionRuntimeToken = new GitHubActionRuntimeToken(_gitHubEnvironment.GitHubActionRuntimeToken);

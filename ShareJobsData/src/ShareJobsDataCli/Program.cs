@@ -8,10 +8,9 @@ internal static class Program
         //await using var textWriter = new StreamWriter(githubOutputFile, append: true, Encoding.UTF8);
         var textWriter = new StreamWriter(githubOutputFile, append: true, Encoding.UTF8);
         Console.SetOut(textWriter);
-        //await textWriter.WriteLineAsync("updated-metrics=21");
-        //await textWriter.WriteLineAsync("summary-title=123");
-        //await textWriter.WriteLineAsync("summary-details=123");
-
+        await textWriter.WriteLineAsync("updated-metrics=21");
+        Console.WriteLine("summary-details=123");
+        Console.WriteLine($"IsOutputRedirected={Console.IsOutputRedirected}");
 
         var app = new ShareDataBetweenJobsCli();
         return await app.RunAsync(args);
