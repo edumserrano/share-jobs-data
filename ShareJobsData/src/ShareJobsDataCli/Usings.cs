@@ -5,6 +5,7 @@ global using System.Net.Http.Headers;
 global using System.Net.Http.Json;
 global using System.Net.Mime;
 global using System.Runtime.CompilerServices;
+global using System.Security.Cryptography;
 global using System.Text;
 global using System.Text.Json.Serialization;
 global using CliFx;
