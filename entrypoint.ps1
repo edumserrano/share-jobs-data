@@ -40,7 +40,7 @@ function Main()
   }
 
   Write-Output "Executing: dotnet '/app/ShareJobsDataCli.dll' $argsAsList"
-  dotnet '/app/ShareJobsDataCli.dll' $argsAsList
+  dotnet '/app/ShareJobsDataCli.dll' $argsAsList >> $env:GITHUB_OUTPUT
 
   if($LASTEXITCODE -ne 0 ) {
       Write-Output "::error::Share data jobs didn't complete successfully. See the step's log for more details."

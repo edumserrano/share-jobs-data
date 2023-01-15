@@ -9,8 +9,8 @@ internal static class GitHubActionStepOutputExtensions
     //
     // As of this change https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
     // You do not need to sanitize values anymore, for multi line values you can use a delimiter
-    // which is what this function does.
-    // See discussion here: https://github.com/orgs/community/discussions/26288#discussioncomment-3876281
+    // which is what this function does. See: https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
+    // For more info on this see discussion here: https://github.com/orgs/community/discussions/26288#discussioncomment-3876281
     public static async Task WriteGitHubStepOuputAsync(
         this ConsoleWriter consoleWriter,
         string key,

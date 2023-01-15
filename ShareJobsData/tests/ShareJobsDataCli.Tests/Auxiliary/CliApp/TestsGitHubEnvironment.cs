@@ -9,6 +9,4 @@ internal sealed class TestsGitHubEnvironment : IGitHubEnvironment
     public string GitHubActionRunId => "3085101792";
 
     public string GitHubRepository => "source-repo";
-
-    public string GitHubOutputFile => "/github/file_commands/set_output_ffff02fb-8c70-41e9-b178-7eb55db9935e";
 }
