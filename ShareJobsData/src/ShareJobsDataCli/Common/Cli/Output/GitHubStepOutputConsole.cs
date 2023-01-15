@@ -1,24 +1,19 @@
 namespace ShareJobsDataCli.Common.Cli.Output;
 
+// Couldn't find another way to change the output stream for without creating
+// a new implementation of IConsole based on the default SystemConsole.
+// How to write to the GitHub step's output was based on this comment https://github.com/community/community/discussions/35994#discussioncomment-4153598
 public class GitHubStepOutputConsole : IConsole, IDisposable
 {
     private readonly SystemConsole _systemConsole;
-    private readonly StreamWriter _textWriter;
+    private StreamWriter? _textWriter;
 
     public GitHubStepOutputConsole()
     {
         _systemConsole = new SystemConsole();
         Input = _systemConsole.Input;
         Error = _systemConsole.Error;
-        //Output = SetOutput();
-
-        var githubOutputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? string.Empty;
-        _textWriter = new StreamWriter(githubOutputFile, append: true, Encoding.UTF8);
-        var consoleWriter = new ConsoleWriter(this, Stream.Synchronized(_textWriter.BaseStream))
-        {
-            AutoFlush = true,
-        };
-        Output = consoleWriter;
+        Output = SetOutput();
     }
 
     public ConsoleReader Input { get; }
@@ -82,8 +77,8 @@ public class GitHubStepOutputConsole : IConsole, IDisposable
         // create a ConsoleWriter based on the example from https://github.com/Tyrrrz/CliFx/blob/02dc7de12721eacc729aaf50297b74b8a1c92ac0/CliFx/Infrastructure/ConsoleWriter.cs#L275
         // except that this writer will write to the GitHub step output file
         var githubOutputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? string.Empty;
-        var textWriter = new StreamWriter(githubOutputFile, append: true, Encoding.UTF8);
-        return new ConsoleWriter(this, Stream.Synchronized(textWriter.BaseStream))
+        _textWriter = new StreamWriter(githubOutputFile, append: true, Encoding.UTF8);
+        return new ConsoleWriter(this, Stream.Synchronized(_textWriter.BaseStream))
         {
             AutoFlush = true,
         };
@@ -92,7 +87,7 @@ public class GitHubStepOutputConsole : IConsole, IDisposable
     public void Dispose()
     {
         _systemConsole.Dispose();
-        _textWriter.Dispose();
+        _textWriter?.Dispose();
         Output.Dispose();
     }
 }
