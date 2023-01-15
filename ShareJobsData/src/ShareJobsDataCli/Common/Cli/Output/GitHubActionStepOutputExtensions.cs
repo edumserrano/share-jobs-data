@@ -1,4 +1,4 @@
-﻿namespace ShareJobsDataCli.Common.Cli.Output;
+namespace ShareJobsDataCli.Common.Cli.Output;
 
 internal static class GitHubActionStepOutputExtensions
 {
@@ -12,5 +12,15 @@ internal static class GitHubActionStepOutputExtensions
             .Replace("%", "%25", StringComparison.InvariantCulture)
             .Replace("\n", "%0A", StringComparison.InvariantCulture)
             .Replace("\r", "%0D", StringComparison.InvariantCulture);
+    }
+
+    public static async Task WriteGitHubStepOuputAsync(
+        this ConsoleWriter consoleWriter,
+        string key,
+        string value)
+    {
+        await consoleWriter.WriteLineAsync($"{key}<<EOF");
+        await consoleWriter.WriteLineAsync(value);
+        await consoleWriter.WriteLineAsync("EOF");
     }
 }
