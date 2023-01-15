@@ -12,7 +12,6 @@ internal sealed class GitHubActionStrictJsonStepOutput
     public async Task WriteToConsoleAsync(string json)
     {
         json.NotNull();
-        var sanitizedOutput = json.SanitizeGitHubStepOutput();
-        await _console.Output.WriteLineAsync($"data={sanitizedOutput}");
+        await _console.Output.WriteGitHubStepOuputAsync(key: "data", value: json);
     }
 }

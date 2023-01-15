@@ -40,6 +40,7 @@ function Main()
   }
 
   Write-Output "Executing: dotnet '/app/ShareJobsDataCli.dll' $argsAsList"
+  # dotnet '/app/ShareJobsDataCli.dll' $argsAsList >> $env:GITHUB_OUTPUT
   dotnet '/app/ShareJobsDataCli.dll' $argsAsList
 
   if($LASTEXITCODE -ne 0 ) {

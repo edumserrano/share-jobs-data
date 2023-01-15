@@ -9,6 +9,7 @@
     <PackageReference Include="CliFx" Version="2.3.0" />
     <PackageReference Include="FluentValidation" Version="11.2.2" />
     <PackageReference Include="Flurl" Version="3.0.6" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="OneOf" Version="3.0.223" />
     <PackageReference Include="System.Net.Http.Json" Version="6.0.0" />

@@ -53,8 +53,6 @@ public sealed class SetDataCommand : ICommand
     public async ValueTask ExecuteAsync(IConsole console)
     {
         console.NotNull();
-        await console.Output.WriteLineAsync($"GitHubOutputFile={_gitHubEnvironment.GitHubOutputFile}");
-        
 
         var actionRuntimeToken = new GitHubActionRuntimeToken(_gitHubEnvironment.GitHubActionRuntimeToken);
         var repository = new GitHubRepositoryName(_gitHubEnvironment.GitHubRepository);
