@@ -27,6 +27,14 @@ jobs:
     - name: Trigger info
       run: |
         Write-Output "::notice::This worklfow was triggered by a 'workflow_run' from '${{ github.event.workflow_run.name }}'."
+    - name: Test set
+      run: |
+        echo "test=Hello world" >> $env:GITHUB_OUTPUT
+        Write-Output "test2=Hello world2" >> $env:GITHUB_OUTPUT
+    - name: Dump outputs from previous step
+      env:
+        STEP_OUTPUT: ${{ toJSON(steps.read-data.outputs) }}
+      run: $env:STEP_OUTPUT
 
   test-failure:
     name: test failure
