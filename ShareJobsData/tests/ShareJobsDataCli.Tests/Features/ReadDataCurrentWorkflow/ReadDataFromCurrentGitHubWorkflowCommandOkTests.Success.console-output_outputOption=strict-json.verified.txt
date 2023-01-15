@@ -1,1 +1,20 @@
-﻿::set-output name=data::{%0A  "name": "George Washington",%0A  "age": "89",%0A  "height_in_inches": "5.75",%0A  "addresses": {%0A    "home": {%0A      "street": "400 Mockingbird Lane",%0A      "city": "Louaryland",%0A      "state": "Hawidaho",%0A      "zip": "99970",%0A      "list": [%0A        "first",%0A        "second",%0A        "third"%0A      ]%0A    }%0A  }%0A}
+﻿data<<EOF
+{
+  "name": "George Washington",
+  "age": "89",
+  "height_in_inches": "5.75",
+  "addresses": {
+    "home": {
+      "street": "400 Mockingbird Lane",
+      "city": "Louaryland",
+      "state": "Hawidaho",
+      "zip": "99970",
+      "list": [
+        "first",
+        "second",
+        "third"
+      ]
+    }
+  }
+}
+EOF

@@ -1,6 +1,6 @@
 ﻿[
   {
-    RequestUri: 'https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/pipelines/workflows/3085101792/artifacts?api-version=6.0-preview',
+    RequestUri: https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/pipelines/workflows/3085101792/artifacts?api-version=6.0-preview,
     RequestMethod: GET,
     RequestHeaders: {
       Accept: application/json; api-version=6.0-preview,
@@ -28,7 +28,7 @@
 
   },
   {
-    RequestUri: 'https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982?itemPath=job-data',
+    RequestUri: https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982?itemPath=job-data,
     RequestMethod: GET,
     RequestHeaders: {
       Accept: application/json; api-version=6.0-preview,
@@ -77,7 +77,7 @@
 
   },
   {
-    RequestUri: 'https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982?itemPath=job-data%2Fjob-data.json',
+    RequestUri: https://pipelines.actions.githubusercontent.com/pasYWZMKAGeorzjszgve9v6gJE03WMQ2NXKn6YXBa7i57yJ5WP/_apis/resources/Containers/2535982?itemPath=job-data%2Fjob-data.json,
     RequestMethod: GET,
     RequestHeaders: {
       Accept: application/octet-stream; api-version=6.0-preview,

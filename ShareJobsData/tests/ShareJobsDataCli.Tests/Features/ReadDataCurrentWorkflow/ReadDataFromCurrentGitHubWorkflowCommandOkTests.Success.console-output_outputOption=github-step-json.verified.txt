@@ -1,10 +1,30 @@
-﻿::set-output name=name::George Washington
-::set-output name=age::89
-::set-output name=height_in_inches::5.75
-::set-output name=addresses_home_street::400 Mockingbird Lane
-::set-output name=addresses_home_city::Louaryland
-::set-output name=addresses_home_state::Hawidaho
-::set-output name=addresses_home_zip::99970
-::set-output name=addresses_home_list_0_::first
-::set-output name=addresses_home_list_1_::second
-::set-output name=addresses_home_list_2_::third
+﻿name<<EOF
+George Washington
+EOF
+age<<EOF
+89
+EOF
+height_in_inches<<EOF
+5.75
+EOF
+addresses_home_street<<EOF
+400 Mockingbird Lane
+EOF
+addresses_home_city<<EOF
+Louaryland
+EOF
+addresses_home_state<<EOF
+Hawidaho
+EOF
+addresses_home_zip<<EOF
+99970
+EOF
+addresses_home_list_0_<<EOF
+first
+EOF
+addresses_home_list_1_<<EOF
+second
+EOF
+addresses_home_list_2_<<EOF
+third
+EOF

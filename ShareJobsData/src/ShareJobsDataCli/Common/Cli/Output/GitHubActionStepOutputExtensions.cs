@@ -17,7 +17,7 @@ internal static class GitHubActionStepOutputExtensions
         string value)
     {
         // only need to use a delimiter for multi line values but for simplicity we always use one
-        var delimiter = BitConverter.ToString(RandomNumberGenerator.GetBytes(8));
+        var delimiter = $"EOF_{BitConverter.ToString(RandomNumberGenerator.GetBytes(8))}";
         await consoleWriter.WriteLineAsync($"{key}<<{delimiter}");
         await consoleWriter.WriteLineAsync(value);
         await consoleWriter.WriteLineAsync(delimiter);
