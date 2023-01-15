@@ -13,6 +13,6 @@ internal sealed class GitHubActionStrictJsonStepOutput
     {
         json.NotNull();
         var sanitizedOutput = json.SanitizeGitHubStepOutput();
-        await _console.Output.WriteLineAsync($"::set-output name=data::{sanitizedOutput}");
+        await _console.Output.WriteLineAsync($"data={sanitizedOutput}");
     }
 }
