@@ -3,23 +3,14 @@ namespace ShareJobsDataCli;
 public class GitHubStepOutputConsole : IConsole, IDisposable
 {
     private readonly SystemConsole _systemConsole;
-    private readonly StreamWriter _textWriter;
 
     public GitHubStepOutputConsole()
     {
         _systemConsole = new SystemConsole();
         Input = _systemConsole.Input;
         Error = _systemConsole.Error;
-
-        var githubOutputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? string.Empty;
-        _textWriter = new StreamWriter(githubOutputFile, append: true, Encoding.UTF8);
-        var consoleWriter = new ConsoleWriter(this, Stream.Synchronized(_textWriter.BaseStream))
-        {
-            AutoFlush = true,
-        };
-        Output = consoleWriter;
+        Output = SetOutput();
     }
-
 
     public ConsoleReader Input { get; }
 
@@ -77,10 +68,22 @@ public class GitHubStepOutputConsole : IConsole, IDisposable
 
     public void ResetColor() => _systemConsole.ResetColor();
 
+    private ConsoleWriter SetOutput()
+    {
+        // create a ConsoleWriter based on the example from https://github.com/Tyrrrz/CliFx/blob/02dc7de12721eacc729aaf50297b74b8a1c92ac0/CliFx/Infrastructure/ConsoleWriter.cs#L275
+        // except that this writer will write to the GitHub step output file
+        var githubOutputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? string.Empty;
+        var textWriter = new StreamWriter(githubOutputFile, append: true, Encoding.UTF8);
+        return new ConsoleWriter(this, Stream.Synchronized(textWriter.BaseStream))
+        {
+            AutoFlush = true,
+        };
+    }
+
     public void Dispose()
     {
         _systemConsole.Dispose();
-        _textWriter.Dispose();
+        //_textWriter.Dispose();
         Output.Dispose();
     }
 }
