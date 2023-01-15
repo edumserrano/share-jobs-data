@@ -1,15 +1,24 @@
-namespace ShareJobsDataCli;
+namespace ShareJobsDataCli.Common.Cli.Output;
 
 public class GitHubStepOutputConsole : IConsole, IDisposable
 {
     private readonly SystemConsole _systemConsole;
+    private readonly StreamWriter _textWriter;
 
     public GitHubStepOutputConsole()
     {
         _systemConsole = new SystemConsole();
         Input = _systemConsole.Input;
         Error = _systemConsole.Error;
-        Output = SetOutput();
+        //Output = SetOutput();
+
+        var githubOutputFile = Environment.GetEnvironmentVariable("GITHUB_OUTPUT") ?? string.Empty;
+        _textWriter = new StreamWriter(githubOutputFile, append: true, Encoding.UTF8);
+        var consoleWriter = new ConsoleWriter(this, Stream.Synchronized(_textWriter.BaseStream))
+        {
+            AutoFlush = true,
+        };
+        Output = consoleWriter;
     }
 
     public ConsoleReader Input { get; }
@@ -83,7 +92,7 @@ public class GitHubStepOutputConsole : IConsole, IDisposable
     public void Dispose()
     {
         _systemConsole.Dispose();
-        //_textWriter.Dispose();
+        _textWriter.Dispose();
         Output.Dispose();
     }
 }
