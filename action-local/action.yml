@@ -46,7 +46,7 @@ outputs:
   # The keys for the output values depend on the data shared.
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/edumserrano/share-jobs-data:main'
+  image: '../Dockerfile'
   args:
     - ${{ inputs.command }}
     - --artifact-name
