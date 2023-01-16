@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Set data
-      uses: edumserrano/share-jobs-data@v1.0.0
+      uses: edumserrano/share-jobs-data@v1
       with:
         command: set-data
         data: |
@@ -81,7 +81,7 @@ jobs:
     # so that you can use it on subsequent steps
     - name: Read data
       id: read-data  # must have an id so that you can access the output from this step which contains the shared data
-      uses: edumserrano/share-jobs-data@v1.0.0
+      uses: edumserrano/share-jobs-data@v1
       with:
         command: read-data-current-workflow
     - name: Do something with the shared data
@@ -111,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Set data
-      uses: edumserrano/share-jobs-data@v1.0.0
+      uses: edumserrano/share-jobs-data@v1
       with:
         command: set-data
         data: |
@@ -140,7 +140,7 @@ jobs:
     # so that you can use it on subsequent steps
     - name: Read data
       id: read-data  # must have an id so that you can access the output from this step which contains the shared data
-      uses: edumserrano/share-jobs-data@v1.0.0
+      uses: edumserrano/share-jobs-data@v1
       with:
         command: read-data-different-workflow
         run-id: ${{ github.event.workflow_run.id }}  # we need to specify the run id of the workflow that shared the data
@@ -296,7 +296,7 @@ jobs:
     steps:
     - name: Set data
       id: set # must have an id so that you can access the output from this step on later steps in the same job
-      uses: edumserrano/share-jobs-data@v1.0.0
+      uses: edumserrano/share-jobs-data@v1
       with:
         command: set-data
         output: github-step-json # or `strict-json`, if you use `none` there won't be any output set on this step
@@ -316,7 +316,7 @@ Yes, you should be able to use most of YAML syntax. To share data with multiple 
 
 ```yml
 - name: Set data
-  uses: edumserrano/share-jobs-data@v1.0.0
+  uses: edumserrano/share-jobs-data@v1
   with:
     command: set-data
     data: |
@@ -346,7 +346,7 @@ Yes, you can build the data to share by hardcoding values or by building it from
   run: |
     Write-Output "name=Eduardo Serrano" >> $env:GITHUB_OUTPUT
 - name: Set data
-  uses: edumserrano/share-jobs-data@v1.0.0
+  uses: edumserrano/share-jobs-data@v1
   with:
     command: set-data
     data: |
@@ -403,7 +403,7 @@ If you're struggling to get the right keys for the output of this action then yo
 #
 - name: Read data
   id: read-data  # must have an id so that you can access the output from this step which contains the shared data
-  uses: edumserrano/share-jobs-data@v1.0.0
+  uses: edumserrano/share-jobs-data@v1
   with:
     command: read-data-current-workflow # this example works with any 'command' value
     output: github-step-json            # this example works with any 'output' value
