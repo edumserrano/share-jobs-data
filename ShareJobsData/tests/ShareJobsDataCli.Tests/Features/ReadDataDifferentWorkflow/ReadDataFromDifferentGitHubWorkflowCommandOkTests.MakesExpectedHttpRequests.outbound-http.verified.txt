@@ -1,6 +1,6 @@
 ﻿[
   {
-    RequestUri: 'https://api.github.com/repos/edumserrano/share-jobs-data/actions/runs/test-run-id/artifacts',
+    RequestUri: https://api.github.com/repos/edumserrano/share-jobs-data/actions/runs/test-run-id/artifacts,
     RequestMethod: GET,
     RequestHeaders: {
       Accept: application/vnd.github+json,
@@ -36,7 +36,7 @@
 
   },
   {
-    RequestUri: 'https://api.github.com/repos/edumserrano/share-jobs-data/actions/artifacts/351670722/zip',
+    RequestUri: https://api.github.com/repos/edumserrano/share-jobs-data/actions/artifacts/351670722/zip,
     RequestMethod: GET,
     RequestHeaders: {
       Accept: application/vnd.github+json,

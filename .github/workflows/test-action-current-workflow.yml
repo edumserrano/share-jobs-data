@@ -66,7 +66,7 @@ jobs:
       run: |
         # just to show an example that data to share can be built in different steps
         # and then shared using this action
-        Write-Output '::set-output name=name::George Washington'
+        Write-Output "name=George Washington" >> $env:GITHUB_OUTPUT
     - name: Run set-data command
       id: set
       uses: ./

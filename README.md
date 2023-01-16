@@ -344,7 +344,7 @@ Yes, you can build the data to share by hardcoding values or by building it from
 - name: Set name value
   id: set-name
   run: |
-    Write-Output '::set-output name=name::Eduardo Serrano'
+    Write-Output "name=Eduardo Serrano" >> $env:GITHUB_OUTPUT
 - name: Set data
   uses: edumserrano/share-jobs-data@v1.0.0
   with:

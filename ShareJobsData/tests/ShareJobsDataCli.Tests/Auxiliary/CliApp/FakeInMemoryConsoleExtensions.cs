@@ -6,6 +6,6 @@ internal static class FakeInMemoryConsoleExtensions
     {
         var output = console.ReadOutputString();
         var error = console.ReadErrorString();
-        return (error + output).NormalizeLineEndingsToUnix();
+        return error + output;
     }
 }

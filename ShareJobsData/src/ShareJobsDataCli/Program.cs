@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace ShareJobsDataCli;
 
 internal static class Program

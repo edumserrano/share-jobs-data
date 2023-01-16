@@ -69,6 +69,7 @@ public sealed class SetDataCommandOkTests
         console.ReadErrorString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output)
+            .ScrubGitHubMultiLineDelimiter()
             .AppendToMethodName("console-output")
             .UseParameters(scenario);
     }

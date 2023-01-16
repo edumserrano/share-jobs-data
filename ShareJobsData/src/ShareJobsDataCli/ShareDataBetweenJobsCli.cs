@@ -5,9 +5,7 @@ public class ShareDataBetweenJobsCli
     public ShareDataBetweenJobsCli()
     {
         CliApplicationBuilder = new CliApplicationBuilder()
-            .AddCommandsFromThisAssembly()
-            .UseConsole(new GitHubStepOutputConsole())
-            ;
+            .AddCommandsFromThisAssembly();
     }
 
     public CliApplicationBuilder CliApplicationBuilder { get; }

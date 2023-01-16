@@ -52,6 +52,7 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandOkTests
         console.ReadErrorString().ShouldBeEmpty();
         var output = console.ReadAllAsString();
         await Verify(output)
+            .ScrubGitHubMultiLineDelimiter()
             .AppendToMethodName("console-output")
             .UseParameters(outputOption);
     }

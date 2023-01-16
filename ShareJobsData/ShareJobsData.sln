@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{9A3930ED
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareJobsDataCli", "src\ShareJobsDataCli\ShareJobsDataCli.csproj", "{77E164E5-E161-482A-9A14-EAE6D8554810}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareJobsDataCli.Tests", "tests\ShareJobsDataCli.Tests\ShareJobsDataCli.Tests.csproj", "{FBDEFCC9-4B1C-443E-83C2-DDB8860CA0C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShareJobsDataCli.Tests", "tests\ShareJobsDataCli.Tests\ShareJobsDataCli.Tests.csproj", "{FBDEFCC9-4B1C-443E-83C2-DDB8860CA0C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,1 +1,6 @@
-﻿::set-output name=data::{%0A  "name": "George line 1\nline 2\nline 3 Washington",%0A  "age": "89"%0A}
+﻿data<<EOF
+{
+  "name": "George line 1\nline 2\nline 3 Washington",
+  "age": "89"
+}
+EOF
