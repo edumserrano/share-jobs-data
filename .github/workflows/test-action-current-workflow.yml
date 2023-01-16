@@ -37,7 +37,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Run action with bad input
       id: set-bad-input
-      uses: ./action-local.yml
+      uses: ./action-local
       continue-on-error: true
       with:
         command: set-data
@@ -69,7 +69,7 @@ jobs:
         Write-Output "name=George Washington" >> $env:GITHUB_OUTPUT
     - name: Run set-data command
       id: set
-      uses: ./action-local.yml
+      uses: ./action-local
       with:
         command: set-data
         artifact-name: from-set-with-github-step-json-output
@@ -127,7 +127,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Run set-data command
       id: set
-      uses: ./action-local.yml
+      uses: ./action-local
       with:
         command: set-data
         artifact-name: from-set-with-strict-json-output
@@ -211,7 +211,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Run set-data command
       id: set
-      uses: ./action-local.yml
+      uses: ./action-local
       with:
         command: set-data
         output: none
@@ -257,7 +257,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Run read-data-current-workflow command
       id: read
-      uses: ./action-local.yml
+      uses: ./action-local
       with:
         command: read-data-current-workflow
         artifact-name: from-set-with-github-step-json-output
@@ -300,7 +300,7 @@ jobs:
     - uses: actions/checkout@v3
     - name: Run read-data-current-workflow command
       id: read
-      uses: ./action-local.yml
+      uses: ./action-local
       with:
         command: read-data-current-workflow
         artifact-name: from-set-with-strict-json-output
