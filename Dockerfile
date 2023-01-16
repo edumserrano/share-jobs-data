@@ -24,7 +24,7 @@ RUN chmod +x /opt/microsoft/powershell/7/pwsh
 RUN ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
 # end of install powershell
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:7.0-alpine AS build
 WORKDIR /share-jobs-data
 COPY ["ShareJobsData/NuGet.Config", "ShareJobsData/"]
 COPY ["ShareJobsData/src/ShareJobsDataCli/ShareJobsDataCli.csproj", "ShareJobsData/src/ShareJobsDataCli/"]
