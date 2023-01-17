@@ -20,6 +20,4 @@ updates:
     labels:
       - 'dependabot'
       - 'bot:robot:'
-      - 'github-workflows:'
-
-
+      - 'github-workflows'
