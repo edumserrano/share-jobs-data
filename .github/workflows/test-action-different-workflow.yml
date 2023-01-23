@@ -160,8 +160,7 @@ jobs:
         $read1JobResult = '${{ needs.read-data-different-workflow-with-github-step-json-output.result }}'
         $read2JobResult = '${{ needs.read-data-different-workflow-with-strict-json-output.result }}'
 
-        if ($read1JobResult -eq 'success' `
-            && $read2JobResult -eq 'success')
+        if ($read1JobResult -eq 'success' -and $read2JobResult -eq 'success')
         {
           $description = 'Successful'
           $state = 'success'
