@@ -12,6 +12,15 @@ defaults:
   run:
     shell: pwsh
 
+env:
+  # Need to checkout the same commit from the workflow run that triggered this workflow.
+  # By default the checkout step gets the latest from master but that's not what we want.
+  # Without checking out the workflow run head sha the errors that we get into are like:
+  # - Create a PR, that will run the workflows that trigger this one but then, instead of
+  # checking commit from the PR, we get the commit from master. This would mean we would
+  # run this workflow which builds the docker image and runs tests using the incorrect commit.
+  WORKFLOW_HEAD_SHA : ${{ github.event.workflow_run.head_sha }}
+
 jobs:
   trigger-info:
     name: Trigger info
@@ -34,6 +43,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+      with:
+        ref: ${{ env.WORKFLOW_HEAD_SHA }}
     - name: Run read-data-different-workflow command
       id: read
       uses: ./action-local
@@ -77,6 +88,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+      with:
+        ref: ${{ env.WORKFLOW_HEAD_SHA }}
     - name: Run read-data-different-workflow command
       id: read
       uses: ./action-local
@@ -154,7 +167,6 @@ jobs:
       env:
         GITHUB_CONTEXT: ${{ toJSON(github) }}
       run: $env:GITHUB_CONTEXT
-    - uses: actions/checkout@v3
     - name: Create GitHub status on PR
       run: |
         $read1JobResult = '${{ needs.read-data-different-workflow-with-github-step-json-output.result }}'
