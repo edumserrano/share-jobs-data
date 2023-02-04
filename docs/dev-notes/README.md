@@ -48,27 +48,48 @@
 The steps below show how to run the Docker container action against a set of test data provided by the repo. However you can follow the same steps and provide any data you wish to test.
 
 1) Clone the repo and browse to the repo's directory.
-2) Run `docker build -t share-jobs-data .`
-3) Run the docker container and pass the required inputs to execute one of the available commands. If you want to figure out the available commands and options for each command you can check in each of the `ICommand` classes or do:
+2) Create an empty file named `github-step-output.txt` that will store the output of the action. To create an empty file you can do something like `echo $null >> github-step-output.txt`.
+3) Run `docker build -t share-jobs-data .`
+4) Run the docker container and pass the required inputs to execute one of the available commands. To know the options for each available command you can check the documentation on the [main readme](/README.md) or do:
+
+> **Note**
+>
+> When executing the docker image make sure you keep the docker run flags as shown below. To run any command other than the help command just change the input parameters for the `share-jobs-data` image.
 
 ```
 # returns the available commands
-docker run --rm -v ${pwd}:/workspace --workdir /workspace share-jobs-data -h
+docker run --rm --env GITHUB_OUTPUT=/workspace/github-step-output.txt `
+-v ${pwd}:/workspace `
+-v ${pwd}/github-step-output.txt:/workspace/github-step-output.txt `
+--workdir /workspace `
+share-jobs-data -h
 ```
 
 ```
 # returns the usage options for the set-data command
-docker run --rm -v ${pwd}:/workspace --workdir /workspace share-jobs-data set-data -h
+docker run --rm --env GITHUB_OUTPUT=/workspace/github-step-output.txt `
+-v ${pwd}:/workspace `
+-v ${pwd}/github-step-output.txt:/workspace/github-step-output.txt `
+--workdir /workspace `
+share-jobs-data set-data -h
 ```
 
 ```
 # returns the usage options for the read-data-current-workflow command
-docker run --rm -v ${pwd}:/workspace --workdir /workspace share-jobs-data read-data-current-workflow -h
+docker run --rm --env GITHUB_OUTPUT=/workspace/github-step-output.txt `
+-v ${pwd}:/workspace `
+-v ${pwd}/github-step-output.txt:/workspace/github-step-output.txt `
+--workdir /workspace `
+share-jobs-data read-data-current-workflow -h
 ```
 
 ```
 # returns the usage options for the read-data-different-workflow command
-docker run --rm -v ${pwd}:/workspace --workdir /workspace share-jobs-data read-data-different-workflow -h
+docker run --rm --env GITHUB_OUTPUT=/workspace/github-step-output.txt `
+-v ${pwd}:/workspace `
+-v ${pwd}/github-step-output.txt:/workspace/github-step-output.txt `
+--workdir /workspace `
+share-jobs-data read-data-different-workflow -h
 ```
 
 >**Warning**
@@ -124,6 +145,12 @@ To understand better how the action builds and executes the Docker container loo
 
 ### As of writing this, the log for building the docker action looks as follows
 
+> **Note**
+>
+> This is the log when building the docker image for the action, which happens for instance on the [test-action-current-workflow workflow](https://github.com/edumserrano/share-jobs-data/actions/workflows/test-action-current-workflow.yml) because the log for the action when it's published to the GitHub Marketplace will download the published packaged from the GitHub packages.
+>
+> The information mentioned here is still valuable to understand more about how GitHub Docker actions work.
+
 ```
 /usr/bin/docker build
 -t 5364e3:10ad17d734e944afa36bd83acaec12cc
@@ -142,6 +169,12 @@ This way it can successfully build the Dockerfile for this action which would ot
 - This allows the Dockerfile to reference files in the `Share GitHub jobs data` repo even though the workflow has not explicitly checked it out.
 
 ### As of writing this, the log for running the docker action looks as follows
+
+> **Note**
+>
+> This is the log when building the docker image for the action, which happens for instance on the [test-action-current-workflow workflow](https://github.com/edumserrano/share-jobs-data/actions/workflows/test-action-current-workflow.yml) because the log for the action when it's published to the GitHub Marketplace will download the published packaged from the GitHub packages.
+>
+> The information mentioned here is still valuable to understand more about how GitHub Docker actions work.
 
 ```
 /usr/bin/docker run
