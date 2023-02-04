@@ -40,12 +40,18 @@ function Main()
   }
 
   Write-Output "Executing: dotnet '/app/ShareJobsDataCli.dll' $argsAsList"
-  dotnet '/app/ShareJobsDataCli.dll' $argsAsList >> $env:GITHUB_OUTPUT
+  $output = dotnet '/app/ShareJobsDataCli.dll' $argsAsList
 
   if($LASTEXITCODE -ne 0 ) {
       Write-Output "::error::Share data jobs didn't complete successfully. See the step's log for more details."
       exit $LASTEXITCODE
   }
+
+  Write-Output $output >> $env:GITHUB_OUTPUT
+
+  Write-Output "::group::Share jobs data output"
+  Write-Output $output
+  Write-Output "::endgroup::"
 }
 
 # invoke entrypoint function

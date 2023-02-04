@@ -48,7 +48,7 @@
 The steps below show how to run the Docker container action against a set of test data provided by the repo. However you can follow the same steps and provide any data you wish to test.
 
 1) Clone the repo and browse to the repo's directory.
-2) Create an empty file named `github-step-output.txt` that will store the output of the action. To create an empty file you can do something like `echo $null >> github-step-output.txt`.
+2) Create an empty file named `github-step-output.txt` that will store the GitHub step output of the action. To create an empty file you can do something like `echo $null >> github-step-output.txt`.
 3) Run `docker build -t share-jobs-data .`
 4) Run the docker container and pass the required inputs to execute one of the available commands. To know the options for each available command you can check the documentation on the [main readme](/README.md) or do:
 
@@ -124,7 +124,7 @@ For more information about the GitHub workflows configured for this repo go [her
 
 ## GitHub marketplace
 
-This action is published to the [GitHub marketplace](https://github.com/marketplace/actions/markdown-link-check-log-parser).
+This action is published to the [GitHub marketplace](https://github.com/marketplace/actions/share-github-jobs-data).
 
 **Currently there is no workflow setup to publish this action to the marketplace. The publishing act is a manual process following the instructions below.**
 
@@ -147,7 +147,7 @@ To understand better how the action builds and executes the Docker container loo
 
 > **Note**
 >
-> This is the log when building the docker image for the action, which happens for instance on the [test-action-current-workflow workflow](https://github.com/edumserrano/share-jobs-data/actions/workflows/test-action-current-workflow.yml) because the log for the action when it's published to the GitHub Marketplace will download the published packaged from the GitHub packages.
+> This is the log when building the docker image for the action, which happens for instance on the [test-action-current-workflow workflow](https://github.com/edumserrano/share-jobs-data/actions/workflows/test-action-current-workflow.yml) because using the published action from GitHub Marketplace will download the package from the GitHub packages and so the log will look different.
 >
 > The information mentioned here is still valuable to understand more about how GitHub Docker actions work.
 
@@ -172,7 +172,7 @@ This way it can successfully build the Dockerfile for this action which would ot
 
 > **Note**
 >
-> This is the log when building the docker image for the action, which happens for instance on the [test-action-current-workflow workflow](https://github.com/edumserrano/share-jobs-data/actions/workflows/test-action-current-workflow.yml) because the log for the action when it's published to the GitHub Marketplace will download the published packaged from the GitHub packages.
+> This is the log when building the docker image for the action, which happens for instance on the [test-action-current-workflow workflow](https://github.com/edumserrano/share-jobs-data/actions/workflows/test-action-current-workflow.yml) because using the published action from GitHub Marketplace will download the package from the GitHub packages and so the log will look different.
 >
 > The information mentioned here is still valuable to understand more about how GitHub Docker actions work.
 
