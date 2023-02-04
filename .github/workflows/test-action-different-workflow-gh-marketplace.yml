@@ -1,0 +1,153 @@
+name: 'Test GH action from GH Marketplace: share data on different workflow'
+
+on:
+  workflow_run:
+    workflows: [
+      "Test GH action from GH Marketplace: share data on current workflow",
+    ]
+    types:
+    - completed
+
+defaults:
+  run:
+    shell: pwsh
+
+env:
+  # Need to checkout the same commit from the workflow run that triggered this workflow.
+  # By default the checkout step gets the latest from master but that's not what we want.
+  # Without checking out the workflow run head sha the errors that we get into are like:
+  # - Create a PR, that will run the workflows that trigger this one but then, instead of
+  # checking commit from the PR, we get the commit from master. This would mean we would
+  # run this workflow which builds the docker image and runs tests using the incorrect commit.
+  WORKFLOW_HEAD_SHA : ${{ github.event.workflow_run.head_sha }}
+
+jobs:
+  trigger-info:
+    name: Trigger info
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+    - name: Dump github context for debug purposes
+      env:
+        GITHUB_CONTEXT: ${{ toJSON(github) }}
+      run: $env:GITHUB_CONTEXT
+    - name: Trigger info
+      run: |
+        Write-Output "::notice::This worklfow was triggered by a 'workflow_run' from '${{ github.event.workflow_run.name }}'."
+
+  read-data-different-workflow-with-github-step-json-output:
+    name: read-data-different-workflow command with github-step-json output
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ env.WORKFLOW_HEAD_SHA }}
+    - name: Run read-data-different-workflow command
+      id: read
+      uses: edumserrano/share-jobs-data@v1
+      with:
+        command: read-data-different-workflow
+        run-id: ${{ github.event.workflow_run.id }}
+        artifact-name: from-set-with-github-step-json-output
+        # output: github-step-json # this is the default
+    - name: Dump outputs from previous step
+      env:
+        STEP_OUTPUT: ${{ toJSON(steps.read.outputs) }}
+      run: $env:STEP_OUTPUT
+    - name: Verify read-data-current-workflow command output
+      run: |
+        $street = @'
+        400 Mockingbird Lane
+        address line 2
+        '@
+        if('${{ steps.read.outputs.name }}' -eq 'George Washington' `
+          -and '${{ steps.read.outputs.age }}' -eq '89' `
+          -and '${{ steps.read.outputs.height_in_inches }}' -eq '5.75' `
+          -and '${{ steps.read.outputs.addresses_home_street }}' -eq $street `
+          -and '${{ steps.read.outputs.addresses_home_city }}' -eq 'Louaryland' `
+          -and '${{ steps.read.outputs.addresses_home_state }}' -eq 'Hawidaho' `
+          -and '${{ steps.read.outputs.addresses_home_zip }}' -eq '99970' `
+          -and '${{ steps.read.outputs.addresses_home_list_0_ }}' -eq 'first' `
+          -and '${{ steps.read.outputs.addresses_home_list_1_ }}' -eq 'second' `
+          -and '${{ steps.read.outputs.addresses_home_list_2_ }}' -eq 'third')
+        {
+          Write-Output "Action produced expected output values."
+          Exit 0
+        }
+
+        Write-Output "::error::Action didn't produce expected github-step-json output."
+        Exit 1
+
+  read-data-different-workflow-with-strict-json-output:
+    name: read-data-different-workflow command with strict-json output
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ env.WORKFLOW_HEAD_SHA }}
+    - name: Run read-data-different-workflow command
+      id: read
+      uses: edumserrano/share-jobs-data@v1
+      with:
+        command: read-data-different-workflow
+        run-id: ${{ github.event.workflow_run.id }}
+        artifact-name: from-set-with-strict-json-output
+        output: strict-json
+    - name: Dump outputs from previous step
+      env:
+        STEP_OUTPUT: ${{ toJSON(steps.read.outputs) }}
+      run: $env:STEP_OUTPUT
+    - name: Verify read-data-current-workflow command output
+      run: |
+        # verify using github fromJson function
+        $street = @'
+        400 Mockingbird Lane
+        address line 2
+        '@
+        if('${{ fromJson(steps.read.outputs.data).name }}' -eq 'George Washington' `
+          -and '${{ fromJson(steps.read.outputs.data).age }}' -eq '89' `
+          -and '${{ fromJson(steps.read.outputs.data).height_in_inches }}' -eq '5.75' `
+          -and '${{ fromJson(steps.read.outputs.data).addresses.home.street }}' -eq $street `
+          -and '${{ fromJson(steps.read.outputs.data).addresses.home.city }}' -eq 'Louaryland' `
+          -and '${{ fromJson(steps.read.outputs.data).addresses.home.state }}' -eq 'Hawidaho' `
+          -and '${{ fromJson(steps.read.outputs.data).addresses.home.zip }}' -eq '99970' `
+          -and '${{ fromJson(steps.read.outputs.data).addresses.home.list[0] }}' -eq 'first' `
+          -and '${{ fromJson(steps.read.outputs.data).addresses.home.list[1] }}' -eq 'second' `
+          -and '${{ fromJson(steps.read.outputs.data).addresses.home.list[2] }}' -eq 'third')
+        {
+          Write-Output "Action produced expected output values."
+          Exit 0
+        }
+
+        Write-Output "::error::Action didn't produce expected github-step-json output."
+        Exit 1
+    - name: Verify read-data-current-workflow command output 2
+      run: |
+        # verify using powershell
+        $data = '${{ steps.read.outputs.data }}' | ConvertFrom-Json
+        $street = @'
+        400 Mockingbird Lane
+        address line 2
+        '@
+        if($data.name -eq 'George Washington' `
+          -and $data.age -eq '89' `
+          -and $data.height_in_inches -eq '5.75' `
+          -and $data.addresses.home.street -eq $street `
+          -and $data.addresses.home.city -eq 'Louaryland' `
+          -and $data.addresses.home.state -eq 'Hawidaho' `
+          -and $data.addresses.home.zip -eq '99970' `
+          -and $data.addresses.home.list[0] -eq 'first' `
+          -and $data.addresses.home.list[1] -eq 'second' `
+          -and $data.addresses.home.list[2] -eq 'third')
+        {
+          Write-Output "Action produced expected output values."
+          Exit 0
+        }
+
+        Write-Output "::error::Action didn't produce expected github-step-json output."
+        Exit 1
