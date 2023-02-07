@@ -69,7 +69,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Update="Verify.Xunit" Version="19.8.3" />
+    <PackageReference Update="Verify.Xunit" Version="19.9.2" />
     <PackageReference Update="xunit.analyzers" Version="1.1.0" />
   </ItemGroup>
 </Project>
