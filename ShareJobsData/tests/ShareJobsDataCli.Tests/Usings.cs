@@ -11,7 +11,6 @@ global using CliFx.Extensibility;
 global using CliFx.Infrastructure;
 global using DotNet.Sdk.Extensions.Testing.HttpMocking.HttpMessageHandlers;
 global using DotNet.Sdk.Extensions.Testing.HttpMocking.HttpMessageHandlers.ResponseMocking;
-global using ShareJobsDataCli.Common.Cli.Output;
 global using ShareJobsDataCli.Common.GitHub;
 global using ShareJobsDataCli.Common.Guards;
 global using ShareJobsDataCli.Features.ReadDataCurrentWorkflow;
