@@ -1,6 +1,5 @@
 namespace ShareJobsDataCli.Common.Cli.Errors;
 
-// See /docs/dev-notes/code-details/throw-helper.md to understand more about this implementation.
 internal static class CommandExceptionThrowHelper
 {
     [DoesNotReturn]

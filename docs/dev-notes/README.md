@@ -15,7 +15,6 @@
 - [Note about the Docker container action](#note-about-the-docker-container-action)
   - [As of writing this, the log for building the docker action looks as follows](#as-of-writing-this-the-log-for-building-the-docker-action-looks-as-follows)
   - [As of writing this, the log for running the docker action looks as follows](#as-of-writing-this-the-log-for-running-the-docker-action-looks-as-follows)
-- [Notes about code details](#notes-about-code-details)
 
 ## Building the ShareJobsData solution
 
@@ -219,7 +218,3 @@ When running the docker container there are lots of docker parameters set. Besid
 - For the purpose of this scenario, imagine that there was an `output` option that would allow you to write the shared data to a file. Let's say we define the output file to be named `./output.json`.
 - When the workflow is executing the Docker container is will output the file to the github workspace with the chosen names because because the contents of the checked out `hello-world` repo are mounted into the Docker container at `/github/workspace`. Furthermore the output of the file `./output.json` doesn't need to start with `/github/workspace` because the `workdir` parameter is set to `/github/workspace` when executing the Docker container.
 - When the action finishes and the container is terminated the user can access the output file at `${{ github.workspace}}/output.json`.
-
-## Notes about code details
-
-- [ThrowHelper pattern](/docs/dev-notes/code-details/throw-helper.md)

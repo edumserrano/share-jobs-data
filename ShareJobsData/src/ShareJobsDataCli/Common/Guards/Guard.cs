@@ -1,6 +1,5 @@
 namespace ShareJobsDataCli.Common.Guards;
 
-// See /docs/dev-notes/code-details/throw-helper.md to understand more about this implementation.
 internal static class Guard
 {
     public static T NotNull<T>([NotNull] this T? value, [CallerArgumentExpression("value")] string expression = "")
