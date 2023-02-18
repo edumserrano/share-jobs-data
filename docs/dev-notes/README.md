@@ -36,7 +36,7 @@
 1) Clone the repo and open the **ShareJobsData.sln** solution file at `/ShareJobsData`.
 2) Go to the test explorer in Visual Studio and run tests.
 
-**Note:** [Remote testing](https://docs.microsoft.com/en-us/visualstudio/test/remote-testing?view=vs-2022) with WSL is configured on the solution which enables you to run the tests locally on Linux or on Windows. You can view the configuration file at [testenvironments.json](/GitHubIssueFormsParser/testenvironments.json). To run the tests on Linux you need to have at least `Visual Studio 2022` and the Linux distro `Ubuntu-22.04` installed on [WSL](https://docs.microsoft.com/en-us/windows/wsl/install).
+**Note:** [Remote testing](https://docs.microsoft.com/en-us/visualstudio/test/remote-testing?view=vs-2022) with WSL is configured on the solution which enables you to run the tests locally on Linux or on Windows. You can view the configuration file at [testenvironments.json](/ShareJobsData/testenvironments.json). To run the tests on Linux you need to have at least `Visual Studio 2022` and the Linux distro `Ubuntu-22.04` installed on [WSL](https://docs.microsoft.com/en-us/windows/wsl/install).
 
 ### Run tests with dotnet CLI
 
