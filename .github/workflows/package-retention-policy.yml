@@ -21,7 +21,7 @@ jobs:
       packages: write
     steps:
       - name: Cleanup old share-jobs-data Docker images
-        uses: snok/container-retention-policy@v1
+        uses: snok/container-retention-policy@v2
         with:
           image-names: share-jobs-data
           cut-off: One month ago UTC
