@@ -31,7 +31,7 @@ jobs:
       TEST_RESULTS_ARTIFACT_NAME: test-results
       CODE_COVERAGE_ARTIFACT_NAME: code-coverage-report
     steps:
-    - name: Dump github co  ntext for debug purposes
+    - name: Dump github context for debug purposes
       env:
         GITHUB_CONTEXT: ${{ toJSON(github) }}
       run: $env:GITHUB_CONTEXT
