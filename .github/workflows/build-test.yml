@@ -24,7 +24,6 @@ jobs:
     env:
       SLN_DIR: ShareJobsData
       SLN_FILENAME: ShareJobsData.sln
-      SLN_FILEPATH: ShareJobsData/ShareJobsData.sln
       TEST_RESULTS_DIR: tests/test-results
       TEST_COVERAGE_DIR: tests/coverage-results
       TEST_COVERAGE_MERGE_FILE: tests/coverage-results/coverage.json
@@ -54,17 +53,19 @@ jobs:
     - name: Install reportgenerator dotnet tool
       run:  dotnet tool install --global dotnet-reportgenerator-globaltool
     - name: Restore dependencies
-      run: dotnet restore ${{ env.SLN_FILEPATH }}
+      working-directory: ${{ env.SLN_DIR }}
+      run: dotnet restore ${{ env.SLN_FILENAME }}
     - name: Build
       working-directory: ${{ env.SLN_DIR }}
       run: dotnet build ${{ env.SLN_FILENAME }} -c Release -warnaserror --no-restore --no-incremental
     - name: Test and code coverage
       id: dotnet-test
+      working-directory: ${{ env.SLN_DIR }}
       run: |
         $os = $PSVersionTable.OS
         $testResultsDir = $(Join-Path -Path (Get-Location) -ChildPath "${{ env.TEST_RESULTS_DIR }}")
         Write-Output "test-results-dir=$testResultsDir" >> $env:GITHUB_OUTPUT
-        dotnet test ${{ env.SLN_FILEPATH }} `
+        dotnet test ${{ env.SLN_FILENAME }} `
           -c Release `
           --no-build `
           --logger "trx;LogFilePrefix=framework" `
