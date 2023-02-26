@@ -104,7 +104,7 @@ jobs:
         # - the '(steps.<step-id>.conclusion == 'success' || steps.<step-id>.conclusion == 'failure')' condition: to run the steps only if the <step-id> step has ran, regardless
         # if it failed or not. It won't run if the <step-id> step has been skipped or cancelled.
 
-        $condition = '${{ (steps.dotnet-test.conclusion == 'success' || steps.dotnet-test.conclusion == 'failure') }} && alkways()'
+        $condition = '${{ (steps.dotnet-test.conclusion == 'success' || steps.dotnet-test.conclusion == 'failure') }} && always()'
         Write-Output "condition=$condition" >> $env:GITHUB_OUTPUT
         Write-Output "condition is set to $condition"
     - name: Upload test coverage to Codecov
