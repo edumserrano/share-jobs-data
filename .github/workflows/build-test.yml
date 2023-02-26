@@ -91,11 +91,20 @@ jobs:
         else {
           Write-Output "::error title=Tests (${{ runner.os }})::Tests failed on ${{ runner.os }}. $downloadArtifactMessage"
         }
+
+        Exit 1
     # Some of the steps below provide feedback on the test run and I want to run them even if some of the previous steps failed. For that
     # I need:
     # - the 'always()' condition: without it the step only runs if the job is successful, it's like the 'if' condition on any step always has a hidden '&& success()' clause.
     # - the '(steps.<step-id>.conclusion == 'success' || steps.<step-id>.conclusion == 'failure')' condition: to run the steps only if the <step-id> step has ran, regardless
     # if it failed or not. It won't run if the <step-id> step has been skipped or cancelled.
+    - name: Set run even if tests fail condition
+      id: even-if-tests-fail
+      working-directory: ${{ env.SLN_DIR }}
+      run: |
+        $condition = ${{ (steps.dotnet-test.conclusion == 'success' || steps.dotnet-test.conclusion == 'failure') }}
+        Write-Output "condition=$condition" >> $env:GITHUB_OUTPUT
+        Write-Output "condition is set to $condition"
     - name: Upload test coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
@@ -103,7 +112,8 @@ jobs:
         fail_ci_if_error: true
     - name: Generate code coverage report
       id: code-coverage-report-generator
-      if: (steps.dotnet-test.conclusion == 'success' || steps.dotnet-test.conclusion == 'failure') && always()
+      if: steps.even-if-tests-fail.outputs.condition
+      # if: (steps.dotnet-test.conclusion == 'success' || steps.dotnet-test.conclusion == 'failure') && always()
       run: |
         $testCoverageReportDir = $(Join-Path -Path ${{ steps.dotnet-test.outputs.test-coverage-dir }} -ChildPath "report")
         Write-Output "test-coverage-report-dir=$testCoverageReportDir" >> $env:GITHUB_OUTPUT
