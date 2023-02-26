@@ -109,19 +109,9 @@ jobs:
 
         $condition = '${{ (steps.dotnet-test.conclusion == 'success' || steps.dotnet-test.conclusion == 'failure') }}'
         Write-Output "condition=$condition" >> $env:GITHUB_OUTPUT
-    - name: Dump outputs from previous step
-      env:
-        STEP_OUTPUT: ${{ toJSON(steps.even-if-tests-fail.outputs) }}
-      run: $env:STEP_OUTPUT
-    - name: Upload test coverage to Codecov
-      uses: codecov/codecov-action@v3
-      with:
-        files: ${{ steps.dotnet-test.outputs.test-coverage-file }}
-        fail_ci_if_error: true
     - name: Generate code coverage report
       id: code-coverage-report-generator
       if: steps.even-if-tests-fail.outputs.condition == 'true' && always()
-      # if: (steps.dotnet-test.conclusion == 'success' || steps.dotnet-test.conclusion == 'failure') && always()
       run: |
         $testCoverageReportDir = $(Join-Path -Path ${{ steps.dotnet-test.outputs.test-coverage-dir }} -ChildPath "report")
         Write-Output "test-coverage-report-dir=$testCoverageReportDir" >> $env:GITHUB_OUTPUT
@@ -130,19 +120,24 @@ jobs:
           "-targetdir:$testCoverageReportDir" `
           -reportTypes:htmlInline
     - name: Upload code coverage report to artifacts
-      if: (steps.dotnet-test.conclusion == 'success' || steps.dotnet-test.conclusion == 'failure') && always()
+      if: steps.even-if-tests-fail.outputs.condition == 'true' && always()
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.CODE_COVERAGE_ARTIFACT_NAME }}
         path: ${{ steps.code-coverage-report-generator.outputs.test-coverage-report-dir }}
-    - name: Log Codecov info
-      if: (steps.dotnet-test.conclusion == 'success' || steps.dotnet-test.conclusion == 'failure') && always()
-      run: |
-        $codeCoveUrl = "https://app.codecov.io/gh/${{ github.repository }}/"
-        Write-Output "::notice title=Code coverage (${{ runner.os }})::Code coverage has been uploaded to Codecov at $codeCoveUrl. You can download the code coverage report from the workflow artifact named: ${{ env.CODE_COVERAGE_ARTIFACT_NAME }}."
     - name: Upload test results to artifacts
-      if: (steps.dotnet-test.conclusion == 'success' || steps.dotnet-test.conclusion == 'failure') && always()
+      if: steps.even-if-tests-fail.outputs.condition == 'true' && always()
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.TEST_RESULTS_ARTIFACT_NAME }}
         path: ${{ steps.dotnet-test.outputs.test-results-dir }}
+    - name: Upload test coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ${{ steps.dotnet-test.outputs.test-coverage-file }}
+        fail_ci_if_error: true
+    - name: Log Codecov info
+      run: |
+        $codeCoveUrl = "https://app.codecov.io/gh/${{ github.repository }}/"
+        Write-Output "::notice title=Code coverage (${{ runner.os }})::Code coverage has been uploaded to Codecov at $codeCoveUrl. You can download the code coverage report from the workflow artifact named: ${{ env.CODE_COVERAGE_ARTIFACT_NAME }}."
+
