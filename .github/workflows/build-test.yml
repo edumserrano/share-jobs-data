@@ -91,8 +91,6 @@ jobs:
         else {
           Write-Output "::error title=Tests (${{ runner.os }})::Tests failed on ${{ runner.os }}. $downloadArtifactMessage"
         }
-
-        Exit 1
     - name: Set run even if tests fail condition
       id: even-if-tests-fail
       if: always()
