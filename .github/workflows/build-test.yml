@@ -62,7 +62,7 @@ jobs:
         $testResultsDir = $(Join-Path -Path (Get-Location) -ChildPath "tests/test-results")
         $testCoverageDir = $(Join-Path -Path (Get-Location) -ChildPath "tests/coverage-results/")
         $testCoverageMergeFile = $(Join-Path -Path $testCoverageDir -ChildPath "coverage.json")
-        $testCoverageFile = $(Join-Path -Path testCoverageDir -ChildPath "coverage.opencover.xml")
+        $testCoverageFile = $(Join-Path -Path $testCoverageDir -ChildPath "coverage.opencover.xml")
         Write-Output "test-results-dir=$testResultsDir" >> $env:GITHUB_OUTPUT
         Write-Output "test-coverage-dir=$testCoverageDir" >> $env:GITHUB_OUTPUT
         Write-Output "test-coverage-file=$testCoverageFile" >> $env:GITHUB_OUTPUT
@@ -79,6 +79,10 @@ jobs:
           /p:MergeWith="$testCoverageMergeFile" `
           /p:CoverletOutputFormat="json%2copencover" `
           -m:1
+
+        Write-Output "test-results-dir is set to $testResultsDir"
+        Write-Output "test-coverage-dir is set to $testCoverageDir"
+        Write-Output "test-coverage-file is set to $testCoverageFile"
 
         $downloadArtifactMessage = "You can inspect the test results by downloading the workflow artifact named: ${{ env.TEST_RESULTS_ARTIFACT_NAME }}."
         if($LASTEXITCODE -eq 0) {
