@@ -53,7 +53,7 @@ Also note that when reading the shared data, the step reading the data must have
 
 >**Note**
 >
-> Since the data is shared via a worklfow artifact, the job producing the data must finish and upload the data before the consuming job can access it. This dependency is declared via the `needs` field set to the consuming job.
+> Since the data is shared via a workflow artifact, the job producing the data must finish and upload the data before the consuming job can access it. This dependency is declared via the `needs` field set to the consuming job.
 
 ```yml
 name: Example of sharing data in the same workflow

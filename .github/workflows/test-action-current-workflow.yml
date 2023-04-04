@@ -26,7 +26,7 @@ jobs:
       run: $env:GITHUB_CONTEXT
     - name: Trigger info
       run: |
-        Write-Output "::notice::This worklfow was triggered by a 'workflow_run' from '${{ github.event.workflow_run.name }}'."
+        Write-Output "::notice::This workflow was triggered by a 'workflow_run' from '${{ github.event.workflow_run.name }}'."
 
   test-failure:
     name: test failure
