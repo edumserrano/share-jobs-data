@@ -38,6 +38,6 @@ internal static partial class VerifyExtensions
     }
 
     // identifies patterns such as EOF_0A-8E-FE-D8-F0-F5-A1-1C
-    [GeneratedRegex("EOF_([a-fA-F0-9]{2}-[a-fA-F0-9]{2}-[a-fA-F0-9]{2}-[a-fA-F0-9]{2}-[a-fA-F0-9]{2}-[a-fA-F0-9]{2}-[a-fA-F0-9]{2}-[a-fA-F0-9]{2})")]
+    [GeneratedRegex("EOF_([a-fA-F0-9]{2}-[a-fA-F0-9]{2}-[a-fA-F0-9]{2}-[a-fA-F0-9]{2}-[a-fA-F0-9]{2}-[a-fA-F0-9]{2}-[a-fA-F0-9]{2}-[a-fA-F0-9]{2})", RegexOptions.ExplicitCapture, matchTimeoutMilliseconds: 5000)]
     private static partial Regex RandomMultiLineDelimiterRegex();
 }
