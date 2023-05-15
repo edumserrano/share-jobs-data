@@ -8,7 +8,7 @@ public sealed class UnexpectedTypeException : Exception
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    internal static UnexpectedTypeException Create(object value, [CallerArgumentExpression("value")] string expression = "")
+    internal static UnexpectedTypeException Create(object value, [CallerArgumentExpression(nameof(value))] string expression = "")
     {
         var type = value.GetType();
         var message = $"{expression} represented an unhandled type: '{type.Name}' in '{type.Namespace}'.";

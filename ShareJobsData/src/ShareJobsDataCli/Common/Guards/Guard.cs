@@ -2,7 +2,7 @@ namespace ShareJobsDataCli.Common.Guards;
 
 internal static class Guard
 {
-    public static T NotNull<T>([NotNull] this T? value, [CallerArgumentExpression("value")] string expression = "")
+    public static T NotNull<T>([NotNull] this T? value, [CallerArgumentExpression(nameof(value))] string expression = "")
     {
         if (value is null)
         {
@@ -12,7 +12,7 @@ internal static class Guard
         return value;
     }
 
-    public static string NotNullOrWhiteSpace([NotNull] this string? value, [CallerArgumentExpression("value")] string expression = "")
+    public static string NotNullOrWhiteSpace([NotNull] this string? value, [CallerArgumentExpression(nameof(value))] string expression = "")
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -22,7 +22,7 @@ internal static class Guard
         return value;
     }
 
-    public static long Positive(this long value, [CallerArgumentExpression("value")] string expression = "")
+    public static long Positive(this long value, [CallerArgumentExpression(nameof(value))] string expression = "")
     {
         if (value < 0)
         {
