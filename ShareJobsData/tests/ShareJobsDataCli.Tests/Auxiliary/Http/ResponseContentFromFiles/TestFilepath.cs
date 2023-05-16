@@ -11,6 +11,8 @@ internal sealed record TestFilepath
 
     public static implicit operator string(TestFilepath testFilepath)
     {
-        return testFilepath._value;
+        return RemoteTestEnvironment.Instance.IsRunningInRemoteTestEnvironment
+            ? RemoteTestEnvironment.Instance.GetRemoteTestEnvironmentPath(testFilepath._value)
+            : testFilepath._value;
     }
 }
