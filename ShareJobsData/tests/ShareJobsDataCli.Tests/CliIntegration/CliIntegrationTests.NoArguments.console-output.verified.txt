@@ -9,8 +9,8 @@ OPTIONS
   --version         Shows version information. 
 
 COMMANDS
-  set-data          
-  read-data-different-workflow  
   read-data-current-workflow  
+  read-data-different-workflow  
+  set-data          
 
 You can run `{scrubbed app name} [command] --help` to show help on a specific command.
