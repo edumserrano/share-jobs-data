@@ -3,6 +3,7 @@ global using System.Collections.Concurrent;
 global using System.Net;
 global using System.Net.Http.Headers;
 global using System.Net.Mime;
+global using System.Reflection;
 global using System.Runtime.CompilerServices;
 global using System.Text;
 global using System.Text.RegularExpressions;
