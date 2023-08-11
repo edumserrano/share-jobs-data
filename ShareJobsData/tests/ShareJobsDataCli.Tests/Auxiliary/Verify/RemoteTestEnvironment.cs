@@ -1,4 +1,4 @@
-﻿namespace ShareJobsDataCli.Tests.Auxiliary.Verify;
+namespace ShareJobsDataCli.Tests.Auxiliary.Verify;
 
 // This class is used to make sure that the tests can read absolute file paths when running in a remote
 // test environment.
@@ -68,8 +68,8 @@ internal sealed class RemoteTestEnvironment
         // In a remote test environment:
         // - the solutionDirectory will always be a directory in the host platform (ie.: windows)
         // - the currentDirectory will always be a directory in the the run platform (ie.: docker using linux)
-        // 
-        // So if we want to find the remote test environment solution directory, we need to find the folder on 
+        //
+        // So if we want to find the remote test environment solution directory, we need to find the folder on
         // the run platform directory that should be the solution folder which we can derive from the the last folder
         // on the host platform solution directory.
         // As an example, when running tests, given:
