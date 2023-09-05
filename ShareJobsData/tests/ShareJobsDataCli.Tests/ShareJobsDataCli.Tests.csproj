@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNet-Sdk-Extensions-Testing" Version="3.0.0" />
+    <PackageReference Include="DotNet-Sdk-Extensions-Testing" Version="3.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
     <PackageReference Include="Verify.DiffPlex" Version="2.2.1" />
     <PackageReference Include="Verify.Http" Version="4.3.0" />
