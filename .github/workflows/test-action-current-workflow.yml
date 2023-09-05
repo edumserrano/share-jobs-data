@@ -34,7 +34,7 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Run action with bad input
       id: set-bad-input
       uses: ./action-local
@@ -60,7 +60,7 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set name value
       id: set-name
       run: |
@@ -124,7 +124,7 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Run set-data command
       id: set
       uses: ./action-local
@@ -208,7 +208,7 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Run set-data command
       id: set
       uses: ./action-local
@@ -254,7 +254,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [set-data-with-github-step-json-output]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Run read-data-current-workflow command
       id: read
       uses: ./action-local
@@ -297,7 +297,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [set-data-with-strict-json-output]
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Run read-data-current-workflow command
       id: read
       uses: ./action-local
