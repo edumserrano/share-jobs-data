@@ -25,28 +25,28 @@ public sealed class SetDataCommand : ICommand
     [CommandOption(
         "artifact-name",
         IsRequired = false,
-        Validators = new[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Validators = [typeof(NotNullOrWhitespaceOptionValidator)],
         Description = "The name of the artifact.")]
     public string ArtifactName { get; init; } = CommandOptionsDefaults.ArtifactName;
 
     [CommandOption(
         "data-filename",
         IsRequired = false,
-        Validators = new[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Validators = [typeof(NotNullOrWhitespaceOptionValidator)],
         Description = "The filename that contains the data.")]
     public string ArtifactFilename { get; init; } = CommandOptionsDefaults.ArtifactFilename;
 
     [CommandOption(
         "data",
         IsRequired = true,
-        Validators = new[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Validators = [typeof(NotNullOrWhitespaceOptionValidator)],
         Description = "The data to share in YAML format.")]
     public string DataAsYmlStr { get; init; } = default!;
 
     [CommandOption(
         "output",
         IsRequired = false,
-        Validators = new[] { typeof(NotNullOrWhitespaceOptionValidator) },
+        Validators = [typeof(NotNullOrWhitespaceOptionValidator)],
         Description = "How to output the job data in the step's output. It must be one of: none, strict-json, github-step-json.")]
     public string Output { get; init; } = "none";
 

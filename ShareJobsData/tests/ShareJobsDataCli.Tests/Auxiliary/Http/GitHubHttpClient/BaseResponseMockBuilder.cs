@@ -1,7 +1,7 @@
 namespace ShareJobsDataCli.Tests.Auxiliary.Http.GitHubHttpClient;
 
 // The signature `BaseResponseMockBuilder<T> where T : BaseResponseMockBuilder<T>`
-// looks weird at first sight right? 
+// looks weird at first sight right?
 //
 // Here are a few links that help explain the benefits of implementing `A<T> : A<T>` and using the
 // `return (T)this;` in the base class:

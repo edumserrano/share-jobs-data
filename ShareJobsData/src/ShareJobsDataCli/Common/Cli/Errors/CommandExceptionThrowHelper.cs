@@ -16,5 +16,5 @@ internal static class CommandExceptionThrowHelper
     }
 
     [MethodImpl(MethodImplOptions.NoInlining)]
-    private static Exception CreateCommandException(string errorMessage) => new CommandException(errorMessage);
+    private static CommandException CreateCommandException(string errorMessage) => new CommandException(errorMessage);
 }
