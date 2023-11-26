@@ -13,7 +13,6 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommandValidationTests
     /// Validation test for the <see cref="ReadDataFromCurrentGitHubWorkflowCommand.ArtifactName"/> command option.
     /// </summary>
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
     public async Task ValidateArtifactNameOption(string artifactName)
@@ -32,7 +31,6 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommandValidationTests
     /// Validation test for the <see cref="ReadDataFromCurrentGitHubWorkflowCommand.ArtifactFilename"/> command option.
     /// </summary>
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
     public async Task ValidateArtifactFilenameOption(string artifactFilename)

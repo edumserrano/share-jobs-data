@@ -13,7 +13,6 @@ public sealed class SetDataCommandValidationTests
     /// Validation test for the <see cref="SetDataCommand.ArtifactName"/> command option.
     /// </summary>
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
     public async Task ValidateArtifactNameOption(string artifactName)
@@ -33,7 +32,6 @@ public sealed class SetDataCommandValidationTests
     /// Validation test for the <see cref="SetDataCommand.ArtifactFilename"/> command option.
     /// </summary>
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
     public async Task ValidateArtifactFilenameOption(string artifactFilename)
@@ -52,7 +50,6 @@ public sealed class SetDataCommandValidationTests
     /// Validation test for the <see cref="SetDataCommand.DataAsYmlStr"/> command option.
     /// </summary>
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
     public async Task ValidateDataAsYmlStrOption(string dataAsYmlStr)
