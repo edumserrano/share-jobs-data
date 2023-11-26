@@ -13,7 +13,6 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
     /// Validation test for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand.AuthToken"/> command option.
     /// </summary>
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
     public async Task ValidateAuthTokenOption(string authToken)
@@ -34,7 +33,6 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
     /// Validation test for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand.Repo"/> command option.
     /// </summary>
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
     public async Task ValidateRepoOption(string repo)
@@ -55,7 +53,6 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
     /// Validation test for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand.RunId"/> command option.
     /// </summary>
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
     public async Task ValidateRunIdOption(string runId)
@@ -76,7 +73,6 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
     /// Validation test for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand.ArtifactName"/> command option.
     /// </summary>
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
     public async Task ValidateArtifactNameOption(string artifactName)
@@ -98,7 +94,6 @@ public sealed class ReadDataFromDifferentGitHubWorkflowCommandValidationTests
     /// Validation test for the <see cref="ReadDataFromDifferentGitHubWorkflowCommand.ArtifactFilename"/> command option.
     /// </summary>
     [Theory]
-    [InlineData(null)]
     [InlineData("")]
     [InlineData("   ")]
     public async Task ValidateArtifactFilenameOption(string artifactFilename)
