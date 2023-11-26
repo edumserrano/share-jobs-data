@@ -35,6 +35,9 @@ jobs:
       env:
         GITHUB_CONTEXT: ${{ toJSON(github) }}
       run: $env:GITHUB_CONTEXT
+    - name: Enable git core.longpaths
+      if: matrix.os == 'windows-latest'
+      run:  git config --global core.longpaths true
     - name: Checkout repository
       uses: actions/checkout@v4
     - name: Setup .NET
