@@ -16,12 +16,7 @@ internal sealed class RemoteTestEnvironment
     private static readonly Lazy<RemoteTestEnvironment> _instance = new Lazy<RemoteTestEnvironment>(() => new RemoteTestEnvironment());
     private readonly string _solutionDirectory = string.Empty;
     private readonly string _remoteTestEnvironmentSolutionDir = string.Empty;
-
-    private readonly char[] _separators =
-    {
-        '\\',
-        '/',
-    };
+    private readonly char[] _separators = ['\\', '/'];
 
     private RemoteTestEnvironment()
     {

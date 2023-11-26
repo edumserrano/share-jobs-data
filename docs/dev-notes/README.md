@@ -18,6 +18,11 @@
 
 ## Building the ShareJobsData solution
 
+> **Warning**
+>
+> Before cloning the repo make sure you have `core.longpaths` set to `true` on git by running `git config --global core.longpaths true`
+>
+
 ### Building with Visual Studio
 
 1) Clone the repo and open the **ShareJobsData.sln** solution file at `/ShareJobsData`.
