@@ -51,7 +51,7 @@ Also note that when reading the shared data, the step reading the data must have
 
 ### Share data across jobs in the same workflow
 
->**Note**
+>[!NOTE]
 >
 > Since the data is shared via a workflow artifact, the job producing the data must finish and upload the data before the consuming job can access it. This dependency is declared via the `needs` field set to the consuming job.
 
@@ -96,7 +96,7 @@ jobs:
 
 ### Share data across jobs in different workflows
 
->**Note**
+>[!NOTE]
 >
 > To use this flow, you need to know the `run id` of the job that shared the data. A possible approach is to create a workflow that is triggered when the workflow that shares the data completes. This will let you access the `run id` of the job that shared the data via `${{github.event.workflow_run.id}}`. You can do this as follows:
 
@@ -163,7 +163,7 @@ This action supports the following flows:
 
 The operation that the action performs is controlled via the `command` action input.
 
->**Warning**
+>[!WARNING]
 >
 > Some action inputs are only valid for a specifc `command` as indicated by the `restricted to command` column.
 
@@ -198,14 +198,14 @@ See [here](#what-is-the-difference-between-using-strict-json-or-github-step-json
 | ------ | ----------------------------------------------------------------------------------------------- |
 | `data` | Job data in JSON format. Populated only when the `output` action input is set to `strict-json`. |
 
->**Warning**
+>[!WARNING]
 >
 >- When setting the `output` action input to `none`: nothing is written to the step's output.
 >- When setting the `output` action input to `github-step-json`: the action outputs are dynamic, they will depend on the shared data. See [here](#what-is-the-difference-between-using-strict-json-or-github-step-json-as-the-ouput) for more detail.
 
 ## Tips
 
->**Note**
+>[!NOTE]
 >
 > Some of the examples below use GitHub shell steps using powershell but everything works the same if you prefer to use [another shell](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell).
 

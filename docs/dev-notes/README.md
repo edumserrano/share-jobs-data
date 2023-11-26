@@ -18,7 +18,7 @@
 
 ## Building the ShareJobsData solution
 
-> **Warning**
+> [!WARNING]
 >
 > Before cloning the repo make sure you have `core.longpaths` set to `true` on git by running `git config --global core.longpaths true`
 >
@@ -59,7 +59,7 @@ The steps below show how to run the Docker container action against a set of tes
 3) Run `docker build -t share-jobs-data .`
 4) Run the docker container and pass the required inputs to execute one of the available commands. To know the options for each available command you can check the documentation on the [main readme](/README.md) or do:
 
-> **Note**
+> [!NOTE]
 >
 > When executing the docker image make sure you keep the docker run flags as shown below. To run any command other than the help command just change the input parameters for the `share-jobs-data` image.
 
@@ -99,7 +99,7 @@ docker run --rm --env GITHUB_OUTPUT=/workspace/github-step-output.txt `
 share-jobs-data read-data-different-workflow -h
 ```
 
->**Warning**
+>[!WARNING]
 >
 > At the moment you cannot execute the `set-data` and `read-data-current-workflow` locally because they require a special kind of auth token which is only available on the agents running the workflow. See [this comment](https://github.com/actions/upload-artifact/issues/180#issuecomment-1086306269):
 >
@@ -156,7 +156,7 @@ To understand better how the action builds and executes the Docker container loo
 
 ### As of writing this, the log for building the docker action looks as follows
 
-> **Note**
+> [!NOTE]
 >
 > This is the log when building the docker image for the action, which happens for instance on the [test-action-current-workflow workflow](https://github.com/edumserrano/share-jobs-data/actions/workflows/test-action-current-workflow.yml) because using the published action from GitHub Marketplace will download the package from the GitHub packages and so the log will look different.
 >
@@ -181,7 +181,7 @@ This way it can successfully build the Dockerfile for this action which would ot
 
 ### As of writing this, the log for running the docker action looks as follows
 
-> **Note**
+> [!NOTE]
 >
 > This is the log when building the docker image for the action, which happens for instance on the [test-action-current-workflow workflow](https://github.com/edumserrano/share-jobs-data/actions/workflows/test-action-current-workflow.yml) because using the published action from GitHub Marketplace will download the package from the GitHub packages and so the log will look different.
 >
@@ -220,7 +220,7 @@ This way it can successfully build the Dockerfile for this action which would ot
 
 When running the docker container there are lots of docker parameters set. Besides all the environment variables note that there are several volume mounts. More importantly, note that the contents of the checked out repo where the action is executing is mounted into the container at `/github/workspace` and that the `workdir` is also set to `/github/workspace`.
 
->**Note**
+>[!NOTE]
 >
 > Currently this action does not access any files checked out by the workflow and does not produce any output files. However the volume mapping explained above is what would allow this action to do both if required.
 
