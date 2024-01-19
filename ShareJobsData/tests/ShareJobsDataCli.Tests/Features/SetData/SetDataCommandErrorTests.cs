@@ -5,7 +5,6 @@ namespace ShareJobsDataCli.Tests.Features.SetData;
 /// </summary>
 [Trait("Category", XUnitCategories.LogicFailure)]
 [Trait("Category", XUnitCategories.SetDataCommand)]
-[UsesVerify]
 public sealed class SetDataCommandErrorTests
 {
     /// <summary>

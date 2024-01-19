@@ -5,7 +5,6 @@ namespace ShareJobsDataCli.Tests.Features.ReadDataDifferentWorkflow.DependencyEr
 /// </summary>
 [Trait("Category", XUnitCategories.DependencyFailure)]
 [Trait("Category", XUnitCategories.ReadDataFromDifferentGitHubWorkflowCommand)]
-[UsesVerify]
 public sealed class FailedHttpToListWorkflowRunArtifactsTests
 {
     /// <summary>

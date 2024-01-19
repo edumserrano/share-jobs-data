@@ -7,7 +7,6 @@ namespace ShareJobsDataCli.Tests.CliIntegration.SetData;
 /// </summary>
 [Trait("Category", XUnitCategories.CliIntegration)]
 [Trait("Category", XUnitCategories.SetDataCommand)]
-[UsesVerify]
 public sealed class CliIntegrationTests
 {
     /// <summary>
