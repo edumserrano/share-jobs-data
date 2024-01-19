@@ -6,7 +6,6 @@ namespace ShareJobsDataCli.Tests.CliIntegration;
 /// </summary>
 [Trait("Category", XUnitCategories.CliIntegration)]
 [Trait("Category", XUnitCategories.ReadDataFromDifferentGitHubWorkflowCommand)]
-[UsesVerify]
 public sealed class CliIntegrationTests
 {
     /// <summary>

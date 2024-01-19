@@ -5,7 +5,6 @@ namespace ShareJobsDataCli.Tests.Features.ReadDataCurrentWorkflow;
 /// </summary>
 [Trait("Category", XUnitCategories.LogicFailure)]
 [Trait("Category", XUnitCategories.ReadDataFromCurrentGitHubWorkflowCommand)]
-[UsesVerify]
 public sealed class ReadDataFromCurrentGitHubWorkflowCommandErrorTests
 {
     /// <summary>

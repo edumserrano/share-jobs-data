@@ -5,7 +5,6 @@ namespace ShareJobsDataCli.Tests.Features.SetData;
 /// </summary>
 [Trait("Category", XUnitCategories.Commands)]
 [Trait("Category", XUnitCategories.SetDataCommand)]
-[UsesVerify]
 public sealed class SetDataCommandOkTests
 {
     /// <summary>

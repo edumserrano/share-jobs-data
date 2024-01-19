@@ -5,7 +5,6 @@ namespace ShareJobsDataCli.Tests.Features.ReadDataDifferentWorkflow;
 /// </summary>
 [Trait("Category", XUnitCategories.Commands)]
 [Trait("Category", XUnitCategories.ReadDataFromDifferentGitHubWorkflowCommand)]
-[UsesVerify]
 public sealed class ReadDataFromDifferentGitHubWorkflowCommandOkTests
 {
     /// <summary>

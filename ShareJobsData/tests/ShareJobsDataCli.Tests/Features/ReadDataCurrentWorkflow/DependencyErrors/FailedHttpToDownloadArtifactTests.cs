@@ -5,7 +5,6 @@ namespace ShareJobsDataCli.Tests.Features.ReadDataCurrentWorkflow.DependencyErro
 /// </summary>
 [Trait("Category", XUnitCategories.DependencyFailure)]
 [Trait("Category", XUnitCategories.ReadDataFromCurrentGitHubWorkflowCommand)]
-[UsesVerify]
 public sealed class FailedHttpToDownloadArtifactTests
 {
     /// <summary>

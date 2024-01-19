@@ -5,7 +5,6 @@ namespace ShareJobsDataCli.Tests.Features.SetData.DependencyErrors;
 /// </summary>
 [Trait("Category", XUnitCategories.DependencyFailure)]
 [Trait("Category", XUnitCategories.SetDataCommand)]
-[UsesVerify]
 public sealed class FailedHttpToUploadArtifactFileTests
 {
     /// <summary>
