@@ -17,14 +17,15 @@ internal sealed class GitHubDownloadArtifactFromDifferentWorkflowHttpClient
         GitHubRepositoryName repoName,
         GitHubRunId runId,
         GitHubArtifactContainerName artifactContainerName,
-        GitHubArtifactItemFilename artifactItemFilename)
+        GitHubArtifactItemFilename artifactItemFilename,
+        CancellationToken cancellationToken = default)
     {
         repoName.NotNull();
         runId.NotNull();
         artifactContainerName.NotNull();
         artifactItemFilename.NotNull();
 
-        var workflowRunArtifactsResult = await ListWorkflowRunArtifactsAsync(repoName, runId);
+        var workflowRunArtifactsResult = await ListWorkflowRunArtifactsAsync(repoName, runId, cancellationToken);
         if (!workflowRunArtifactsResult.IsOk(out var workflowRunArtifacts, out var errorJsonHttpResult))
         {
             return new FailedToListWorkflowRunArtifacts(errorJsonHttpResult);
@@ -36,7 +37,7 @@ internal sealed class GitHubDownloadArtifactFromDifferentWorkflowHttpClient
             return new ArtifactNotFound(repoName, runId, artifactContainerName);
         }
 
-        var downloadArtifactResult = await DownloadArtifactAsync(artifact.ArchiveDownloadUrl);
+        var downloadArtifactResult = await DownloadArtifactAsync(artifact.ArchiveDownloadUrl, cancellationToken);
         if (!downloadArtifactResult.IsOk(out var artifactZip, out var failedStatusCodeHttpResponse))
         {
             return new FailedToDownloadArtifact(failedStatusCodeHttpResponse);
@@ -52,7 +53,7 @@ internal sealed class GitHubDownloadArtifactFromDifferentWorkflowHttpClient
 
             await using var artifactAsStream = artifactFileAsZip.Open();
             using var streamReader = new StreamReader(artifactAsStream, Encoding.UTF8);
-            var artifactFileContent = await streamReader.ReadToEndAsync();
+            var artifactFileContent = await streamReader.ReadToEndAsync(cancellationToken);
             var createArtifactItemJsonContentResult = GitHubArtifactItemJsonContent.Create(artifactFileContent);
             if (!createArtifactItemJsonContentResult.IsOk(out var gitHubArtifactItemJsonContent, out var notJsonContent))
             {
@@ -63,25 +64,28 @@ internal sealed class GitHubDownloadArtifactFromDifferentWorkflowHttpClient
         }
     }
 
-    private async Task<JsonHttpResult<GitHubListWorkflowRunArtifactsHttpResponse>> ListWorkflowRunArtifactsAsync(GitHubRepositoryName repoName, GitHubRunId runId)
+    private async Task<JsonHttpResult<GitHubListWorkflowRunArtifactsHttpResponse>> ListWorkflowRunArtifactsAsync(
+        GitHubRepositoryName repoName,
+        GitHubRunId runId,
+        CancellationToken cancellationToken)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"repos/{repoName}/actions/runs/{runId}/artifacts");
-        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var jsonHttpResult = await httpResponse.ReadFromJsonAsync<GitHubListWorkflowRunArtifactsHttpResponse, GitHubListWorkflowRunArtifactsHttpResponseValidator>();
+        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+        var jsonHttpResult = await httpResponse.ReadFromJsonAsync<GitHubListWorkflowRunArtifactsHttpResponse, GitHubListWorkflowRunArtifactsHttpResponseValidator>(cancellationToken);
         return jsonHttpResult;
     }
 
-    private async Task<DownloadArtifactZipResult> DownloadArtifactAsync(string archiveDownloadUrl)
+    private async Task<DownloadArtifactZipResult> DownloadArtifactAsync(string archiveDownloadUrl, CancellationToken cancellationToken)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, archiveDownloadUrl);
-        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var ensureSuccessStatusCodeResult = await httpResponse.EnsureSuccessStatusCodeAsync();
+        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+        var ensureSuccessStatusCodeResult = await httpResponse.EnsureSuccessStatusCodeAsync(cancellationToken);
         if (!ensureSuccessStatusCodeResult.IsOk(out var failedStatusCodeHttpResponse))
         {
             return new FailedToDownloadArtifactZip(failedStatusCodeHttpResponse);
         }
 
-        var responseStream = await httpResponse.Content.ReadAsStreamAsync();
+        var responseStream = await httpResponse.Content.ReadAsStreamAsync(cancellationToken);
         return new ZipArchive(responseStream, ZipArchiveMode.Read);
     }
 }

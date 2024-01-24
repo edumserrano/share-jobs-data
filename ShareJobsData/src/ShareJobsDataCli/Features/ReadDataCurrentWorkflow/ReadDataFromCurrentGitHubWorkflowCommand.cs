@@ -61,7 +61,11 @@ public sealed class ReadDataFromCurrentGitHubWorkflowCommand : ICommand
 
         using var httpClient = _httpClient.ConfigureGitHubHttpClient(actionRuntimeToken, repository);
         var githubHttpClient = new GitHubDownloadArtifactFromCurrentWorkflowHttpClient(httpClient);
-        var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(containerUrl, artifactContainerName, artifactFilePath);
+        var downloadResult = await githubHttpClient.DownloadArtifactFileAsync(
+            containerUrl,
+            artifactContainerName,
+            artifactFilePath,
+            CancellationToken.None);
         if (!downloadResult.IsOk(out var gitHubArtifactItemJsonContent, out var downloadError))
         {
             downloadError.Throw(_commandName);

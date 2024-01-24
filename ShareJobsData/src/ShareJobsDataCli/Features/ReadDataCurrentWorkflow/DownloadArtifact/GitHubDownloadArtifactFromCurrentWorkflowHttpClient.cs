@@ -25,13 +25,14 @@ internal sealed class GitHubDownloadArtifactFromCurrentWorkflowHttpClient
     public async Task<DownloadArtifactFileFromCurrentWorkflowResult> DownloadArtifactFileAsync(
         GitHubArtifactContainerUrl containerUrl,
         GitHubArtifactContainerName containerName,
-        GitHubArtifactItemFilePath itemFilePath)
+        GitHubArtifactItemFilePath itemFilePath,
+        CancellationToken cancellationToken = default)
     {
         containerUrl.NotNull();
         containerName.NotNull();
         itemFilePath.NotNull();
 
-        var workflowRunArtifactsResult = await ListWorkflowRunArtifactsAsync(containerUrl);
+        var workflowRunArtifactsResult = await ListWorkflowRunArtifactsAsync(containerUrl, cancellationToken);
         if (!workflowRunArtifactsResult.IsOk(out var artifactContainers, out var listError))
         {
             return new FailedToListWorkflowRunArtifacts(listError);
@@ -43,7 +44,10 @@ internal sealed class GitHubDownloadArtifactFromCurrentWorkflowHttpClient
             return new ArtifactNotFound(containerName);
         }
 
-        var containerItemsResult = await GetContainerItemsAsync(artifactContainer.FileContainerResourceUrl, artifactContainer.Name);
+        var containerItemsResult = await GetContainerItemsAsync(
+            artifactContainer.FileContainerResourceUrl,
+            artifactContainer.Name,
+            cancellationToken);
         if (!containerItemsResult.IsOk(out var artifactContainerItems, out var getContainerItemsError))
         {
             return new FailedToGetContainerItems(getContainerItemsError);
@@ -55,7 +59,7 @@ internal sealed class GitHubDownloadArtifactFromCurrentWorkflowHttpClient
             return new ArtifactContainerItemNotFound(itemFilePath);
         }
 
-        var downloadContainerItemResult = await DownloadContainerItemAsync(artifactContainerFileItem.ContentLocation);
+        var downloadContainerItemResult = await DownloadContainerItemAsync(artifactContainerFileItem.ContentLocation, cancellationToken);
         if (!downloadContainerItemResult.IsOk(out var artifactItemContent, out var downloadContainerItemError))
         {
             return new FailedToDownloadArtifact(downloadContainerItemError);
@@ -64,26 +68,26 @@ internal sealed class GitHubDownloadArtifactFromCurrentWorkflowHttpClient
         return artifactItemContent;
     }
 
-    private async Task<JsonHttpResult<GitHubListArtifactsHttpResponse>> ListWorkflowRunArtifactsAsync(GitHubArtifactContainerUrl containerUrl)
+    private async Task<JsonHttpResult<GitHubListArtifactsHttpResponse>> ListWorkflowRunArtifactsAsync(GitHubArtifactContainerUrl containerUrl, CancellationToken cancellationToken)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, $"{containerUrl}");
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
-        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var jsonHttpResult = await httpResponse.ReadFromJsonAsync<GitHubListArtifactsHttpResponse, GitHubListArtifactsHttpResponseValidator>();
+        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+        var jsonHttpResult = await httpResponse.ReadFromJsonAsync<GitHubListArtifactsHttpResponse, GitHubListArtifactsHttpResponseValidator>(cancellationToken);
         return jsonHttpResult;
     }
 
-    private async Task<JsonHttpResult<GitHubGetContainerItemsHttpResponse>> GetContainerItemsAsync(string fileContainerResourceUrl, string artifactName)
+    private async Task<JsonHttpResult<GitHubGetContainerItemsHttpResponse>> GetContainerItemsAsync(string fileContainerResourceUrl, string artifactName, CancellationToken cancellationToken)
     {
         var getContainerItemsUrl = fileContainerResourceUrl.SetQueryParam("itemPath", artifactName);
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, getContainerItemsUrl);
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/json;api-version={GitHubApiVersion.Latest}");
-        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var jsonHttpResult = await httpResponse.ReadFromJsonAsync<GitHubGetContainerItemsHttpResponse, GitHubGetContainerItemsHttpResponseValidator>();
+        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+        var jsonHttpResult = await httpResponse.ReadFromJsonAsync<GitHubGetContainerItemsHttpResponse, GitHubGetContainerItemsHttpResponseValidator>(cancellationToken);
         return jsonHttpResult;
     }
 
-    private async Task<DownloadContainerItemResult> DownloadContainerItemAsync(string contentLocation)
+    private async Task<DownloadContainerItemResult> DownloadContainerItemAsync(string contentLocation, CancellationToken cancellationToken)
     {
         using var httpRequest = new HttpRequestMessage(HttpMethod.Get, contentLocation);
         // the this Accept-Encoding header below was set on the GitHub toolkit repo were I reverse engineered
@@ -91,14 +95,14 @@ internal sealed class GitHubDownloadArtifactFromCurrentWorkflowHttpClient
         // the set-data command
         httpRequest.Headers.TryAddWithoutValidation("Accept-Encoding", "gzip");
         httpRequest.Headers.TryAddWithoutValidation("Accept", $"application/octet-stream;api-version={GitHubApiVersion.Latest}");
-        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead);
-        var ensureSuccessStatusCodeResult = await httpResponse.EnsureSuccessStatusCodeAsync();
+        var httpResponse = await _httpClient.SendAsync(httpRequest, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+        var ensureSuccessStatusCodeResult = await httpResponse.EnsureSuccessStatusCodeAsync(cancellationToken);
         if (!ensureSuccessStatusCodeResult.IsOk(out var failedStatusCodeHttpResponse))
         {
             return new FailedToDownloadContainerItem(failedStatusCodeHttpResponse);
         }
 
-        var containerItemContent = await httpResponse.Content.ReadAsStringAsync();
+        var containerItemContent = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
         var createArtifactItemJsonContentResult = GitHubArtifactItemJsonContent.Create(containerItemContent);
         if (!createArtifactItemJsonContentResult.IsOk(out var gitHubArtifactItemJsonContent, out var notJsonContent))
         {
