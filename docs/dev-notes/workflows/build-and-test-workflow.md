@@ -11,9 +11,7 @@
 
 ## Codecov
 
-Codecov integration does not require any secret, it was done via the [Codecov GitHub app](https://github.com/apps/codecov).
-
-Besides the information available on the [Codecov web app](https://app.codecov.io/gh/edumserrano/share-jobs-data), this integration enables Codecov to:
+Codecov integration done via the [Codecov GitHub app](https://github.com/apps/codecov). Besides the information available on the [Codecov web app](https://app.codecov.io/gh/edumserrano/share-jobs-data), this integration enables Codecov to:
 
 - [add status checks on pull requests](https://docs.codecov.com/docs/commit-status)
 - [display coverage on pull requests via comments](https://docs.codecov.com/docs/pull-request-comments)
@@ -37,4 +35,4 @@ When running tests we use 3 loggers:
 
 ## Secrets
 
-This workflow uses a Dependabot secret `CODECOV_TOKEN`. This secret contains a [token from Codecov](https://app.codecov.io/gh/edumserrano/share-jobs-data/settings) with permissions to upload [code coverage to Codecov](https://app.codecov.io/gh/edumserrano/share-jobs-data).
+This workflow uses a Dependabot secret as well as a Repository secret named `CODECOV_TOKEN`. This secret contains a [token from Codecov](https://app.codecov.io/gh/edumserrano/share-jobs-data/settings) with permissions to upload [code coverage to Codecov](https://app.codecov.io/gh/edumserrano/share-jobs-data).
