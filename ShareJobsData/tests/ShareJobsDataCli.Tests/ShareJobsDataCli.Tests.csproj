@@ -45,6 +45,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Update="Verify.Xunit" Version="26.4.0" />
+    <PackageReference Update="Verify.Xunit" Version="26.5.0" />
   </ItemGroup>
 </Project>
