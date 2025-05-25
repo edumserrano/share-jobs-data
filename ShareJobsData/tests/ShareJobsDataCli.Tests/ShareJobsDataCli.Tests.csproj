@@ -1,22 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject> <!-- This shouldn't be needed because it should be added by the Microsoft.NET.Test.Sdk package but for now it's required as explained here https://github.com/dotnet/sdk/issues/3790#issuecomment-1100773198 -->
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNet-Sdk-Extensions-Testing" Version="3.0.2" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-    <PackageReference Include="Verify.DiffPlex" Version="3.1.2" />
-    <PackageReference Include="Verify.Http" Version="6.4.1" />
-    <PackageReference Include="xunit" Version="2.9.2" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+    <PackageReference Include="DotNet-Sdk-Extensions-Testing" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Verify.DiffPlex" />
+    <PackageReference Include="Verify.Http" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="coverlet.collector" Version="6.0.2">
+    <PackageReference Include="coverlet.collector">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -43,8 +43,5 @@
       <ParentFile>$([System.String]::Copy('%(FileName)').Split('.')[0])</ParentFile>
       <DependentUpon>%(ParentFile).cs</DependentUpon>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="Verify.Xunit" Version="27.0.1" />
   </ItemGroup>
 </Project>

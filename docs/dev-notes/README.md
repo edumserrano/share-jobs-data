@@ -25,19 +25,19 @@
 
 ### Building with Visual Studio
 
-1) Clone the repo and open the **ShareJobsData.sln** solution file at `/ShareJobsData`.
+1) Clone the repo and open the **ShareJobsData.slnx** solution file at `/ShareJobsData`.
 2) Press build on Visual Studio.
 
 ### Building with dotnet CLI
 
 1) Clone the repo and browse to the solution's directory at `/ShareJobsData` using your favorite shell.
-2) Run **`dotnet build ShareJobsData.sln`** to build the source of the CLI app.
+2) Run **`dotnet build ShareJobsData.slnx`** to build the source of the CLI app.
 
 ## Running ShareJobsData solution tests
 
 ### Run tests with Visual Studio
 
-1) Clone the repo and open the **ShareJobsData.sln** solution file at `/ShareJobsData`.
+1) Clone the repo and open the **ShareJobsData.slnx** solution file at `/ShareJobsData`.
 2) Go to the test explorer in Visual Studio and run tests.
 
 **Note:** [Remote testing](https://docs.microsoft.com/en-us/visualstudio/test/remote-testing?view=vs-2022) with is configured on the solution which enables you to run the tests locally on Linux or on Windows. You can view the configuration file at [testenvironments.json](/ShareJobsData/testenvironments.json). To run the tests on Linux you need to have at least `Visual Studio 2022` and:
@@ -48,7 +48,7 @@
 ### Run tests with dotnet CLI
 
 1) Clone the repo and browse to the solution's directory at `/ShareJobsData` using your favorite shell.
-2) Run **`dotnet test ShareJobsData.sln`** to run tests.
+2) Run **`dotnet test ShareJobsData.slnx`** to run tests.
 
 ## Building and running the Docker container action
 
@@ -110,10 +110,6 @@ share-jobs-data read-data-different-workflow -h
 - The [Directory.Build.props](/ShareJobsData/Directory.Build.props) enables several settings as well as adds some common NuGet packages for all projects.
 
 - There is a set of NuGet packages that are only applied in test projects by using the condition `"'$(IsTestProject)' == 'true'"`. To make this work the `csproj` for the test projects must have the `<IsTestProject>true</IsTestProject>` property defined. Adding this property manually shouldn't be needed because it should be added by the `Microsoft.NET.Test.Sdk` package however there seems to be an issue with this when running tests outside of Visual Studio. See [this GitHub issue](https://github.com/dotnet/sdk/issues/3790#issuecomment-1100773198) for more info.
-
-- When running `dotnet` CLI commands make sure you are at the `/ShareJobsData` folder so that the `global.json` is respected. If you don't you might get unexpected results when building the solution. As explained in [global.json overview](https://learn.microsoft.com/en-us/dotnet/core/tools/global-json):
-
-> The .NET SDK looks for a global.json file in the current working directory (which isn't necessarily the same as the project directory) or one of its parent directories.
 
 ## Deterministic Build configuration
 

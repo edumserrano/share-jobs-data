@@ -27,7 +27,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       SLN_DIR: ShareJobsData
-      SLN_FILENAME: ShareJobsData.sln
+      SLN_FILENAME: ShareJobsData.slnx
       TEST_RESULTS_ARTIFACT_NAME: test-results
       CODE_COVERAGE_ARTIFACT_NAME: code-coverage-report
     steps:
@@ -43,7 +43,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        global-json-file: ShareJobsData/global.json
+        dotnet-version: '9.x'
     - name: Cache/Restore NuGets
       uses: actions/cache@v4
       with:

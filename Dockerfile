@@ -2,7 +2,7 @@
 # See https://hub.docker.com/_/microsoft-dotnet-runtime/ for list of tags for dotnet runtime
 # See https://hub.docker.com/_/microsoft-dotnet-sdk for list of tags for dotnet sdk
 
-FROM mcr.microsoft.com/dotnet/runtime:8.0-alpine AS base
+FROM mcr.microsoft.com/dotnet/runtime:9.0-alpine AS base
 # install powershell as per https://docs.microsoft.com/en-us/powershell/scripting/install/install-alpine
 # the official docs install libssl1.1 but that started to fail and I tried ussing libssl3 which seems to work
 ARG PWSH_VERSION=7.4.1
@@ -28,10 +28,12 @@ RUN chmod +x /opt/microsoft/powershell/7/pwsh
 RUN ln -s /opt/microsoft/powershell/7/pwsh /usr/bin/pwsh
 # end of install powershell
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 WORKDIR /share-jobs-data
 COPY ["ShareJobsData/NuGet.Config", "ShareJobsData/"]
 COPY ["ShareJobsData/src/ShareJobsDataCli/ShareJobsDataCli.csproj", "ShareJobsData/src/ShareJobsDataCli/"]
+COPY ["ShareJobsData/Directory.Build.props", "ShareJobsData/"]
+COPY ["ShareJobsData/Directory.Packages.props", "ShareJobsData/"]
 RUN dotnet restore "ShareJobsData/src/ShareJobsDataCli/ShareJobsDataCli.csproj"
 COPY . .
 WORKDIR "/share-jobs-data/ShareJobsData/src/ShareJobsDataCli"
