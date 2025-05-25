@@ -43,7 +43,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        global-json-file: ShareJobsData/global.json
+        dotnet-version: '9.x'
     - name: Cache/Restore NuGets
       uses: actions/cache@v4
       with:
