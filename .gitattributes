@@ -14,6 +14,7 @@
 
 *.csproj text=auto
 *.sln text=auto eol=crlf
+*.slnx text=auto eol=crlf
 
 # Verify auto-generated verified files should use lf to avoid issues when
 # running tests in different OS

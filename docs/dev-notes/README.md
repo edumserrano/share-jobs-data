@@ -25,19 +25,19 @@
 
 ### Building with Visual Studio
 
-1) Clone the repo and open the **ShareJobsData.sln** solution file at `/ShareJobsData`.
+1) Clone the repo and open the **ShareJobsData.slnx** solution file at `/ShareJobsData`.
 2) Press build on Visual Studio.
 
 ### Building with dotnet CLI
 
 1) Clone the repo and browse to the solution's directory at `/ShareJobsData` using your favorite shell.
-2) Run **`dotnet build ShareJobsData.sln`** to build the source of the CLI app.
+2) Run **`dotnet build ShareJobsData.slnx`** to build the source of the CLI app.
 
 ## Running ShareJobsData solution tests
 
 ### Run tests with Visual Studio
 
-1) Clone the repo and open the **ShareJobsData.sln** solution file at `/ShareJobsData`.
+1) Clone the repo and open the **ShareJobsData.slnx** solution file at `/ShareJobsData`.
 2) Go to the test explorer in Visual Studio and run tests.
 
 **Note:** [Remote testing](https://docs.microsoft.com/en-us/visualstudio/test/remote-testing?view=vs-2022) with is configured on the solution which enables you to run the tests locally on Linux or on Windows. You can view the configuration file at [testenvironments.json](/ShareJobsData/testenvironments.json). To run the tests on Linux you need to have at least `Visual Studio 2022` and:
@@ -48,7 +48,7 @@
 ### Run tests with dotnet CLI
 
 1) Clone the repo and browse to the solution's directory at `/ShareJobsData` using your favorite shell.
-2) Run **`dotnet test ShareJobsData.sln`** to run tests.
+2) Run **`dotnet test ShareJobsData.slnx`** to run tests.
 
 ## Building and running the Docker container action
 
