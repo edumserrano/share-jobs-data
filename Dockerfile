@@ -32,6 +32,8 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 WORKDIR /share-jobs-data
 COPY ["ShareJobsData/NuGet.Config", "ShareJobsData/"]
 COPY ["ShareJobsData/src/ShareJobsDataCli/ShareJobsDataCli.csproj", "ShareJobsData/src/ShareJobsDataCli/"]
+COPY ["ShareJobsData/Directory.Build.props", "ShareJobsData/"]
+COPY ["ShareJobsData/Directory.Packages.props", "ShareJobsData/"]
 RUN dotnet restore "ShareJobsData/src/ShareJobsDataCli/ShareJobsDataCli.csproj"
 COPY . .
 WORKDIR "/share-jobs-data/ShareJobsData/src/ShareJobsDataCli"
